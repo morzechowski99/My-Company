@@ -62,9 +62,22 @@ namespace My_Company
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    name: "Warehouse",
+                    areaName: "Warehouse",
+                    pattern: "Warehouse/{controller=Home}/{action=Index}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "Shop",
+                    areaName: "Shop",
+                    pattern: "/{controller=Home}/{action=Index}"
+                );
+
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }

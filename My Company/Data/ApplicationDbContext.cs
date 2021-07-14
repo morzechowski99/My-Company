@@ -19,7 +19,15 @@ namespace My_Company.Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
-        
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ProductOrder>(entity =>
+            {
+                entity.HasKey(e => new { e.OrderId, e.ProductId });
+            });
+        }
     }
 }

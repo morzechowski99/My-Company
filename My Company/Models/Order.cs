@@ -9,7 +9,7 @@ namespace My_Company.Models
     {
         public Order()
         {
-            Products = new HashSet<Product>();
+            ProductOrders = new HashSet<ProductOrder>();
         }
 
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace My_Company.Models
         public OrderStatus Status { get; set; }
         public bool Paid { get; set; }
         public virtual AppUser User { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductOrder> ProductOrders { get; set; }
     }
 }
