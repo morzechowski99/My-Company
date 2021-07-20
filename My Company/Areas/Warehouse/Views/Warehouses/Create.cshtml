@@ -1,0 +1,84 @@
+﻿@model My_Company.Models.Warehouse
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Stwórz nowy magazyn</h1>
+
+<hr />
+<div class="row">
+    <div class="col">
+        <form asp-action="Create" id="myform">
+            <div class="tab col-md-6">
+                <h5>Podaj nazwę magazynu</h5>
+                <div class="form-group">
+                    <label class="control-label" asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="tab col-md-6">
+                <h5>Gdzie znajduje się magazyn?</h5>
+                <div class="form-group">
+                    <label asp-for="Street" class="control-label"></label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PostalCode" class="control-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Voivodeship" class="control-label"></label>
+                    <input asp-for="Voivodeship" class="form-control" />
+                    <span asp-validation-for="Voivodeship" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="tab col">
+                <h5>Wprowadź plan swojego magazynu</h5>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a class="btn btn-outline-primary" asp-action="Index">Anuluj</a>
+                </div>
+                <div style="float:right;">
+                    <button class="btn btn-outline-primary" type="button" id="prevBtn" >Poprzedni</button>
+                    <button class="btn btn-outline-primary" type="button" id="nextBtn" >Następny</button>
+                </div>
+            </div>
+
+            
+            <div class="d-flex justify-content-center">
+                <div class="btn-group">
+
+                    <button type="button" class="btn btn-primary btn-outline-primary step">1</button>
+                    <button type="button" class="btn btn-outline-primary step">2</button>
+                    <button type="button" class="btn btn-outline-primary step">3</button>
+
+                </div>
+            </div>
+
+            <button type="submit">aaa</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .tab {
+        display:none
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Warehouse/Warehouses/Create/Create.js"></script>
+}
+

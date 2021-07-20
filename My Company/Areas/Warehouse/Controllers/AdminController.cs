@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
-    [Area("Admin")]
+    [Area("Warehouse")]
     public class AdminController : Controller
     {
         public IActionResult Index()

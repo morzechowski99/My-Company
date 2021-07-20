@@ -10,5 +10,7 @@ namespace My_Company.Models
         public int Id { get; set; }
         public string Row { get; set; }
         public string Column { get; set; }
+        public int SectorId { get; set; }
+        public virtual Warehouse Warehouse { get; set; }
     }
 }
