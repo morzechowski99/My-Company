@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col">
-        <form asp-action="Create" id="myform">
+        <form asp-action="Create" id="myForm">
             <div class="tab col-md-6">
                 <h5>Podaj nazwę magazynu</h5>
                 <div class="form-group">
@@ -42,40 +42,78 @@
                 </div>
             </div>
             <div class="tab col">
-                <h5>Wprowadź plan swojego magazynu</h5>
+                <div class="d-flex justify-content-between">
+                    <h5>Wprowadź plan swojego magazynu</h5>
+                    <button type="button" class="btn btn-outline-primary" id="addRowBtn" data-toggle="modal" data-target="#addSectorModal">Dodaj sektror</button>
+                </div>
+
+                <div class="d-flex justify-content-center flex-column align-items-center border border-primary w-100 p-1 mt-3 mb-3" id="warehousePlan">
+                    
+                </div>
             </div>
 
             <div class="d-flex justify-content-between">
                 <div>
-                    <a class="btn btn-outline-primary" asp-action="Index">Anuluj</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
                 </div>
                 <div style="float:right;">
-                    <button class="btn btn-outline-primary" type="button" id="prevBtn" >Poprzedni</button>
-                    <button class="btn btn-outline-primary" type="button" id="nextBtn" >Następny</button>
+                    <button class="btn btn-outline-primary" type="button" id="prevBtn">Poprzedni</button>
+                    <button class="btn btn-outline-primary" type="button" id="nextBtn">Następny</button>
                 </div>
             </div>
 
-            
-            <div class="d-flex justify-content-center">
+
+            <div class="d-flex justify-content-center m-2">
                 <div class="btn-group">
 
-                    <button type="button" class="btn btn-primary btn-outline-primary step">1</button>
-                    <button type="button" class="btn btn-outline-primary step">2</button>
-                    <button type="button" class="btn btn-outline-primary step">3</button>
+                    <button type="button" disabled class="btn btn-primary step">1</button>
+                    <button type="button" disabled class="btn step">2</button>
+                    <button type="button" disabled class="btn  step">3</button>
 
                 </div>
             </div>
 
-            <button type="submit">aaa</button>
+            <div class="modal" tabindex="-1" role="dialog" id="addSectorModal">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Dodaj sektor</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 p-2">
+                                        <div class="form-group">
+                                            <label  class="control-label">Nazwa</label>
+                                            <input required class="form-control" id="sectorNameInput" />
+                                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Ilość sektorów</label>
+                                            <input asp-for="PostalCode" id="sectorCountInput" class="form-control" />
+                                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary " id="addSectorBtn" data-dismiss="modal">Dodaj</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
 
-<style>
-    .tab {
-        display:none
-    }
-</style>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -26,25 +26,33 @@ $(function () {
         const x = $(".step")
         x.removeClass("btn-primary")
         x.eq(n).addClass("btn-primary")
+       
     }
 
     function nextPrev(n) {
         const x = $(".tab")
-        $("#myform").validate()
-        // Exit the function if any field in the current tab is invalid:
-        //if (n == 1 && !validateForm()) return false;
-        // Hide the current tab:
+        if (!$("#myForm").validate().form()) return;
         x.eq(currentTab).css("display","none")
-        // Increase or decrease the current tab by 1:
-        currentTab = currentTab + n;
-        // if you have reached the end of the form...
+        currentTab = currentTab + n
         if (currentTab >= x.length) {
-            // ... the form gets submitted:
             document.getElementById("regForm").submit();
-            return false;
+            return false
         }
-        // Otherwise, display the correct tab:
-        showTab(currentTab);
+        showTab(currentTab)
+    }
+
+    function addSector() {
+        const name = $("#sectorNameInput").val()
+        const count = Number.parseInt($("#sectorCountInput").val())
+        $("#sectorNameInput").val("")
+        $("#sectorCountInput").val("")
+
+        const row = $("<div></div>");
+        for (let i = 0; i < count; i++) {
+            row.append(`<button type="button" class="btn">${name}${i+1}</button>`)
+        }
+
+        $("#warehousePlan").append(row)
     }
 
     $("#prevBtn").click(function () {
@@ -53,5 +61,9 @@ $(function () {
 
     $("#nextBtn").click(function () {
         nextPrev(1)
+    })
+
+    $("#addSectorBtn").click(function () {
+        addSector()
     })
 })
