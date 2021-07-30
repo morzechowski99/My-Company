@@ -4,24 +4,25 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace My_Company.Models
+namespace My_Company.ViewModels
 {
-    public class Warehouse
+    public class NewWarehouseViewModel
     {
-        public Warehouse()
-        {
-            Rows = new HashSet<WarehouseRow>();
-        }
-
-        public int Id { get; set; }
         [Required]
+        [Display(Name ="Nazwa")]
         public string Name { get; set; }
         [Required]
+        [Display(Name = "Ulica")]
         public string Street { get; set; }
+        [RegularExpression(@"^\d{2}-\d{3}")]
+        [Display(Name = "Kod pocztowy")]
         public string PostalCode { get; set; }
         [Required]
+        [Display(Name = "Miasto")]
         public string City { get; set; }
+        [Display(Name = "Województwo")]
         public string Voivodeship { get; set; }
-        public virtual ICollection<WarehouseRow> Rows { get; set; }
+        public List<NewWarehouseSectorViewModel> Sectors { get; set; }
+
     }
 }

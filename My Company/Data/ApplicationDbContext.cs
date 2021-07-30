@@ -26,6 +26,7 @@ namespace My_Company.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<WarehouseSector> WarehouseSectors { get; set; }
+        public DbSet<WarehouseRow> warehouseRows { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder builder)

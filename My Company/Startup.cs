@@ -8,7 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using My_Company.Data;
+using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Repositories;
+using My_Company.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +38,15 @@ namespace My_Company
 
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(o => {
+                o.ModelMetadataDetailsProviders.Add(
+            new CustomValidationMetadataProvider(
+                "My_Company.Validation.Validation",
+                typeof(Validation.Validation)));
+            });
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
