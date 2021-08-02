@@ -10,6 +10,7 @@ namespace My_Company.Interfaces
     {
         Task<List<Warehouse>> GetAll();
         Task<Warehouse> GetById(int id);
+        Task<Warehouse> GetWithPlanById(int id);
 
     }
 }

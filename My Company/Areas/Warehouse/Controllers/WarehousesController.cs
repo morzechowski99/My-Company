@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
@@ -57,16 +58,40 @@ namespace My_Company.Areas.Warehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewWarehouseViewModel warehouse)
+        public async Task<IActionResult> Create(NewWarehouseViewModel warehouseDto)
         {
             if (ModelState.IsValid)
             {
-                var warehouseDb = _mapper.Map<Models.Warehouse>(warehouse);
+                var warehouseDb = _mapper.Map<Models.Warehouse>(warehouseDto);
+                List<WarehouseRow> rows = new();
+                int order = 1;
+
+                foreach (var row in warehouseDto.Sectors)
+                {
+                    var sectors = new List<WarehouseSector>();
+                    for(int i = 0; i < row.Count; i++)
+                    {
+                        sectors.Add(new WarehouseSector()
+                        {
+                            Order = i + 1
+                        });
+                    }
+                    rows.Add(new WarehouseRow()
+                    {
+                        RowName = row.Name,
+                        Order = order,
+                        Sectors = sectors 
+                    });
+
+                    order++;
+                }
+
+                warehouseDb.Rows = rows;
                 _repositoryWrapper.WarehouseRepository.Create(warehouseDb);
                 await _repositoryWrapper.Save();
                 return RedirectToAction(nameof(Index));
             }
-            return View(warehouse);
+            return View(warehouseDto);
         }
 
         // GET: Warehouse/Warehouses/Edit/5
@@ -90,7 +115,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Street,PostalCode,City,Voivodeship")] My_Company.Models.Warehouse warehouse)
+        public async Task<IActionResult> Edit(int id, My_Company.Models.Warehouse warehouse)
         {
             if (id != warehouse.Id)
             {
@@ -101,19 +126,19 @@ namespace My_Company.Areas.Warehouse.Controllers
             {
                 try
                 {
-                    //_repositoryWrapper.WarehouseRepository.Update(warehouse);
-                    //await _context.SaveChangesAsync();
+                    _repositoryWrapper.WarehouseRepository.Update(warehouse);
+                    await _repositoryWrapper.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    //if (!WarehouseExists(warehouse.Id))
-                    //{
-                    //    return NotFound();
-                    //}
-                    //else
-                    //{
-                    //    throw;
-                    //}
+                    if (!await _repositoryWrapper.WarehouseRepository.Exists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -149,9 +174,33 @@ namespace My_Company.Areas.Warehouse.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
 
-        //private bool WarehouseExists(int id)
-        //{
-        //    return _context.Warehouses.Any(e => e.Id == id);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> EditPlan(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var warehouse = await _repositoryWrapper.WarehouseRepository.GetWithPlanById(id.Value);
+
+            if (warehouse == null)
+            {
+                return NotFound();
+            }
+
+            var plan = _mapper.Map<List<WarehouseRowViewModel>>(warehouse.Rows);
+
+            plan.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
+
+            foreach(var row in plan)
+            {
+                row.Sectors.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
+            }
+
+            ViewData["WarehouseName"] = warehouse.Name;
+            return View(plan);
+        }
+       
     }
 }

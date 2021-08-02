@@ -49,26 +49,27 @@
                 </div>
 
                 <span class="text-danger" id="rowsCountValidateMessage"></span>
+                <div class="table-responsive-lg">
+                    <table class="table table-striped table-bordered mt-3 mb-3" id="warehousePlan">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Sectors[0].Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Sectors[0].Count)
+                                </th>
+                                <th>
 
-                <table class="table table-striped table-bordered mt-3 mb-3" id="warehousePlan">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Sectors[0].Name)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Sectors[0].Count)
-                            </th>
-                            <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
 
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-
-            </div>
+                </div>
+                </div>
 
             <div class="d-flex justify-content-between">
                 <div>

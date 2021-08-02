@@ -1,0 +1,56 @@
+﻿@model IEnumerable<My_Company.Areas.Warehouse.ViewModels.WarehouseRowViewModel>
+
+@{
+    ViewData["Title"] = "Edycja planu";
+}
+
+<h1>Edycja planu</h1>
+
+<h4>@ViewData["WarehouseName"]</h4>
+<hr />
+
+<div class="table-responsive-md">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="d-flex">
+                <th class="col-2"></th>
+                <th class="col-8">
+                    @Html.DisplayNameFor(model => model.RowName)
+                </th>
+                <th class="col-2">
+                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="d-flex">
+                    <td class="rowExpander col-2" aria-rowId="@item.Id">
+                        <i class="bi bi-caret-right"></i>
+                    </td>
+                    <td class="col-8">
+                        @Html.DisplayFor(modelItem => item.RowName)
+                    </td>
+                    <td class="col-2">
+                        <button class="btn" data-toggle="modal" data-target="#addSectorModal"><i class="bi bi-plus-lg"></i></button>
+                    </td>
+                </tr>
+                @foreach (var sector in item.Sectors)
+                {
+                    <tr style="display:none" aria-rowId="@item.Id">
+                        <td class="col-2">
+                            @Html.DisplayFor(modelItem => item.RowName)@Html.DisplayFor(modelItem => sector.Order)
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    @await Component.InvokeAsync("AddSectorsModal")
+</div>
+
+
+@section Scripts {
+    <script src="~/js/Warehouse/Warehouses/EditPlan/EditPlan.js"></script>
+}
