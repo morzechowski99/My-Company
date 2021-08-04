@@ -10,22 +10,25 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 p-2">
-                            <div class="form-group">
-                                <label asp-for="Count" class="control-label"></label>
-                                <input asp-for="Count" class="form-control" id="sectorNameInput" />
-                                <span asp-validation-for="Count" class="text-danger" id="nameValidate"></span>
+                <form id="addSectorsForm">
+                    <input type="hidden" asp-for="RowId" value="0"/>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-2">
+                                <div class="form-group">
+                                    <label asp-for="Count" class="control-label"></label>
+                                    <input asp-for="Count" class="form-control" id="sectorNameInput" />
+                                    <span asp-validation-for="Count" class="text-danger" id="nameValidate"></span>
+                                </div>
                             </div>
+
                         </div>
-                        
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary " id="addSectorBtn">Dodaj</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary " id="addSectorBtn">Dodaj</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

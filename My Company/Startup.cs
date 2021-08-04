@@ -43,7 +43,9 @@ namespace My_Company
             new CustomValidationMetadataProvider(
                 "My_Company.Validation.Validation",
                 typeof(Validation.Validation)));
-            });
+            })
+                .AddNewtonsoftJson(opt => 
+            opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();

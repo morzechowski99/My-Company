@@ -9,6 +9,7 @@ namespace My_Company.Interfaces
     public interface IRepositoryWrapper
     {
         IWarehouseRepository WarehouseRepository { get; }
+        IWarehouseRowRepository WarehouseRowRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
     }

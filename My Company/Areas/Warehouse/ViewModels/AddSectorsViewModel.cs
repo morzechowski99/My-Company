@@ -12,7 +12,6 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Range(1,Int32.MaxValue,ErrorMessage = "Ilość musi być wieksza niż 0")]
         [Display(Name ="Ilość")]
         public int Count { get; set; }
-        public int RowId { get; set; } //todo zrobic forma na to
-        //todo oprocz forma zrobic akcje w kontrolerze
+        public int RowId { get; set; } 
     }
 }

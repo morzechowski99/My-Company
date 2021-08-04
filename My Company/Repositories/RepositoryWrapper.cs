@@ -13,6 +13,7 @@ namespace My_Company.Repositories
     {
         private readonly ApplicationDbContext _context;
         private IWarehouseRepository warehouseRepository;
+        private IWarehouseRowRepository warehouseRowRepository;
         public IWarehouseRepository WarehouseRepository
         {
             get
@@ -23,6 +24,18 @@ namespace My_Company.Repositories
                 return warehouseRepository;
             }
         }
+
+        public IWarehouseRowRepository WarehouseRowRepository
+        {
+            get
+            {
+                if (warehouseRowRepository == null)
+                    warehouseRowRepository = new WarehouseRowRepository(_context);
+
+                return warehouseRowRepository;
+            }
+        }
+
 
         public RepositoryWrapper(ApplicationDbContext context)
         {

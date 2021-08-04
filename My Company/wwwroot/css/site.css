@@ -80,3 +80,18 @@ body {
 .rowExpander {
     cursor: pointer;
 }
+
+/*spinner*/
+
+.spinner {
+    width: 5rem;
+    height: 5rem;
+    position:fixed;
+    top:50%;
+    left:50%;
+}
+
+.spinnerHidden {
+    display:none !important;
+}
+

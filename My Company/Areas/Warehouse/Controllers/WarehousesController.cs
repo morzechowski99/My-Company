@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
 
-        public WarehousesController(IMapper mapper,IRepositoryWrapper repositoryWrapper)
+        public WarehousesController(IMapper mapper, IRepositoryWrapper repositoryWrapper)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
@@ -41,7 +42,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
 
             var warehouse = await _repositoryWrapper.WarehouseRepository.GetById(id.Value);
-          
+
             if (warehouse == null)
             {
                 return NotFound();
@@ -50,7 +51,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(warehouse);
         }
 
-        
+
         public IActionResult Create()
         {
             return View();
@@ -69,7 +70,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 foreach (var row in warehouseDto.Sectors)
                 {
                     var sectors = new List<WarehouseSector>();
-                    for(int i = 0; i < row.Count; i++)
+                    for (int i = 0; i < row.Count; i++)
                     {
                         sectors.Add(new WarehouseSector()
                         {
@@ -80,7 +81,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                     {
                         RowName = row.Name,
                         Order = order,
-                        Sectors = sectors 
+                        Sectors = sectors
                     });
 
                     order++;
@@ -193,7 +194,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             plan.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
 
-            foreach(var row in plan)
+            foreach (var row in plan)
             {
                 row.Sectors.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
             }
@@ -201,6 +202,78 @@ namespace My_Company.Areas.Warehouse.Controllers
             ViewData["WarehouseName"] = warehouse.Name;
             return View(plan);
         }
-       
+
+        [HttpPost]
+        public async Task<IActionResult> AddSectors(AddSectorsViewModel newSecotrs)
+        {
+            try
+            {
+                if (newSecotrs == null || !ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var row = await _repositoryWrapper.WarehouseRowRepository.GetById(newSecotrs.RowId);
+                var sectorsCount = row.Sectors.Count;
+
+                for (int i = 1; i <= newSecotrs.Count; i++)
+                {
+                    row.Sectors.Add(new WarehouseSector()
+                    {
+                        Order = sectorsCount + i
+                    });
+                }
+
+                _repositoryWrapper.WarehouseRowRepository.Update(row);
+
+                await _repositoryWrapper.Save();
+
+                row.Sectors = row.Sectors.OrderBy(s => s.Order).ToList();
+
+                return Ok(row);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> SwapRows(int rowId, int direction)
+        {
+            try
+            {
+                if (direction != 1 && direction != -1)
+                    return BadRequest("invalid direction");
+
+                var row = await _repositoryWrapper.WarehouseRowRepository.GetById(rowId);
+
+                if (row == null)
+                    return NotFound("invalid rowId");
+
+
+                int order = row.Order + direction;
+
+                var secondRow = await _repositoryWrapper.WarehouseRowRepository.GetByOrderAndWarehouse(order, row.WarehouseId);
+
+                if (secondRow == null)
+                    return NotFound();
+
+                int temporder = row.Order;
+                row.Order = secondRow.Order;
+                secondRow.Order = temporder;
+
+                _repositoryWrapper.WarehouseRowRepository.Update(row);
+                _repositoryWrapper.WarehouseRowRepository.Update(secondRow);
+
+                await _repositoryWrapper.Save();
+
+                return Ok(secondRow.Id);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
