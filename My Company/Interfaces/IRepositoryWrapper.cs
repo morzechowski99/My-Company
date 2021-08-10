@@ -10,6 +10,7 @@ namespace My_Company.Interfaces
     {
         IWarehouseRepository WarehouseRepository { get; }
         IWarehouseRowRepository WarehouseRowRepository { get; }
+        IWarehouseSectorRepository WarehouseSectorRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -239,6 +240,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> SwapRows(int rowId, int direction)
         {
             try
@@ -273,6 +275,40 @@ namespace My_Company.Areas.Warehouse.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRow(int? RowId)
+        {
+            try
+            {
+                if (RowId == null)
+                    return BadRequest();
+
+                var row = await _repositoryWrapper.WarehouseRowRepository.GetById(RowId.Value);
+
+                if (row == null)
+                    return NotFound("there's no row with given id");
+
+                foreach(var sector in row.Sectors)
+                {
+                    _repositoryWrapper.WarehouseSectorRepository.Delete(sector);
+                }
+
+                _repositoryWrapper.WarehouseRowRepository.Delete(row);
+
+                await _repositoryWrapper.Save();
+
+                return Ok(RowId);
+            }
+            catch(Exception e)
+            {
+                if (e is DbUpdateConcurrencyException || e is DbUpdateException)
+                {
+                    return BadRequest("cannot delete this row");
+                }
+                else return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

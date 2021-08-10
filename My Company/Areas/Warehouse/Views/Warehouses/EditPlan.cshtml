@@ -37,7 +37,7 @@
                     </td>
                     <td class="col-sm-4 col-md-3">
                         <button class="btn openAddSectorModal" data-toggle="modal" data-target="#addSectorModal" data-rowId="@item.Id"><i class="bi bi-plus-lg"></i></button>
-                        <button class="btn" data-rowId="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                        <button class="btn openRemoveRowModal" data-toggle="modal" data-target="#removeRowModal" data-rowId="@item.Id"><i class="bi bi-trash-fill"></i></button>
                         @if (item.Order != 1)
                         {
                             <button class="btn moveUpBtn" data-rowId="@item.Id"><i class="bi bi-arrow-up"></i></button>
@@ -47,11 +47,12 @@
                         <button class="btn moveDownBtn" data-rowId="@item.Id"><i class="bi bi-arrow-down"></i></button>
                         }
 
+
                     </td>
                 </tr>
                 @foreach (var sector in item.Sectors)
                 {
-                    <tr style="display:none" aria-rowId="@item.Id">
+                    <tr style="display:none" aria-rowId="@item.Id" class="bg-light">
                         <td class="col-2">
                             @Html.DisplayFor(modelItem => item.RowName)@Html.DisplayFor(modelItem => sector.Order)
                         </td>
@@ -61,6 +62,7 @@
         </tbody>
     </table>
     @await Component.InvokeAsync("AddSectorsModal")
+    @await Component.InvokeAsync("RemoveRowModal")
 </div>
 
 <div class="spinner-border spinner spinnerHidden text-primary" >

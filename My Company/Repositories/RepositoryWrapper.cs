@@ -14,6 +14,7 @@ namespace My_Company.Repositories
         private readonly ApplicationDbContext _context;
         private IWarehouseRepository warehouseRepository;
         private IWarehouseRowRepository warehouseRowRepository;
+        private IWarehouseSectorRepository warehouseSectorRepository;
         public IWarehouseRepository WarehouseRepository
         {
             get
@@ -36,6 +37,16 @@ namespace My_Company.Repositories
             }
         }
 
+        public IWarehouseSectorRepository WarehouseSectorRepository
+        {
+            get
+            {
+                if (warehouseSectorRepository == null)
+                    warehouseSectorRepository = new WarehouseSectorRepository(_context);
+
+                return warehouseSectorRepository;
+            }
+        }
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
