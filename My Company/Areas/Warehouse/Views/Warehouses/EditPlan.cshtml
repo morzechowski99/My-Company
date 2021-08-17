@@ -12,6 +12,11 @@
 
 
 <div class="table-responsive-md">
+
+    <div class="d-flex justify-content-end mb-2">
+        <button type="button" class="btn btn-outline-primary" id="addRowBtn" data-toggle="modal" data-target="#addRowModal">Dodaj rząd</button>
+    </div>
+
     <table class="table table-bordered">
         
         <thead>
@@ -26,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.OrderBy(r => r.Order).ToList())
             {
                 <tr class="d-flex" id="row-@item.Id">
                     <td class="rowExpander col-2" aria-rowId="@item.Id">
@@ -36,18 +41,16 @@
                         @Html.DisplayFor(modelItem => item.RowName)
                     </td>
                     <td class="col-sm-4 col-md-3">
-                        <button class="btn openAddSectorModal" data-toggle="modal" data-target="#addSectorModal" data-rowId="@item.Id"><i class="bi bi-plus-lg"></i></button>
-                        <button class="btn openRemoveRowModal" data-toggle="modal" data-target="#removeRowModal" data-rowId="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                        <button class="btn openAddSectorModal m-0" data-toggle="modal" data-target="#addSectorModal" data-rowId="@item.Id"><i class="bi bi-plus-lg"></i></button>
+                        <button class="btn openRemoveRowModal m-0" data-toggle="modal" data-target="#removeRowModal" data-rowId="@item.Id"><i class="bi bi-trash-fill"></i></button>
                         @if (item.Order != 1)
                         {
-                            <button class="btn moveUpBtn" data-rowId="@item.Id"><i class="bi bi-arrow-up"></i></button>
+                        <button class="btn moveUpBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-up"></i></button>
                         }
                         @if (item.Order != Model.Count())
                         {
-                        <button class="btn moveDownBtn" data-rowId="@item.Id"><i class="bi bi-arrow-down"></i></button>
+                        <button class="btn moveDownBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-down"></i></button>
                         }
-
-
                     </td>
                 </tr>
                 @foreach (var sector in item.Sectors)
@@ -63,13 +66,22 @@
     </table>
     @await Component.InvokeAsync("AddSectorsModal")
     @await Component.InvokeAsync("RemoveRowModal")
+    @await Component.InvokeAsync("AddRowModal")
 </div>
 
 <div class="spinner-border spinner spinnerHidden text-primary" >
     
 </div>
 
+<div class="alert alert-danger alert-dismissible fade hide" role="alert">
+    <h5 class="alert-content">cos tam</h5>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/shared/shared.js"></script>
     <script src="~/js/Warehouse/Warehouses/EditPlan/EditPlan.js"></script>
 }

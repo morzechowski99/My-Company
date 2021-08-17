@@ -15,6 +15,17 @@ namespace My_Company.Repositories
         {
         }
 
+        public async Task DeleteRow(WarehouseRow row)
+        {
+            var rows = await FindByCondition(r => r.WarehouseId == row.WarehouseId && r.Order > row.Order).ToListAsync();
+            foreach(var item in rows)
+            {
+                item.Order = item.Order - 1;
+                Update(item);
+            }
+            Delete(row);
+        }
+
         public async Task<WarehouseRow> GetById(int rowId)
         {
             return await FindByCondition(row => row.Id == rowId).Include(row => row.Sectors).FirstOrDefaultAsync();

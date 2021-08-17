@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace My_Company.ViewModels
+namespace My_Company.Areas.Warehouse.ViewModels
 {
     public class NewWarehouseSectorViewModel
     {

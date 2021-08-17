@@ -12,7 +12,6 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
-using My_Company.ViewModels;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
@@ -240,7 +239,6 @@ namespace My_Company.Areas.Warehouse.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public async Task<IActionResult> SwapRows(int rowId, int direction)
         {
             try
@@ -296,9 +294,11 @@ namespace My_Company.Areas.Warehouse.Controllers
                     _repositoryWrapper.WarehouseSectorRepository.Delete(sector);
                 }
 
-                _repositoryWrapper.WarehouseRowRepository.Delete(row);
+                await _repositoryWrapper.WarehouseRowRepository.DeleteRow(row);
 
                 await _repositoryWrapper.Save();
+
+                
 
                 return Ok(RowId);
             }
@@ -309,6 +309,58 @@ namespace My_Company.Areas.Warehouse.Controllers
                     return BadRequest("cannot delete this row");
                 }
                 else return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRow(NewWarehouseSectorViewModel newRow,int? WarehouseId)
+        {
+            try
+            {
+                if(newRow == null || WarehouseId == null)
+                {
+                    return BadRequest();
+                }
+
+                var warehouse = await _repositoryWrapper.WarehouseRepository.GetWithPlanById(WarehouseId.Value);
+
+                if (warehouse == null)
+                    return NotFound("warehouse not found");
+
+                foreach(var row in warehouse.Rows)
+                {
+                    if(row.RowName == newRow.Name)
+                    {
+                        return BadRequest("name already exists");
+                    }
+                }
+
+                var sectors = new List<WarehouseSector>();
+                for (int i = 0; i < newRow.Count; i++)
+                {
+                    sectors.Add(new WarehouseSector()
+                    {
+                        Order = i + 1
+                    });
+                }
+
+                WarehouseRow newRowDb = new()
+                {
+                    RowName = newRow.Name,
+                    WarehouseId = warehouse.Id,
+                    Order = warehouse.Rows.Count + 1,
+                    Sectors = sectors
+                };
+
+                _repositoryWrapper.WarehouseRowRepository.Create(newRowDb);
+
+                await _repositoryWrapper.Save();
+                return Ok(newRowDb);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

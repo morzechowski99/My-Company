@@ -95,3 +95,16 @@ body {
     display:none !important;
 }
 
+/*alert*/
+
+.alert {
+    left: 0;
+    margin: auto;
+    position: absolute;
+    width: 60%;
+    bottom: 10%;
+    right: 0;
+    text-align: center;
+    z-index: 1;
+}
+

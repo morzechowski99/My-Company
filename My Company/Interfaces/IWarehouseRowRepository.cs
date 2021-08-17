@@ -10,5 +10,6 @@ namespace My_Company.Interfaces
     {
         Task<WarehouseRow> GetById(int rowId);
         Task<WarehouseRow> GetByOrderAndWarehouse(int order, int warehouseId);
+        Task DeleteRow(WarehouseRow row);
     }
 }
