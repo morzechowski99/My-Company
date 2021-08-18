@@ -52,9 +52,9 @@
                 
             })
             .done(function (data) {
-                alert(JSON.stringify(data))
+                
                 const tableBody = $('.table tbody')
-                const newFirstRow = $(`<tr class="d-flex" id="row-${data.id}"</tr>`)
+                const newFirstRow = $(`<tr class="d-flex rowDetails" id="row-${data.id}"</tr>`)
                 /*expander*/
                 const expander = $(` <td class="rowExpander col-2" aria-rowId="${data.id}">
                         <i class="bi bi-caret-right"></i>
@@ -82,21 +82,34 @@
                     const rowId = $(this).data("rowid")
                     $("#removeRowModal input[name=RowId]").val(rowId)
                 })
-                //swapBtn
-                const swapBtn = $(`<button class="btn moveUpBtn" data-rowId="${data.id}"><i class="bi bi-arrow-up"></i></button> `)
-                swapBtn.click(function (e) {
-                    const rowId = $(this).data("rowid")
-                    $(".spinner").removeClass('spinnerHidden')
-                    swapRows(rowId, -1)
-                    $(".spinner").addClass('spinnerHidden')
-                })
-
+             
                 //append elements
                 actionsTd.append(addSectorsBtn)
                 actionsTd.append('&nbsp;')
                 actionsTd.append(removeRowBtn)
                 actionsTd.append('&nbsp;')
-                actionsTd.append(swapBtn)
+                if (data.order != 1) {
+                    //swapBtn
+                    const swapUpBtn = $(`<button class="btn moveUpBtn" data-rowId="${data.id}"><i class="bi bi-arrow-up"></i></button> `)
+                    swapUpBtn.click(function (e) {
+                        const rowId = $(this).data("rowid")
+                        $(".spinner").removeClass('spinnerHidden')
+                        swapRows(rowId, -1)
+                        $(".spinner").addClass('spinnerHidden')
+                    })
+                    actionsTd.append(swapUpBtn)
+                    const prevRowDetails = $('.rowDetails').last()
+                    const id = prevRowDetails.find('.btn').data("rowid")
+                    const swapDownBtn = $(`<button class="btn moveDownBtn m-0" data-rowId="${id}"><i class="bi bi-arrow-down"></i></button>`)
+                    swapDownBtn.click(function () {
+                        const rowId = $(this).data("rowid")
+                        $(".spinner").removeClass('spinnerHidden')
+                        swapRows(rowId, 1)
+                        $(".spinner").addClass('spinnerHidden')
+                    })
+                    
+                    prevRowDetails.find('td').last().append(swapDownBtn)
+                }
                 newFirstRow.append(expander)
                 newFirstRow.append(rowTd)
                 newFirstRow.append(actionsTd)
@@ -111,6 +124,7 @@
                     </tr>`)
                     tableBody.append(tr)
                 })
+                $('.modal').modal('hide')
             })
         $(".spinner").addClass('spinnerHidden')
 
@@ -141,10 +155,22 @@
         $("#removeRowModal input[name=RowId]").val(rowId)
     })
 
+    $(".openRemoveSectorModal").click(function (e) {
+        const sectorId = $(this).data("sector")
+        $("#removeSectorModal input[name=sectorId]").val(sectorId)
+    })
+
     $("#removeRowBtn").click(function (e) {
         const rowId = $("#removeRowModal input[name=RowId]").val()
         $(".spinner").removeClass('spinnerHidden')
         deleteRow(rowId)
+        $(".spinner").addClass('spinnerHidden')
+    })
+
+    $("#removeSectorBtn").click(function (e) {
+        const sectorId = $("#removeSectorModal input[name=sectorId]").val()
+        $(".spinner").removeClass('spinnerHidden')
+        deleteSector(sectorId)
         $(".spinner").addClass('spinnerHidden')
     })
 })
@@ -161,62 +187,14 @@ const swapRows = function (rowId, direction) {
 
             if (direction == 1) {
                 $(`#row-${rowId}`).insertAfter($(`#row-${data}`))
-                if ($(`#row-${rowId} button.moveUpBtn`).length == 0) {
-                    $(`#row-${data} button.moveUpBtn`).remove()
-                    const btnUp = $(`<button class="btn moveUpBtn" data-rowId="${rowId}">
-                        <i class="bi bi-arrow-up"></i>
-                    </button>`)
-                    btnUp.click(function () {
-                        const rowId = $(this).data("rowid")
-                        $(".spinner").removeClass('spinnerHidden')
-                        swapRows(rowId, -1)
-                        $(".spinner").addClass('spinnerHidden')
-                    })
-                    $(`#row-${rowId} td button.moveDownBtn`).before(btnUp)
-                }
-                if ($(`#row-${data} button.moveDownBtn`).length == 0) {
-                    $(`#row-${rowId} button.moveDownBtn`).remove()
-                    const btnDown = $(`<button class="btn moveDownBtn" data-rowId="${data}">
-                        <i class= "bi bi-arrow-down"></i>
-                    </button>`)
-                    btnDown.click(function () {
-                        const rowId = $(this).data("rowid")
-                        $(".spinner").removeClass('spinnerHidden')
-                        swapRows(rowId, 1)
-                        $(".spinner").addClass('spinnerHidden')
-                    })
-                    $(`#row-${data} td button.moveUpBtn`).after(btnDown)
-                }
-
+                
             } else {
                 $(`#row-${rowId}`).insertBefore($(`#row-${data}`))
-                if ($(`#row-${data} button.moveUpBtn`).length == 0) {
-                    $(`#row-${rowId} button.moveUpBtn`).remove()
-                    const btnUp = $(`<button class="btn moveUpBtn" data-rowId="${data}">
-                        <i class="bi bi-arrow-up"></i>
-                    </button>`)
-                    btnUp.click(function () {
-                        const rowId = $(this).data("rowid")
-                        $(".spinner").removeClass('spinnerHidden')
-                        swapRows(rowId, -1)
-                        $(".spinner").addClass('spinnerHidden')
-                    })
-                    $(`#row-${data} td button.moveDownBtn`).before(btnUp)
-                }
-                if ($(`#row-${rowId} button.moveDownBtn`).length == 0) {
-                    $(`#row-${data} button.moveDownBtn`).remove()
-                    const btnDown = $(`<button class="btn moveDownBtn" data-rowId="${rowId}">
-                        <i class= "bi bi-arrow-down"></i>
-                    </button>`)
-                    btnDown.click(function () {
-                        const rowId = $(this).data("rowid")
-                        $(".spinner").removeClass('spinnerHidden')
-                        swapRows(rowId, 1)
-                        $(".spinner").addClass('spinnerHidden')
-                    })
-                    $(`#row-${rowId} td button.moveUpBtn`).after(btnDown)
-                }
+                
             }
+
+            fixArrows()
+
             const rows = $(document).find('tr[aria-rowId]').toArray()
             rows.reverse().forEach(row => {
                 if ($(row).attr("aria-rowId") == rowId) {
@@ -245,7 +223,18 @@ const deleteRow = function (rowId) {
                     $(row).hide("slow", null, () => { $(row).remove() })
                 }
             })
-            $(`#row-${data}`).hide("slow", null, function() { $(this).remove() })
+            $(`#row-${data}`).hide("slow", null, function () { $(this).remove() })
+            const detailsRows = $('.rowDetails').toArray()
+           
+            if (detailsRows.length === 2) {
+                $(detailsRows[0]).find('.moveUpBtn').remove()
+                $(detailsRows[0]).find('.moveDownBtn').remove()
+            }
+            else  {
+                $(detailsRows[0]).find('.moveUpBtn').remove()
+                $(detailsRows[1]).find('.moveDownBtn').remove()
+            }
+            
         },
         error: function (data) {
             if (data.responseText == "cannot delete this row")
@@ -267,7 +256,7 @@ const showHideRows = function () {
         i.addClass("bi-caret-down")
         rows.forEach(row => {
             if ($(row).attr("aria-rowId") == id) {
-                $(row).show("fast", null, () => { $(row).css('display', 'flex') })
+                $(row).css('display', 'flex')
 
             }
         })
@@ -280,4 +269,74 @@ const showHideRows = function () {
             }
         })
     }
+}
+
+const fixArrows = function () {
+    $('.rowDetails').find('.moveUpBtn').remove()
+    $('.rowDetails').find('.moveDownBtn').remove()
+    const rows = $('.rowDetails').toArray()
+    if (rows.length === 0 || rows.length === 1) return
+    else if (rows.length === 2) {
+        const id1 = $(rows[0]).find('td').first().attr('aria-rowId')
+        $(rows[0]).find('td').last().append(getBtnDown(id1))
+        const id2 = $(rows[1]).find('td').first().attr('aria-rowId')
+        $(rows[1]).find('td').last().append(getBtnUp(id2))
+    }
+    else {
+        rows.forEach((row, index, array) => {
+            if (index === 0) {
+                const id1 = $(row).find('td').first().attr('aria-rowId')
+                $(row).find('td').last().append(getBtnDown(id1))
+            }
+            else if (index === array.length - 1) {
+                const id2 = $(row).find('td').first().attr('aria-rowId')
+                $(row).find('td').last().append(getBtnUp(id2))
+            }
+            else {
+                const id = $(row).find('td').first().attr('aria-rowId')
+                $(row).find('td').last().append(getBtnUp(id))
+                $(row).find('td').last().append(getBtnDown(id))
+            }
+        })
+    }
+}
+
+const getBtnDown = function (rowid) {
+    const swapDownBtn = $(`<button class="btn moveDownBtn m-0" data-rowId="${rowid}"><i class="bi bi-arrow-down"></i></button>`)
+    swapDownBtn.click(function () {
+        const rowId = $(this).data("rowid")
+        $(".spinner").removeClass('spinnerHidden')
+        swapRows(rowId, 1)
+        $(".spinner").addClass('spinnerHidden')
+    })
+    return swapDownBtn
+}
+
+const getBtnUp = function (rowid) {
+    const swapUpBtn = $(`<button class="btn moveUpBtn" data-rowId="${rowid}"><i class="bi bi-arrow-up"></i></button> `)
+    swapUpBtn.click(function (e) {
+        const rowId = $(this).data("rowid")
+        $(".spinner").removeClass('spinnerHidden')
+        swapRows(rowId, -1)
+        $(".spinner").addClass('spinnerHidden')
+    })
+    return swapUpBtn
+}
+
+const deleteSector = function (sectorId) {
+    $.ajax({
+        url: 'DeleteSector',
+        type: 'DELETE',
+        data: {
+            sectorId: sectorId,
+        },
+        success: function (data) {
+            console.log("usunięto")
+
+        },
+        error: function (data) {
+            $('.alert .alert-content').text("Wystąpił błąd")
+            showAlert()
+        }
+    })
 }

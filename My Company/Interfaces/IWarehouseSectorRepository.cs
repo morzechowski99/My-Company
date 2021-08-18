@@ -8,7 +8,10 @@ namespace My_Company.Interfaces
 {
     public interface IWarehouseSectorRepository : IRepositoryBase<WarehouseSector>
     {
-       
+        Task<bool> IsEmpty(int sectorId);
+        Task<WarehouseSector> GetById(int id);
+        Task<WarehouseSector> GetByWithRowId(int id);
+        Task DeleteSector(WarehouseSector sector);
     }
     
 }

@@ -197,6 +197,10 @@ namespace My_Company.Areas.Warehouse.Controllers
             foreach (var row in plan)
             {
                 row.Sectors.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
+                foreach(var sector in row.Sectors)
+                {
+                    sector.Deletable = await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(sector.Id);
+                }
             }
 
             ViewData["WarehouseName"] = warehouse.Name;
@@ -361,6 +365,39 @@ namespace My_Company.Areas.Warehouse.Controllers
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSector(int? SectorId)
+        {
+            try
+            {
+                if (SectorId == null)
+                    return BadRequest();
+
+                var sector = await _repositoryWrapper.WarehouseSectorRepository.GetByWithRowId(SectorId.Value);
+
+                if (sector == null)
+                    return NotFound("invalid Id");
+
+                if (!(await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(SectorId.Value)))
+                    return BadRequest("sector isn't empty");
+
+                await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);
+           
+                await _repositoryWrapper.Save();
+                //todo map and return and frontend
+
+                return Ok(sector.Row.Sectors);
+            }
+            catch (Exception e)
+            {
+                if (e is DbUpdateConcurrencyException || e is DbUpdateException)
+                {
+                    return BadRequest("cannot delete this row");
+                }
+                else return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
