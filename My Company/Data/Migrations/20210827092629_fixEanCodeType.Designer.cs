@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_Company.Data;
 
 namespace My_Company.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210827092629_fixEanCodeType")]
+    partial class fixEanCodeType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -408,6 +410,9 @@ namespace My_Company.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
                     b.Property<string>("NIP")
                         .HasColumnType("nvarchar(max)");
 
@@ -443,7 +448,7 @@ namespace My_Company.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VATRates");
+                    b.ToTable("VATRate");
                 });
 
             modelBuilder.Entity("My_Company.Models.Warehouse", b =>
@@ -497,7 +502,7 @@ namespace My_Company.Data.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WarehouseRows");
+                    b.ToTable("warehouseRows");
                 });
 
             modelBuilder.Entity("My_Company.Models.WarehouseSector", b =>

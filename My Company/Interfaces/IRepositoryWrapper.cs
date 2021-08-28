@@ -11,6 +11,10 @@ namespace My_Company.Interfaces
         IWarehouseRepository WarehouseRepository { get; }
         IWarehouseRowRepository WarehouseRowRepository { get; }
         IWarehouseSectorRepository WarehouseSectorRepository { get; }
+        ICategoriesRepository CategoriesRepository { get; }
+        IVATRatesRepository VATRatesRepository { get; }
+        ISuppliersRepository SuppliersRepository { get; }
+        IProductRepository ProductRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
     }

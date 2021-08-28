@@ -24,11 +24,20 @@
                                 Magazyn
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item"  asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twoje magazyny</a>
+                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twoje magazyny</a>
                             </div>
                         </li>
-                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Produkty
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Products" asp-action="Index">Produkty</a>
+                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Products" asp-action="Create">Dodaj produkt</a>
+                            </div>
+                        </li>
                     </ul>
+                   
                     @*<partial name="_LoginPartial" />*@
                 </div>
             </div>

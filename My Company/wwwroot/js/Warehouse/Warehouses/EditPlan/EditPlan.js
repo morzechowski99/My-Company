@@ -21,12 +21,18 @@
                 expander.removeClass("bi-caret-right")
                 expander.addClass("bi-caret-down")
                 let prevrow = trprev;
-                data.sectors.forEach(sector => {
+                data.sectors.forEach((sector,idx,array) => {
                     newrow = $(`<tr style="display:flex" aria-rowId="${data.id}" class="bg-light">
                     <td class="col-2">
                             ${data.rowName}${sector.order}
                     </td>
                 </tr>`)
+                    const td2 = $(` <td class="col-sm-6 col-md-7"></td>`)
+                    if (idx === array.length-1) {
+                        td2.append(getDeleteSectorBtn(sector.id, false))
+                        
+                    }
+                    newrow.append(td2)
                     prevrow.after(newrow)
                     prevrow = newrow
                 })
@@ -331,12 +337,44 @@ const deleteSector = function (sectorId) {
             sectorId: sectorId,
         },
         success: function (data) {
-            console.log("usunięto")
+            $(document).find(`tr[aria-rowId=${data.rowId}]`).not(".rowDetails").remove()
 
+            const row = $(`#row-${data.rowId}`)
+
+            data.sectors.reverse().forEach((sector, idx) => {
+                const tr = $(`<tr style="display:flex" aria-rowId="${data.rowId}" class="bg-light"></tr>`)
+                const td1 = $(` <td class="col-2">
+                            ${data.rowName}${sector.order}
+                        </td>`)
+                tr.append(td1)
+                const td2 = $(` <td class="col-sm-6 col-md-7"></td>`)
+                
+                if (idx === 0) {
+                    td2.append(getDeleteSectorBtn(sector.id, !sector.deletable))
+                    if (!sector.deletable)
+                        td2.append($(`<span class="text-danger">Usuń wszystkie produkty z sektora</span>`))
+                }
+                tr.append(td2)
+                row.after(tr)
+            })
         },
         error: function (data) {
             $('.alert .alert-content').text("Wystąpił błąd")
             showAlert()
         }
     })
+}
+
+const getDeleteSectorBtn = function (sectorId, disabled) {
+    let btn;
+    if (!disabled) {
+        btn = $(`<button class="btn openRemoveSectorModal m-0" data-toggle="modal" data-target="#removeSectorModal" data-sector="${sectorId}"><i class="bi bi-trash-fill"></i></button>`)
+        btn.click(function (e) {
+            const sectorId = $(this).data("sector")
+            $("#removeSectorModal input[name=sectorId]").val(sectorId)
+        })
+    }
+    else
+        btn = $(`<button disabled class="btn m-0"><i class="bi bi-trash-fill"></i></button> `)
+    return btn
 }

@@ -387,9 +387,17 @@ namespace My_Company.Areas.Warehouse.Controllers
                 await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);
            
                 await _repositoryWrapper.Save();
-                //todo map and return and frontend
 
-                return Ok(sector.Row.Sectors);
+                var sectors = await _repositoryWrapper.WarehouseSectorRepository.GetSectorsByRow(sector.RowId);
+
+                var sectorsDTOs = _mapper.Map<List<WarehouseSectorViewModel>>(sectors.OrderBy(s => s.Order));
+
+                foreach (var s in sectorsDTOs)
+                {
+                    s.Deletable = await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(s.Id);
+                }
+                
+                return Ok(new { sectors=sectorsDTOs, rowId=sector.RowId, rowName = sector.Row.RowName });
             }
             catch (Exception e)
             {

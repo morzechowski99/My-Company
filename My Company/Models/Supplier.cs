@@ -21,7 +21,6 @@ namespace My_Company.Models
         public string PhoneNumber { get; set; }
         public string WebSite { get; set; }
         public string Email { get; set; }
-        public int MyProperty { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }

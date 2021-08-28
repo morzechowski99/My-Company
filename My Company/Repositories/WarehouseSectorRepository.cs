@@ -42,5 +42,10 @@ namespace My_Company.Repositories
             }
             Delete(sector);
         }
+
+        public async Task<IEnumerable<WarehouseSector>> GetSectorsByRow(int rowId)
+        {
+            return await FindByCondition(s => s.RowId == rowId).ToListAsync();
+        }
     }
 }

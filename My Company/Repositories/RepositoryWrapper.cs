@@ -15,6 +15,15 @@ namespace My_Company.Repositories
         private IWarehouseRepository warehouseRepository;
         private IWarehouseRowRepository warehouseRowRepository;
         private IWarehouseSectorRepository warehouseSectorRepository;
+        private ICategoriesRepository categoriesRepository;
+        private IVATRatesRepository _VATRatesRepository;
+        private ISuppliersRepository suppliersRepository;
+        private IProductRepository productRepository;
+
+        public RepositoryWrapper(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public IWarehouseRepository WarehouseRepository
         {
             get
@@ -48,9 +57,48 @@ namespace My_Company.Repositories
             }
         }
 
-        public RepositoryWrapper(ApplicationDbContext context)
+        public ICategoriesRepository CategoriesRepository
         {
-            _context = context;
+            get
+            {
+                if (categoriesRepository == null)
+                    categoriesRepository = new CategoriesRepository(_context);
+
+                return categoriesRepository;
+            }
+        }
+
+        public IVATRatesRepository VATRatesRepository
+        {
+            get
+            {
+                if (_VATRatesRepository == null)
+                    _VATRatesRepository = new VATRatesRepository(_context);
+
+                return _VATRatesRepository;
+            }
+        }
+
+        public ISuppliersRepository SuppliersRepository
+        {
+            get
+            {
+                if (suppliersRepository == null)
+                    suppliersRepository = new SuppliersRepository(_context);
+
+                return suppliersRepository;
+            }
+        }
+
+        public IProductRepository ProductRepository
+        {
+            get
+            {
+                if (productRepository == null)
+                    productRepository = new ProductRepository(_context);
+
+                return productRepository;
+            }
         }
 
         public async Task<IDbContextTransaction> BeginTransaction()

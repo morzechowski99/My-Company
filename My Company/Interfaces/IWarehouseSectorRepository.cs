@@ -12,6 +12,7 @@ namespace My_Company.Interfaces
         Task<WarehouseSector> GetById(int id);
         Task<WarehouseSector> GetByWithRowId(int id);
         Task DeleteSector(WarehouseSector sector);
+        Task<IEnumerable<WarehouseSector>> GetSectorsByRow(int rowId);
     }
     
 }
