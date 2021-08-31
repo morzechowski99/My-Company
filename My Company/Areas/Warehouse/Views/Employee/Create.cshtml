@@ -1,0 +1,51 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.CreateUserViewModel
+
+@{
+    ViewData["Title"] = "Nowy użytkownik";
+}
+
+<h1>Dodaj</h1>
+
+<h4>Użytkownik</h4>
+<hr />
+
+<form asp-action="Create">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surname" class="control-label"></label>
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" class="form-control" asp-items="ViewBag.Roles"></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Stwórz" class="btn btn-primary" />
+    </div>
+</form>
+
+
+
+<div>
+    <a asp-action="Index">Anuluj</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

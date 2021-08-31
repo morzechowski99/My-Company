@@ -19,6 +19,7 @@ namespace My_Company.Repositories
         private IVATRatesRepository _VATRatesRepository;
         private ISuppliersRepository suppliersRepository;
         private IProductRepository productRepository;
+        private IUserRepository userRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -101,9 +102,25 @@ namespace My_Company.Repositories
             }
         }
 
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if (userRepository == null)
+                    userRepository = new UserRepository(_context);
+
+                return userRepository;
+            }
+        }
+
         public async Task<IDbContextTransaction> BeginTransaction()
         {
             return await _context.Database.BeginTransactionAsync();
+        }
+
+        public bool EnsureCreated()
+        {
+            return _context.Database.EnsureCreated();
         }
 
         public async Task Save()

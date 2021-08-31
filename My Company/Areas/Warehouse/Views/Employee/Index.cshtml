@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Pracownicy";
+}
+
+<h1>Pracownicy</h1>
+
+<p>
+    <a asp-action="Create">Dodaj pracownika</a>
+</p>
+<div class="row ">
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="searchValue" placeholder="Szukaj">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="input-group my-2">
+            <select class="form-control" id="roleSelect">
+                <option selected value="">Rola</option>
+
+                @foreach (var opt in ViewData["roles"] as IEnumerable<My_Company.Areas.Warehouse.ViewModels.RoleViewModel>)
+                {
+                    <option value="@opt.Id">@opt.RolePL</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="">Sortowanie</option>
+                <option value="0">Imię i Nazwisko Rosnąco</option>
+                <option value="1">Imię i Nazwisko Malejąco</option>
+                <option value="2">Email Rosnąco</option>
+                <option value="3">Email Malejąco</option>
+                <option value="4">Nazwa użytkownika Rosnąco</option>
+                <option value="5">Nazwa użytkownika Malejąco</option>
+
+
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table">
+    @await Component.InvokeAsync("EmployeeList", new My_Company.Areas.Warehouse.ViewModels.EmployeeListFilters())
+</div>
+
+@section Scripts{
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Employee/Index/Index.js">
+
+    </script>
+}
+
+@await Component.InvokeAsync("LockEmployeeModal")
+@await Component.InvokeAsync("UnlockEmployeeModal")
+
+<div class="alert alert-danger alert-dismissible fade hide" role="alert">
+    <h5 class="alert-content">Wystąpił problem</h5>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

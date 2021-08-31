@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using My_Company.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using My_Company.Areas.Warehouse.ViewModels;
 
 namespace My_Company.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext 
+        : IdentityDbContext<AppUser,AppRole,string,IdentityUserClaim<string>, 
+            AppUserRole, IdentityUserLogin<string>,
+            IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -48,6 +53,22 @@ namespace My_Company.Data
             {
                 entity.HasKey(e => new { e.SectorId, e.ProductId });
             });
+
+            builder.Entity<AppUserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId);
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId);
+            });
         }
+
+        
+        public DbSet<My_Company.Areas.Warehouse.ViewModels.EditEmployeeViewModel> EditEmployeeViewModel { get; set; }
     }
 }

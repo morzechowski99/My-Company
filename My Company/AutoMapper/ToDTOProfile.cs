@@ -16,6 +16,12 @@ namespace My_Company.AutoMapper
             CreateMap<WarehouseRow, WarehouseRowViewModel>();
 
             CreateMap<WarehouseSector, WarehouseSectorViewModel>();
+
+            CreateMap<AppUser, EmployeeListItem>()
+                .ForMember(x => x.NameAndSurname, opt => opt.MapFrom(y => $"{y.Name} {y.Surname}"))
+                .ForMember(x => x.LockoutEnabled, opt => opt.MapFrom(y => y.LockoutEnd != null && y.LockoutEnd > DateTime.Now));
+
+            CreateMap<AppUser, EditEmployeeViewModel>();
         }
     }
 }

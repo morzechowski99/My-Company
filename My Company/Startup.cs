@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Repositories;
+using My_Company.Services;
 using My_Company.Validation;
 using System;
 using System.Collections.Generic;
@@ -36,8 +38,16 @@ namespace My_Company
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<AppUser>(options => {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -._@+/";
+                })
+                .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IUsersService, UsersService>();
+
             services.AddControllersWithViews(o => {
                 o.ModelMetadataDetailsProviders.Add(
             new CustomValidationMetadataProvider(

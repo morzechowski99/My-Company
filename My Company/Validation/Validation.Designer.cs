@@ -61,6 +61,15 @@ namespace My_Company.Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Podaj poprawny adres e-mail.
+        /// </summary>
+        public static string EmailAddressAttribute {
+            get {
+                return ResourceManager.GetString("EmailAddressAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimalna wartość to {1}.
         /// </summary>
         public static string MinAttribute {

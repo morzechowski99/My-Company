@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using My_Company.Models;
 namespace My_Company.Areas.Warehouse.Controllers
 {
     [Area("Warehouse")]
+    [Authorize(Roles = Constants.Roles.MainAdministrator)]
     public class ProductsController : Controller
     {
         private readonly IRepositoryWrapper repositoryWrapper;
@@ -84,6 +86,8 @@ namespace My_Company.Areas.Warehouse.Controllers
             ViewData["VATRateId"] = ViewHelpers.GetVatRatesSelectList(repositoryWrapper.VATRatesRepository.FindAll(), productViewModel.VATRateId);
             return View(productViewModel);
         }
+
+      
 
         // GET: Warehouse/Products/Edit/5
         //public async Task<IActionResult> Edit(int? id)

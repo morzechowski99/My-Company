@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace My_Company.Models
 {
-    public class AppUser: IdentityUser
+    public class AppRole: IdentityRole
     {
-        public AppUser()
+        public AppRole()
         {
-            Orders = new HashSet<Order>();
             UserRoles = new HashSet<AppUserRole>();
         }
 
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<AppUserRole> UserRoles { get; set; }
     }
 }

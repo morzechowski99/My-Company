@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using My_Company.InitializeDb;
+using My_Company.Interfaces;
+using My_Company.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +18,11 @@ namespace My_Company
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            CreateDbIfNotExists(host);
+            
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -23,5 +32,24 @@ namespace My_Company
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseUrls("http://192.168.8.106:5000");
                 });
+
+        private async static Task CreateDbIfNotExists(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var repopWrapper = services.GetRequiredService<IRepositoryWrapper>();
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                    await DbInitializer.Initialize(repopWrapper, userManager, roleManager);
+                }
+                catch
+                {
+
+                }
+            }
+        }
     }
 }

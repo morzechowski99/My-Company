@@ -29,7 +29,7 @@ namespace My_Company.Validation
             foreach (var attribute in context.ValidationMetadata.ValidatorMetadata)
             {
                 ValidationAttribute tAttr = attribute as ValidationAttribute;
-                if (tAttr != null && tAttr.ErrorMessage == null
+                if (tAttr != null 
                         && tAttr.ErrorMessageResourceName == null)
                 {
                     var name = tAttr.GetType().Name;

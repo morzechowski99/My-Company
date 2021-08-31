@@ -14,6 +14,7 @@ namespace My_Company.AutoMapper
         {
             CreateMap<NewWarehouseViewModel, Warehouse>();
             CreateMap<NewProductViewModel, Product>();
+            CreateMap<CreateUserViewModel, AppUser>();
         }
     }
 }

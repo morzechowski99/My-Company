@@ -2,7 +2,7 @@
 
 namespace My_Company.Data.Migrations
 {
-    public partial class fix : Migration
+    public partial class fixes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

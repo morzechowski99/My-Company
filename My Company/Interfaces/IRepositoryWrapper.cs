@@ -15,7 +15,9 @@ namespace My_Company.Interfaces
         IVATRatesRepository VATRatesRepository { get; }
         ISuppliersRepository SuppliersRepository { get; }
         IProductRepository ProductRepository { get; }
+        IUserRepository UserRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
+        bool EnsureCreated();
     }
 }
