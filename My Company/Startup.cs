@@ -40,6 +40,7 @@ namespace My_Company
 
             services.AddDefaultIdentity<AppUser>(options => {
                 options.SignIn.RequireConfirmedAccount = true;
+                options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -._@+/";
                 })
                 .AddRoles<AppRole>()

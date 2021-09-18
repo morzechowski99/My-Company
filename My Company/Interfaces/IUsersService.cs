@@ -17,5 +17,7 @@ namespace My_Company.Interfaces
         Task LockUser(AppUser user);
         Task UnlockUser(AppUser user);
         Task<AppUser> GetUserWithRolesById(string id);
+        Task EditUser(AppUser editedUser, string role,string prevName, string prevSurname);
+        Task<bool> CheckEmail(string email);
     }
 }

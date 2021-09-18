@@ -38,7 +38,7 @@ namespace My_Company.Services
 
             string password = GeneratePassword();
 
-            IdentityResult checkUser = await _userManager.CreateAsync(newUser, GeneratePassword());
+            IdentityResult checkUser = await _userManager.CreateAsync(newUser, password);
 
             if (checkUser.Succeeded)
             {
@@ -181,6 +181,33 @@ namespace My_Company.Services
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task EditUser(AppUser editedUser, string role, string prevName, string prevSurname)
+        {
+            editedUser.Name = editedUser.Name.Trim();
+            editedUser.Surname = editedUser.Surname.Trim();
+
+            if(editedUser.Name != prevName || editedUser.Surname != prevName)
+                editedUser.UserName = await getUserName(editedUser);
+
+            IdentityResult checkUser = await _userManager.UpdateAsync(editedUser);
+
+            if (checkUser.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(editedUser);
+                await _userManager.RemoveFromRolesAsync(editedUser, roles.ToArray());
+                await _userManager.AddToRoleAsync(editedUser, role);
+            }
+
+            string message = $"Administrator zaaktualizował twoje konto. Twoj login to: {editedUser.UserName}";
+
+            await _emailSender.SendEmailAsync(editedUser.Email, "Modyfikacja konta", message);
+        }
+
+        public async Task<bool> CheckEmail(string email)
+        {
+            return await _userManager.Users.AnyAsync(user => user.Email == email);
         }
     }
 }

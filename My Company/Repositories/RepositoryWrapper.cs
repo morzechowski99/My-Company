@@ -20,6 +20,7 @@ namespace My_Company.Repositories
         private ISuppliersRepository suppliersRepository;
         private IProductRepository productRepository;
         private IUserRepository userRepository;
+        private ICategoryAttributesRepository categoryAttributesRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -110,6 +111,17 @@ namespace My_Company.Repositories
                     userRepository = new UserRepository(_context);
 
                 return userRepository;
+            }
+        } 
+        
+        public ICategoryAttributesRepository CategoryAttributesRepository
+        {
+            get
+            {
+                if (categoryAttributesRepository == null)
+                    categoryAttributesRepository = new CategoryAttributesRepository(_context);
+
+                return categoryAttributesRepository;
             }
         }
 

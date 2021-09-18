@@ -22,6 +22,13 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.LockoutEnabled, opt => opt.MapFrom(y => y.LockoutEnd != null && y.LockoutEnd > DateTime.Now));
 
             CreateMap<AppUser, EditEmployeeViewModel>();
+
+            CreateMap<Models.Attribute, CreteAttributeViewModel>();
+
+            CreateMap<Models.Attribute, AttributeValuesViewModel>()
+                .ForMember(x => x.AttributeId, opt => opt.MapFrom(y => y.Id))
+                .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Name))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

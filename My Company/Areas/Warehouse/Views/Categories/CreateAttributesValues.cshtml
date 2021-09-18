@@ -1,0 +1,74 @@
+﻿@model List<My_Company.Areas.Warehouse.ViewModels.AttributeValuesViewModel>
+
+@{
+    ViewBag.Title = "Zarządzaj słownikami";
+}
+
+<h1>Zarządzaj słownikami</h1>
+
+<hr />
+
+<form id="attributesValuesForm" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+
+        <div class="tab" id="attributesTab-@i">
+            <input type="hidden" asp-for="@Model[i].AttributeId" />
+            <h4>Dodaj wartości dla: @Html.DisplayFor(model => model[i].Name)</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-8 col-md-10">
+                            <input class="form-control attributeNameInput" name="name-@i" type="text" placeholder="Nazwa" />
+                            <span class="text-danger" id="validationName-@i"></span>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <button type="button" class="btn btn-outline-info addValueBtn" data-id="@i">Dodaj</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mt-2" id="editDiv-@i" style="display: none">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-8 col-md-10">
+                            <input class="form-control attributeEditInput" name="edit-@i" type="text" />
+                            <span class="text-danger" id="validationEdit-@i"></span>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <button type="button" class="btn btn-outline-info editValueBtn" data-id="@i">Edytuj</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col-12"><h3>Wartości:</h3></div>
+
+                <div class="col-md-6 " id="values-@i">
+                    <ul class="list-group">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <button class="btn  btn-outline-primary" type="button" id="prevBtn">Poprzedni</button>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary" type="button" id="nextBtn">Następny</button>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const lenght = @Model.Count();
+    </script>
+    <script src="~/js/Warehouse/Categories/CreateAttributesValues/CreateAttributesValues.js"></script>
+}

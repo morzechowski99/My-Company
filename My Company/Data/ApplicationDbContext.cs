@@ -33,6 +33,11 @@ namespace My_Company.Data
         public DbSet<WarehouseSector> WarehouseSectors { get; set; }
         public DbSet<WarehouseRow> WarehouseRows { get; set; }
         public DbSet<VATRate> VATRates { get; set; }
+        public DbSet<Models.Attribute> Attributes { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<AttributeDictionaryValues> AttributeDictionaryValues { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        
 
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -53,6 +58,16 @@ namespace My_Company.Data
             {
                 entity.HasKey(e => new { e.SectorId, e.ProductId });
             });
+            
+            builder.Entity<ProductCategory>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.CategoryId });
+            });
+
+             builder.Entity<ProductAttribute>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.AttributeId });
+            });
 
             builder.Entity<AppUserRole>(userRole =>
             {
@@ -68,7 +83,5 @@ namespace My_Company.Data
             });
         }
 
-        
-        public DbSet<My_Company.Areas.Warehouse.ViewModels.EditEmployeeViewModel> EditEmployeeViewModel { get; set; }
     }
 }

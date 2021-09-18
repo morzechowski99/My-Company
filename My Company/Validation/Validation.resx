@@ -120,6 +120,9 @@
   <data name="EmailAddressAttribute" xml:space="preserve">
     <value>Podaj poprawny adres e-mail</value>
   </data>
+  <data name="MaxLengthAttribute" xml:space="preserve">
+    <value>Pole może mieć maksymalnie {1} znaków</value>
+  </data>
   <data name="MinAttribute" xml:space="preserve">
     <value>Minimalna wartość to {1}</value>
   </data>

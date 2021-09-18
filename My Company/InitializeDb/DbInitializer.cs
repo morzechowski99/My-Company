@@ -14,7 +14,7 @@ namespace My_Company.InitializeDb
     {
         public static async Task Initialize(IRepositoryWrapper repository, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
-            if (!repository.EnsureCreated()) return;
+           // if (!repository.EnsureCreated()) return;
 
             var adminRole = new AppRole();
             adminRole.Name = Constants.Roles.MainAdministrator;

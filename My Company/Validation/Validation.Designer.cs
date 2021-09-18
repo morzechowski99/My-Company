@@ -70,6 +70,15 @@ namespace My_Company.Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pole może mieć maksymalnie {1} znaków.
+        /// </summary>
+        public static string MaxLengthAttribute {
+            get {
+                return ResourceManager.GetString("MaxLengthAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimalna wartość to {1}.
         /// </summary>
         public static string MinAttribute {

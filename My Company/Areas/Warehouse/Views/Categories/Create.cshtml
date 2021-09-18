@@ -1,0 +1,104 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.CreateCategoryViewModel
+
+@{
+    ViewData["Title"] = "Nowa Kategoria";
+}
+
+<h1>Stwórz</h1>
+
+<h4>Kategoria</h4>
+<hr />
+
+<form asp-action="Create" id="createCategoryForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="tab">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="CategoryName" class="control-label"></label>
+                    <input asp-for="CategoryName" class="form-control" id="nameInput" />
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descripttion" class="control-label"></label>
+                    <textarea rows="4" asp-for="Descripttion" class="form-control"></textarea>
+                    <span asp-validation-for="Descripttion" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="ParentCategoryId" class="control-label"></label>
+                    <select asp-for="ParentCategoryId" asp-items="ViewBag.ParentCategoryId" class="form-control" id="parentSelect">
+                        <option selected value="-1">Kategoria nadrzędna</option>
+                    </select>
+                    <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="col-md-7 ">
+                <label class="control-label">Drzewo kategorii</label>
+                <p id="tree"></p>
+            </div>
+        </div>
+    </div>
+    <div class="tab mb-2" style="display:none">
+        <h4>Atrybuty</h4>
+        <div class="row" id="inheritedContainer" style="display:none">
+            <div class="col-md-8">
+                <h6>Atrybuty odziedziczone</h6>
+                <div id="inheritedAttributes"></div>
+            </div>
+        </div>
+        <div id="newAttributesDiv">
+            @for (int i = 0; i < Model?.Attributes.Count; i++)
+            {
+                <div class="row" data-id="@i">
+                    <div class="form-group col-md-4">
+                        <label class="control-label" asp-for="Attributes[i].Name"></label>
+                        <input class="form-control" asp-for="Attributes[i].Name" />
+                        <span class="text-danger " asp-validation-for="Attributes[i].Name"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label" asp-for="Attributes[i].Type"></label>
+                        <select class="form-control" asp-for="Attributes[i].Name" asp-items="ViewBag.Attributes">
+                        </select>
+                        <span class="text-danger" asp-validation-for="Attributes[i].Name"></span>
+
+                    </div>
+                    <div class="col-md-4 p-3 h-50 d-flex mt-3 justify-content-center align-items-md-end">
+                        <button type="button" class="btn btn-block btn-outline-danger deleteAttributeBtn" data-id="@i">Usuń</button>
+                    </div>
+
+                </div>
+            }
+        </div>
+        <button type="button" id="addAtrtibuteBtn" class="btn btn-outline-primary">Dodaj atrybut</button>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
+        </div>
+        <div>
+            <button class="btn  btn-outline-primary" type="button" id="prevBtn">Poprzedni</button>
+            <button class="btn btn-outline-primary" type="button" id="nextBtn">Następny</button>
+        </div>
+    </div>
+
+</form>
+
+<select id="templateAttributes" asp-items="ViewBag.Attributes" style="display:none"></select>
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+@section Scripts {
+    <script src="~/lib/selectize/selectize.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Warehouse/Categories/Create/Create.js"></script>
+}

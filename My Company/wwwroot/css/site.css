@@ -72,7 +72,8 @@ body {
 
 /*Warehouse - Create*/
 .tab {
-    display: none
+    display: none;
+
 }
 
 /*Warehouse - EditPlan*/

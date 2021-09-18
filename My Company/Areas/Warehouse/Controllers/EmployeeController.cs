@@ -132,10 +132,59 @@ namespace My_Company.Areas.Warehouse.Controllers
                 rolesList,
                 "Role",
                 "RolePL",
-                rolesList.Find(role => role.Role == user.UserRoles.First().Role.Name)
-            );
+                rolesList.Find(role => role.Role == user.UserRoles.First().Role.Name).Role
+            ); 
 
             return View(userDto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, EditEmployeeViewModel editEmployeeDto)
+        {
+            AppUser user = null;
+            List<RoleViewModel> rolesList = null;
+            if (ModelState.IsValid)
+            {
+                if (id != editEmployeeDto.Id)
+                    return BadRequest();
+
+                user = await _usersService.GetUserWithRolesById(id);
+
+                if (user == null)
+                    return NotFound();
+
+                if (user.Email != editEmployeeDto.Email)
+                    if (await _usersService.CheckEmail(editEmployeeDto.Email))
+                    {
+                        ModelState.AddModelError("Email", "Podany adres e-mail jest zajęty");
+                        rolesList = getRolesList();
+                        ViewData["Roles"] = new SelectList(
+                            rolesList,
+                            "Role",
+                            "RolePL",
+                            editEmployeeDto.Role
+                        );
+                        return View(editEmployeeDto);
+                    }
+
+                string prevName = user.Name;
+                string prevSurname = user.Surname;
+
+                var editedUser = _mapper.Map(editEmployeeDto, user);
+
+                await _usersService.EditUser(editedUser, editEmployeeDto.Role, prevName, prevSurname);
+
+                return RedirectToAction(nameof(Index));
+            }
+            rolesList = getRolesList();
+            ViewData["Roles"] = new SelectList(
+                rolesList,
+                "Role",
+                "RolePL",
+                editEmployeeDto.Role
+            );
+            return View(editEmployeeDto);
         }
         #region Private
         private List<RoleViewModel> getRolesList()
