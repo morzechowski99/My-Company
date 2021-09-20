@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
-using My_Company.Data;
 using My_Company.DIctionaries;
 using My_Company.EnumTypes;
 using My_Company.Helpers;
@@ -33,10 +30,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         }
 
         // GET: Warehouse/Categories
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = await _repositoryWrapper.CategoriesRepository.GetAll();
-            return View(applicationDbContext);
+            return View();
         }
 
         // GET: Warehouse/Categories/Details/5
@@ -142,22 +138,15 @@ namespace My_Company.Areas.Warehouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Warehouse/Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,CategoryName,Descripttion,ParentCategoryId")] Category category)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(category);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
-        //    return View(category);
-        //}
+
+        [HttpGet]
+        public IActionResult GetList(CategoryListFilters filters)
+        {
+            if (filters == null)
+                return BadRequest();
+
+            return ViewComponent("CategoriesList", filters);
+        }
 
         //// GET: Warehouse/Categories/Edit/5
         //public async Task<IActionResult> Edit(int? id)
@@ -212,39 +201,15 @@ namespace My_Company.Areas.Warehouse.Controllers
         //    return View(category);
         //}
 
-        //// GET: Warehouse/Categories/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-        //    var category = await _context.Categories
-        //        .Include(c => c.ParentCategory)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(category);
-        //}
-
-        //// POST: Warehouse/Categories/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var category = await _context.Categories.FindAsync(id);
-        //    _context.Categories.Remove(category);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool CategoryExists(int id)
-        //{
-        //    return _context.Categories.Any(e => e.Id == id);
-        //}
     }
 }

@@ -1,47 +1,51 @@
-﻿@model IEnumerable<My_Company.Models.Category>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Kategorie";
 }
 
-<h1>Index</h1>
+<h1>Kategorie</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj kategorię</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripttion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParentCategory)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripttion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentCategory.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row ">
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="searchValue" placeholder="Szukaj">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="0">Sortowanie</option>
+                <option value="1">Nazwa od A do Z</option>
+                <option value="2">Nazwa od Z do A</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table">
+    @await Component.InvokeAsync("CategoriesList", new My_Company.Areas.Warehouse.ViewModels.CategoryListFilters())
+</div>
+
+
+@section Scripts{
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Categories/Index/Index.js">
+
+    </script>
 }
-    </tbody>
-</table>
+
+@await Component.InvokeAsync("DeleteCategoryModal")
+
+<div class="alert alert-danger alert-dismissible fade hide" role="alert">
+    <h5 class="alert-content">Wystąpił problem</h5>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

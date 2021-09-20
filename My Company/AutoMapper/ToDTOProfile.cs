@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.ViewModels;
 using System;
@@ -29,6 +30,8 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.AttributeId, opt => opt.MapFrom(y => y.Id))
                 .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Name))
                 .ForAllOtherMembers(x => x.Ignore());
+
+            CreateMap<Category, CategoryListItemViewModel>();
         }
     }
 }

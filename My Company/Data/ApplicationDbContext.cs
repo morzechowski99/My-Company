@@ -81,6 +81,13 @@ namespace My_Company.Data
                     .WithMany(r => r.UserRoles)
                     .HasForeignKey(ur => ur.UserId);
             });
+
+            builder.Entity<Models.Attribute>(entity =>
+            {
+                entity.HasOne(e => e.Category)
+                    .WithMany(c => c.Attributes)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
     }

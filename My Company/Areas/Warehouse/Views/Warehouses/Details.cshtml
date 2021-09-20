@@ -1,14 +1,12 @@
 ﻿@model My_Company.Models.Warehouse
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły magazynu";
 }
 
-<h1>Details</h1>
-
+<h1>Twój magazyn</h1>
+<hr />
 <div>
-    <h4>Warehouse</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -42,7 +40,12 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="d-flex justify-content-between">
+    <a class="btn btn-outline-secondary" asp-action="Index">Wróć</a>
+    <div>
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a>
+        <a class="btn btn-outline-primary" asp-action="EditPlan" asp-route-id="@Model.Id">Plan</a>
+    </div>
+    
+
 </div>
