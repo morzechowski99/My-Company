@@ -22,7 +22,14 @@ $(function () {
         }
     });
 
+    $('#deleteCategoryBtn').click(function () {
+        const categoryId = $("#deleteCategoryModal input[name=categoryId]").val()
+        deleteCategory(categoryId)
+    })
+
     registerBtns()
+
+    registerTooltips()
 })
 
 const loadData = function () {
@@ -43,6 +50,33 @@ const loadData = function () {
 
         })
 }
+
+const alertTemplate = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <h4>Kategoria usunięta pomyślnie!</h4>
+</div>`
+
+const deleteCategory = function (categoryId) {
+    $('.spinner').removeClass("spinnerHidden")
+
+    $.ajax({
+        url: '/Warehouse/Categories/Delete/' + categoryId,
+        type: 'DELETE',
+        success: function (data) {
+            $('body').append(alertTemplate)
+            setTimeout(function () {
+                $('.alert-success').alert('close')
+            }, 5000)
+            loadData()
+        },
+        error: function (data) {
+            showAlert()
+            $('.spinner').addClass("spinnerHidden")
+        }
+    })
+}
+
+
+
 
 const registerBtns = function () {
 
@@ -79,6 +113,11 @@ const registerBtns = function () {
         e.preventDefault()
         currentPage++
         loadData()
+    })
+
+    $('.openRemoveCategoryModal').click(function (e) {
+        selectedCategory = $(this).data("id")
+        $("#deleteCategoryModal input[name=categoryId]").val(selectedCategory)
     })
 
 }

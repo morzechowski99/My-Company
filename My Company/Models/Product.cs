@@ -11,6 +11,7 @@ namespace My_Company.Models
         {
             ProductOrders = new HashSet<ProductOrder>();
             ProductCategories = new HashSet<ProductCategory>();
+            ProductAttributes = new HashSet<ProductAttribute>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace My_Company.Models
         public virtual VATRate VATRate { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
+        public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
     }
 }

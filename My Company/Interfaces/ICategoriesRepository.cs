@@ -16,5 +16,7 @@ namespace My_Company.Interfaces
         Task<bool> CheckName(string categoryName);
         IQueryable<Category> GetCategoriesByFilters(CategoryListFilters filters);
         Task<string> GetCategoryTree(Category category);
+        Task<bool> CheckIfRemovable(int id);
+        Task<Category> GetById(int value);
     }
 }

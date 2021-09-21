@@ -13,7 +13,8 @@ function showAlert() {
     $('.alert').addClass('show')
     $('.alert').removeClass('hide')
     setTimeout(function () {
-        $('.alert').alert('close')
+        $('.alert').addClass('hide')
+        $('.alert').removeClass('show')
     }, 5000)
 }
 
@@ -22,4 +23,8 @@ function setResetModalOnClose() {
         $(".modal input").val('');
         $(".modal .validationMessage").text('');
     });
+}
+
+function registerTooltips() {
+    $('[data-toggle="tooltip"]').tooltip()
 }

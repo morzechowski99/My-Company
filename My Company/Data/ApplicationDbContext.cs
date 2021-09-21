@@ -88,6 +88,13 @@ namespace My_Company.Data
                     .WithMany(c => c.Attributes)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            builder.Entity<AttributeDictionaryValues>(entity =>
+            {
+                entity.HasOne(e => e.Attribute)
+                    .WithMany(a => a.AttributeDictionaryValues)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
     }

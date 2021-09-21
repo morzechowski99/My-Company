@@ -35,6 +35,7 @@ namespace My_Company.Areas.Warehouse.ViewComponents
             {
                 var item = _mapper.Map<CategoryListItemViewModel>(category);
                 item.CategoryTree = await _repositoryWrapper.CategoriesRepository.GetCategoryTree(category);
+                item.Deletable = await _repositoryWrapper.CategoriesRepository.CheckIfRemovable(item.Id);
                 listView.Add(item);
             }
 

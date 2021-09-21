@@ -119,5 +119,10 @@ namespace My_Company.Repositories
 
             return query;
         }
+
+        public async Task<bool> CheckIfRemovable(int id)
+        {
+            return !await FindByCondition(c => c.Id == id).AnyAsync(c => c.ChildCategories.Any() || c.ProductCategories.Any());
+        }
     }
 }

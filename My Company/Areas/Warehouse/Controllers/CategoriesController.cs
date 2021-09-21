@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using My_Company.Areas.Warehouse.ViewModels;
@@ -201,14 +202,29 @@ namespace My_Company.Areas.Warehouse.Controllers
         //    return View(category);
         //}
 
-        
+
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute]int? id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (id == null)
+                return BadRequest();
+
+            try
+            {
+                var category = await _repositoryWrapper.CategoriesRepository.GetById(id.Value);
+
+                if (category == null)
+                    return NotFound();
+
+                _repositoryWrapper.CategoriesRepository.Delete(category);
+
+                await _repositoryWrapper.Save();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
     }

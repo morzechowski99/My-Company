@@ -15,5 +15,6 @@ namespace My_Company.Areas.Warehouse.ViewModels
         public string Descripttion { get; set; }
         [Display(Name ="Drzewo kategorii")]
         public string CategoryTree { get; set; }
+        public bool Deletable { get; set; }
     }
 }

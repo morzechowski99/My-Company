@@ -59,7 +59,16 @@
                     </td>
                     
                     <td>
-                    
+                        @if (item.Deletable)
+                        {
+                            <button class="btn openRemoveCategoryModal m-0" data-toggle="modal" data-target="#deleteCategoryModal" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                        }
+                        else
+                        {
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Usunąć można jedynie kategorię, która nie posiada żadnych kategorii podrzędnych oraz produktów">
+                                <button class="btn m-0" style="pointer-events: none;" type="button" disabled><i class="bi bi-trash-fill"></i></button>
+                            </span>
+                        }
                     </td>
                 </tr>
             }

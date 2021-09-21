@@ -33,19 +33,15 @@
     @await Component.InvokeAsync("CategoriesList", new My_Company.Areas.Warehouse.ViewModels.CategoryListFilters())
 </div>
 
-
 @section Scripts{
     <script src="~/js/shared/shared.js"></script>
     <script src="~/js/Warehouse/Categories/Index/Index.js">
 
     </script>
 }
-
 @await Component.InvokeAsync("DeleteCategoryModal")
 
 <div class="alert alert-danger alert-dismissible fade hide" role="alert">
     <h5 class="alert-content">Wystąpił problem</h5>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
 </div>
+

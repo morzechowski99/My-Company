@@ -89,7 +89,7 @@ namespace My_Company
                 endpoints.MapAreaControllerRoute(
                     name: "Warehouse",
                     areaName: "Warehouse",
-                    pattern: "Warehouse/{controller=Home}/{action=Index}"
+                    pattern: "Warehouse/{controller=Home}/{action=Index}/{id?}"
                 );
 
                 endpoints.MapAreaControllerRoute(
