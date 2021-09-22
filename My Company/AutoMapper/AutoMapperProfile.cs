@@ -44,6 +44,14 @@ namespace My_Company.AutoMapper
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<Category, CategoryListItemViewModel>();
+
+            CreateMap<Category, CategoryDetailsViewModel>();
+
+            CreateMap<Attribute, AttributeDetailsViewModel>()
+                .ForMember(a => a.Values, opt => opt.MapFrom(y => y.AttributeDictionaryValues.Select(aa => aa.Value)));
+
+            CreateMap<string, AttributeDictionaryValues>()
+                .ForMember(adv => adv.Value, opt => opt.MapFrom(y => y));
         }
     }
 }

@@ -17,6 +17,7 @@ namespace My_Company.Interfaces
         IQueryable<Category> GetCategoriesByFilters(CategoryListFilters filters);
         Task<string> GetCategoryTree(Category category);
         Task<bool> CheckIfRemovable(int id);
-        Task<Category> GetById(int value);
+        Task<Category> GetById(int id);
+        Task<Category> GetCategoryWithAttributes(int id);
     }
 }

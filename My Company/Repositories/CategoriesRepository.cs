@@ -124,5 +124,13 @@ namespace My_Company.Repositories
         {
             return !await FindByCondition(c => c.Id == id).AnyAsync(c => c.ChildCategories.Any() || c.ProductCategories.Any());
         }
+
+        public async Task<Category> GetCategoryWithAttributes(int id)
+        {
+            return await FindByCondition(item => item.Id == id)
+                .Include(c => c.Attributes)
+                .ThenInclude(a => a.AttributeDictionaryValues)
+                .FirstOrDefaultAsync();
+        }
     }
 }

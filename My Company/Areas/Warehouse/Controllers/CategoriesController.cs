@@ -36,24 +36,25 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View();
         }
 
-        // GET: Warehouse/Categories/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
 
-        //    var category = await _context.Categories
-        //        .Include(c => c.ParentCategory)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributes(id.Value);
+            if (category == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(category);
-        //}
+            var categoryViewModel = _mapper.Map<CategoryDetailsViewModel>(category);
+            categoryViewModel.CategoryTree = await _repositoryWrapper.CategoriesRepository.GetCategoryTree(category);
+
+            return View(categoryViewModel);
+        }
 
         // GET: Warehouse/Categories/Create
         public async Task<IActionResult> Create()
@@ -202,9 +203,52 @@ namespace My_Company.Areas.Warehouse.Controllers
         //    return View(category);
         //}
 
+        [HttpGet]
+        public async Task<IActionResult> EditValues(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var attribute = await _repositoryWrapper.CategoryAttributesRepository.GetAttributeWithCategoryAndValuesById(id.Value);
+            if (attribute == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CategoryName"] = attribute.Category.CategoryName;
+            ViewData["AttributeId"] = attribute.Id;
+
+            IEnumerable<string> values = attribute.AttributeDictionaryValues.Select(a => a.Value);
+
+            return View(values);
+
+            /*dopisac widok*/
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditValues(int? id, List<string> values)
+        {
+            if(id == null || values == null)
+            {
+                return BadRequest();
+            }
+
+            var attribute = await _repositoryWrapper.CategoryAttributesRepository.GetAttributeById(id.Value);
+
+            attribute.AttributeDictionaryValues = _mapper.Map<List<AttributeDictionaryValues>>(values);
+
+            _repositoryWrapper.CategoryAttributesRepository.Update(attribute);
+
+            await _repositoryWrapper.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromRoute]int? id)
+        public async Task<IActionResult> Delete([FromRoute] int? id)
         {
             if (id == null)
                 return BadRequest();

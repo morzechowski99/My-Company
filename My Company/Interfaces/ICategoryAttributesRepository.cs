@@ -10,5 +10,6 @@ namespace My_Company.Interfaces
     {
         Task<Attribute> GetAttributeById(int id);
         Task AddAttributeValue(int attributeId, List<string> values);
+        Task<Attribute> GetAttributeWithCategoryAndValuesById(int id);
     }
 }
