@@ -218,33 +218,41 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
 
             ViewData["CategoryName"] = attribute.Category.CategoryName;
+            ViewData["AttributeName"] = attribute.Name;
             ViewData["AttributeId"] = attribute.Id;
 
-            IEnumerable<string> values = attribute.AttributeDictionaryValues.Select(a => a.Value);
+            List<string> values = attribute.AttributeDictionaryValues.Select(a => a.Value).ToList();
 
             return View(values);
-
-            /*dopisac widok*/
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditValues(int? id, List<string> values)
         {
-            if(id == null || values == null)
+            Attribute attribute = null;
+            if(ModelState.IsValid)
             {
-                return BadRequest();
+                if (id == null || values == null)
+                {
+                    return BadRequest();
+                }
+
+                attribute = await _repositoryWrapper.CategoryAttributesRepository.GetAttributeWithCategoryAndValuesTrackedById(id.Value);
+
+                attribute.AttributeDictionaryValues = _mapper.Map<List<AttributeDictionaryValues>>(values);
+
+                _repositoryWrapper.CategoryAttributesRepository.Update(attribute);
+
+                await _repositoryWrapper.Save();
+
+                return RedirectToAction(nameof(Index));
             }
 
-            var attribute = await _repositoryWrapper.CategoryAttributesRepository.GetAttributeById(id.Value);
-
-            attribute.AttributeDictionaryValues = _mapper.Map<List<AttributeDictionaryValues>>(values);
-
-            _repositoryWrapper.CategoryAttributesRepository.Update(attribute);
-
-            await _repositoryWrapper.Save();
-
-            return RedirectToAction(nameof(Index));
+            ViewData["CategoryName"] = attribute.Category.CategoryName;
+            ViewData["AttributeName"] = attribute.Name;
+            ViewData["AttributeId"] = attribute.Id;
+            return View(values);
         }
 
         [HttpDelete]

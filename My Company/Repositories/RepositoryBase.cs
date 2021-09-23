@@ -48,5 +48,10 @@ namespace My_Company.Repositories
 
             return entity == null ? false : true;
         }
+
+        public IQueryable<T> GetTracked()
+        {
+            return _context.Set<T>().AsTracking();
+        }
     }
 }

@@ -1,0 +1,78 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Edytuj wartości";
+}
+
+<h1>Edytuj wartośći atrybutu</h1>
+
+<h5>Kategoria: @ViewBag.CategoryName</h5>
+<h6>Atrybut: @ViewBag.AttributeName</h6>
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-8 col-md-10">
+                    <input class="form-control attributeNameInput" name="name" type="text" placeholder="Nazwa" />
+                    <span class="text-danger" id="validationName"></span>
+                </div>
+                <div class="col-4 col-md-2">
+                    <button type="button" class="btn btn-outline-info addValueBtn">Dodaj</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row mt-2" id="editDiv" style="display: none">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-8 col-md-10">
+                    <input class="form-control attributeEditInput" name="edit" type="text" />
+                    <span class="text-danger" id="validationEdit"></span>
+                </div>
+                <div class="col-4 col-md-2">
+                    <button type="button" class="btn btn-outline-info editValueBtn">Edytuj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-12"><h3>Wartości:</h3></div>
+
+        <div class="col-md-6 " id="values">
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <input type="hidden" asp-for="@Model[i]" class="hiddenInput" value="@Model[i]" />
+            }
+            <ul class="list-group">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <li class="list-group-item d-flex justify-content-between list-group-item-action align-items-center item" data-index="@i">
+                        @Model[i]
+                        <button type="button" class="removeValueBtn btn btn-outline-danger" data-index="@i">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex justify-content-lg-between">
+        <button type="button" id="backBtn" class="btn btn-outline-secondary">Cofnij</button>
+        <button type="submit" class="btn btn-outline-primary">Zapisz</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Warehouse/Categories/EditValues/EditValues.js"></script>
+}
+
+<style>
+    .item {
+        cursor:pointer;
+    }
+</style>

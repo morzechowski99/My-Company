@@ -51,5 +51,20 @@ namespace My_Company.Repositories
             else
                 return attribute;
         }
+
+        public async Task<Attribute> GetAttributeWithCategoryAndValuesTrackedById(int id)
+        {
+            var attribute = await GetTracked()
+                .Where(a => a.Id == id)
+                .Include(a => a.Category)
+                .Include(a => a.AttributeDictionaryValues)
+                .FirstOrDefaultAsync();
+
+            if (attribute.Type != EnumTypes.AttributeType.Dictionary)
+                return null;
+
+            else
+                return attribute;
+        }
     }
 }
