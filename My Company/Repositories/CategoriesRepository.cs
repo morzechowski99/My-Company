@@ -104,8 +104,8 @@ namespace My_Company.Repositories
                 query = query.Where(c =>
                 c.CategoryName.Contains(filters.SearchString) ||
                 filters.SearchString.Contains(c.CategoryName) ||
-                c.Descripttion.Contains(filters.SearchString) ||
-                filters.SearchString.Contains(c.Descripttion));
+                c.Description.Contains(filters.SearchString) ||
+                filters.SearchString.Contains(c.Description));
 
             switch (filters.SortOrder)
             {
@@ -131,6 +131,11 @@ namespace My_Company.Repositories
                 .Include(c => c.Attributes)
                 .ThenInclude(a => a.AttributeDictionaryValues)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> CheckNameToEdit(string categoryName, int categoryId)
+        {
+            return await FindAll().AnyAsync(c => c.CategoryName == categoryName && c.Id != categoryId);
         }
     }
 }

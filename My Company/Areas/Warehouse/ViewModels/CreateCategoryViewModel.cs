@@ -18,7 +18,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name ="Opis")]
         [DataType(DataType.MultilineText)]
         [MaxLength(250)]
-        public string Descripttion { get; set; }
+        public string Description { get; set; }
         [Display(Name ="Kategoria nadrzędna")]
         [Required]
         [Range(-1,Int32.MaxValue,ErrorMessage = "Pole wymagane")]

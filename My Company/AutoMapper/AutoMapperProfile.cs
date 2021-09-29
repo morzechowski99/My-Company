@@ -52,6 +52,9 @@ namespace My_Company.AutoMapper
 
             CreateMap<string, AttributeDictionaryValues>()
                 .ForMember(adv => adv.Value, opt => opt.MapFrom(y => y));
+
+            CreateMap<Category, EditCategoryViewModel>()
+                .ReverseMap();
         }
     }
 }

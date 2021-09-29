@@ -19,5 +19,6 @@ namespace My_Company.Interfaces
         Task<bool> CheckIfRemovable(int id);
         Task<Category> GetById(int id);
         Task<Category> GetCategoryWithAttributes(int id);
+        Task<bool> CheckNameToEdit(string categoryName,int categoryId);
     }
 }

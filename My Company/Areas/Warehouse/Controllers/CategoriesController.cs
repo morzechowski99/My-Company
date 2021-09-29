@@ -106,6 +106,17 @@ namespace My_Company.Areas.Warehouse.Controllers
             else
                 return Json("Nazwa zajęta");
         }
+        
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> CheckNameEdit(EditCategoryViewModel editCategoryDto)
+        {
+            var exists = await _repositoryWrapper.CategoriesRepository.CheckNameToEdit(editCategoryDto.CategoryName,editCategoryDto.Id);
+
+            if (!exists)
+                return Json(true);
+            else
+                return Json("Nazwa zajęta");
+        }
 
         [HttpGet]
         public IActionResult CreateAttributesValues()
@@ -150,58 +161,47 @@ namespace My_Company.Areas.Warehouse.Controllers
             return ViewComponent("CategoriesList", filters);
         }
 
-        //// GET: Warehouse/Categories/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Warehouse/Categories/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
 
-        //    var category = await _context.Categories.FindAsync(id);
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
-        //    return View(category);
-        //}
+            var category = await _repositoryWrapper.CategoriesRepository.GetById(id.Value);
+            if (category == null)
+            {
+                return NotFound();
+            }
 
-        //// POST: Warehouse/Categories/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,Descripttion,ParentCategoryId")] Category category)
-        //{
-        //    if (id != category.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            var categoryDto = _mapper.Map<EditCategoryViewModel>(category);
+            ViewData["Tree"] = await _repositoryWrapper.CategoriesRepository.GetCategoryTree(category) + category.CategoryName;
+            return View(categoryDto);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(category);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CategoryExists(category.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
-        //    return View(category);
-        //}
+        // POST: Warehouse/Categories/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditCategoryViewModel categoryDto)
+        {
+            if (id != categoryDto.Id)
+            {
+                return NotFound();
+            }
+
+            Category category = null;
+            if (ModelState.IsValid)
+            {
+                category = await _repositoryWrapper.CategoriesRepository.GetById(id);
+                category = _mapper.Map(categoryDto, category);
+                _repositoryWrapper.CategoriesRepository.Update(category);
+                await _repositoryWrapper.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["Tree"] = await _repositoryWrapper.CategoriesRepository.GetCategoryTree(category) + category.CategoryName;
+            return View(categoryDto);
+        }
 
         [HttpGet]
         public async Task<IActionResult> EditValues(int? id)
