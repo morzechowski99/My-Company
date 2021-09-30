@@ -1,0 +1,74 @@
+﻿@model List<My_Company.Areas.Warehouse.ViewModels.EditAttributeViewModel>
+@using My_Company.DIctionaries;
+
+@{
+    ViewData["Title"] = "Edytuj atrybuty";
+}
+
+<h1>Edytuj atrybuty</h1>
+
+<h4>Kategoria: @ViewBag.CategoryName</h4>
+<hr />
+
+<form method="post" id="editAttributesForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h4>Atrybuty</h4>
+    <div class="row" id="inheritedContainer">
+        <div class="col-md-8">
+            @if (ViewBag.ParentCategoryId != null)
+            {
+                <h6>Atrybuty odziedziczone</h6>
+                <div>
+                    @await Component.InvokeAsync("InheritedAttributesTable", new { parentCategoryId = (ViewBag.ParentCategoryId as int?).Value })
+                </div>
+            }
+
+        </div>
+    </div>
+    <div id="editAttributesDiv">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="row" data-id="@i">
+                @Html.HiddenFor(m => m[i].Id)
+                <div class="form-group col-md-4">                 
+                    <label class="control-label" asp-for="@Model[i].Name"></label>
+                    <input class="form-control" asp-for="@Model[i].Name" />
+                    <span class="text-danger " asp-validation-for="@Model[i].Name"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" asp-for="@Model[i].Type"></label>
+                    <select disabled class="form-control" asp-for="@Model[i].Name" >
+                        <option value="@Model[i].Type">@CategoryAttributeTypesDictionary.AttributeDictionary[Model[i].Type]</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="@Model[i].Name"></span>
+
+                </div>
+                <div class="col-md-4 p-3 h-50 d-flex mt-3 justify-content-center align-items-md-end">
+                    <button type="button" data-toggle="tooltip"
+                            title="Usunięcie atrybutu spowoduje usunięcie jego wartości w każdym produkcie tej kategorii"
+                            class="btn btn-block btn-outline-danger deleteAttributeBtn" data-id="@i">
+                        Usuń
+                    </button>
+                </div>
+
+            </div>
+        }
+    </div>
+    <button type="button" id="addAtrtibuteBtn" class="btn btn-outline-primary mb-2">Dodaj atrybut</button>
+
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
+        <button class="btn btn-outline-primary" type="submit">Zapisz</button>
+    </div>
+
+</form>
+
+<select id="templateAttributes" asp-items="ViewBag.Types" style="display:none"></select>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    let attributesCount = @Model.Count
+    </script>
+    <script src="~/js/Warehouse/Categories/EditAttributes/EditAttributes.js"></script>
+}

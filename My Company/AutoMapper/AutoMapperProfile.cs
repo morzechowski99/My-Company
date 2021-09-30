@@ -55,6 +55,9 @@ namespace My_Company.AutoMapper
 
             CreateMap<Category, EditCategoryViewModel>()
                 .ReverseMap();
+
+            CreateMap<Attribute, EditAttributeViewModel>()
+                .ReverseMap();
         }
     }
 }

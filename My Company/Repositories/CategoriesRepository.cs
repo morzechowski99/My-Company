@@ -137,5 +137,10 @@ namespace My_Company.Repositories
         {
             return await FindAll().AnyAsync(c => c.CategoryName == categoryName && c.Id != categoryId);
         }
+
+        public async Task<Category> GetCategoryWithAttributesTracked(int id)
+        {
+            return await GetTracked().Include(c => c.Attributes).FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }

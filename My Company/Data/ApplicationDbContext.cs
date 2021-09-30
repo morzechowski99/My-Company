@@ -95,6 +95,13 @@ namespace My_Company.Data
                     .WithMany(a => a.AttributeDictionaryValues)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            builder.Entity<ProductAttribute>(entity =>
+            {
+                entity.HasOne(e => e.Attribute)
+                    .WithMany(a => a.ProductAttributes)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
     }

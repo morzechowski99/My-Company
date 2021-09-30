@@ -20,5 +20,6 @@ namespace My_Company.Interfaces
         Task<Category> GetById(int id);
         Task<Category> GetCategoryWithAttributes(int id);
         Task<bool> CheckNameToEdit(string categoryName,int categoryId);
+        Task<Category> GetCategoryWithAttributesTracked(int id);
     }
 }

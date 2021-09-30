@@ -106,11 +106,11 @@ namespace My_Company.Areas.Warehouse.Controllers
             else
                 return Json("Nazwa zajęta");
         }
-        
+
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> CheckNameEdit(EditCategoryViewModel editCategoryDto)
         {
-            var exists = await _repositoryWrapper.CategoriesRepository.CheckNameToEdit(editCategoryDto.CategoryName,editCategoryDto.Id);
+            var exists = await _repositoryWrapper.CategoriesRepository.CheckNameToEdit(editCategoryDto.CategoryName, editCategoryDto.Id);
 
             if (!exists)
                 return Json(true);
@@ -231,7 +231,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> EditValues(int? id, List<string> values)
         {
             Attribute attribute = null;
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (id == null || values == null)
                 {
@@ -253,6 +253,81 @@ namespace My_Company.Areas.Warehouse.Controllers
             ViewData["AttributeName"] = attribute.Name;
             ViewData["AttributeId"] = attribute.Id;
             return View(values);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditAttributes(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributes(id.Value);
+
+            if (category == null)
+                return NotFound();
+
+            ViewBag.ParentCategoryId = category.ParentCategoryId;
+            ViewBag.CategoryName = category.CategoryName;
+            ViewBag.Types = new SelectList(CategoryAttributeTypesDictionary.AttributeDictionary, "Key", "Value");
+
+            var attributesDtos = _mapper.Map<List<EditAttributeViewModel>>(category.Attributes);
+
+            return View(attributesDtos);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAttributes(int? id, List<EditAttributeViewModel> attributeDtos)
+        {
+            if (id == null)
+                return BadRequest();
+
+            Category category;
+            category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributesTracked(id.Value);
+            if (ModelState.IsValid)
+            {
+                category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributesTracked(id.Value);
+                foreach (var attrDb in category.Attributes)
+                {
+                    if (!attributeDtos.Any(a => a.Id == attrDb.Id))
+                        category.Attributes.Remove(attrDb);
+                }
+                List<Attribute> newAttributes = new();
+                foreach (var attrDto in attributeDtos)
+                {
+                    if (attrDto.Id != 0)
+                    {
+                        var attrDb = category.Attributes.FirstOrDefault(a => a.Id == attrDto.Id);
+                        attrDb.Name = attrDto.Name;
+                    }
+                    else
+                    {
+                        var newAttr = _mapper.Map<Attribute>(attrDto);
+                        category.Attributes.Add(newAttr);
+                        newAttributes.Add(newAttr);
+                    }
+                }
+
+                _repositoryWrapper.CategoriesRepository.Update(category);
+
+                await _repositoryWrapper.Save();
+
+                TempData["attributes"] = JsonConvert.SerializeObject(newAttributes.Where(attr => attr.Type == AttributeType.Dictionary).ToList(),
+               new JsonSerializerSettings()
+               {
+                   ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+               });
+
+                return RedirectToAction(nameof(CreateAttributesValues));
+
+            }
+
+            ViewBag.ParentCategoryId = category.ParentCategoryId;
+            ViewBag.CategoryName = category.CategoryName;
+            ViewBag.Types = new SelectList(CategoryAttributeTypesDictionary.AttributeDictionary, "Key", "Value");
+
+            return View(attributeDtos);
+
         }
 
         [HttpDelete]
