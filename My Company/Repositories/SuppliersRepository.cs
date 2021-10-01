@@ -1,4 +1,5 @@
-﻿using My_Company.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
 using System;
@@ -12,6 +13,11 @@ namespace My_Company.Repositories
     {
         public SuppliersRepository(ApplicationDbContext context) : base(context)
         {
+        }
+
+        public async Task<Supplier> GetById(int id)
+        {
+            return await FindByCondition(s => s.Id == id).FirstOrDefaultAsync();
         }
     }
 }

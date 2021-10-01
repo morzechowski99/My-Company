@@ -8,5 +8,6 @@ namespace My_Company.Interfaces
 {
     public interface ISuppliersRepository : IRepositoryBase<Supplier>
     {
+        Task<Supplier> GetById(int id);
     }
 }

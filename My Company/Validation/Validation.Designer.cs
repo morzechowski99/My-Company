@@ -61,6 +61,24 @@ namespace My_Company.Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zły format.
+        /// </summary>
+        public static string DataTypeAttribute {
+            get {
+                return ResourceManager.GetString("DataTypeAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zły format.
+        /// </summary>
+        public static string DateTypeAttribute {
+            get {
+                return ResourceManager.GetString("DateTypeAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Podaj poprawny adres e-mail.
         /// </summary>
         public static string EmailAddressAttribute {

@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DataTypeAttribute" xml:space="preserve">
+    <value>Zły format</value>
+  </data>
+  <data name="DateTypeAttribute" xml:space="preserve">
+    <value>Zły format</value>
+  </data>
   <data name="EmailAddressAttribute" xml:space="preserve">
     <value>Podaj poprawny adres e-mail</value>
   </data>

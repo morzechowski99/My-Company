@@ -1,0 +1,74 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.SupplierViewModel
+
+@{
+    ViewData["Title"] = "Edytuj dostawcę";
+}
+
+<h1>Edytuj</h1>
+
+<h4>Dostawca</h4>
+<hr />
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(m => m.Id)
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NIP" class="control-label"></label>
+                <input asp-for="NIP" class="form-control" />
+                <span asp-validation-for="NIP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostalCode" class="control-label"></label>
+                <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="PhoneNumber1" class="control-label"></label>
+                <input asp-for="PhoneNumber1" class="form-control" />
+                <span asp-validation-for="PhoneNumber1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber2" class="control-label"></label>
+                <input asp-for="PhoneNumber2" class="form-control" />
+                <span asp-validation-for="PhoneNumber2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WebSite" class="control-label"></label>
+                <input asp-for="WebSite" class="form-control" />
+                <span asp-validation-for="WebSite" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
+        <input type="submit" value="Zapisz" class="btn btn-outline-primary" />
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
