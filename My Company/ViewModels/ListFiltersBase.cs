@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace My_Company.Areas.Warehouse.ViewModels
+namespace My_Company.ViewModels
 {
     public class ListFiltersBase<T> where T : Enum
     {

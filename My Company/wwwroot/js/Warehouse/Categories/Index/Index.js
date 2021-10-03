@@ -29,7 +29,6 @@ $(function () {
 
     registerBtns()
 
-    registerTooltips()
 })
 
 const loadData = function () {
@@ -116,7 +115,7 @@ const registerBtns = function () {
     })
 
     $('.openRemoveCategoryModal').click(function (e) {
-        selectedCategory = $(this).data("id")
+        const selectedCategory = $(this).data("id")
         $("#deleteCategoryModal input[name=categoryId]").val(selectedCategory)
     })
 

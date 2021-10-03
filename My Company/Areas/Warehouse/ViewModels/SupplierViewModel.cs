@@ -47,7 +47,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Strona Internetowa")]
         public string WebSite { get; set; }
         [MaxLength(50)]
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.EmailAddress,ErrorMessage ="Niepoprawny adres e-mail")]
         [Display(Name = "Adres e-mail")]
         public string Email { get; set; }
     }

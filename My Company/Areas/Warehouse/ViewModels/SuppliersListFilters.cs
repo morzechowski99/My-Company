@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
-    public class CategoryListFilters : ListFiltersBase<CategoriesSortOrderEnum>
+    public class SuppliersListFilters : ListFiltersBase<SuppliersListSortOrderEnum>
     {
         public string SearchString { get; set; }
+        public string Nip { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -1,77 +1,71 @@
-﻿@model IEnumerable<My_Company.Models.Supplier>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Dostawcy";
 }
 
-<h1>Index</h1>
+<h1>Dostawcy</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj dostawcę</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NIP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Street)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WebSite)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NIP)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WebSite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row d-flex filtersContainer justify-content-between">
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="searchValue" placeholder="Szukaj">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <select class="form-control" id="nipFilter" placeholder="NIP">
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <select class="form-control" id="emailFilter" placeholder="E-mail">
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="0">Sortowanie</option>
+                <option value="1">Nazwa od A do Z</option>
+                <option value="2">Nazwa od Z do A</option>
+                <option value="3">NIP rosnąco</option>
+                <option value="4">NIP malejąco</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <button class="w-100 my-2 btn btn-outline-secondary" type="button" id="showHideFilters">
+            Ukryj filtry
+        </button>
+    </div>
+
+
+</div>
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table">
+    @await Component.InvokeAsync("SuppliersList", new My_Company.Areas.Warehouse.ViewModels.SuppliersListFilters())
+</div>
+
+@await Component.InvokeAsync("DeleteSupplierModal")
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
-    </tbody>
-</table>
+
+@section Scripts{
+    <script src="~/lib/selectize/selectize.min.js"></script>
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Suppliers/Index/Index.js"></script>
+}
+
+
+<div class="alert alert-danger alert-dismissible fade hide" role="alert">
+    <h5 class="alert-content">Wystąpił problem</h5>
+</div>

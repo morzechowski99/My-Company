@@ -61,6 +61,8 @@ namespace My_Company.AutoMapper
 
             CreateMap<Supplier, SupplierViewModel>()
                 .ReverseMap();
+
+            CreateMap<Supplier, SupplierListItem>();
         }
     }
 }

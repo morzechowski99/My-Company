@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
+using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Repositories;
@@ -15,6 +18,7 @@ using My_Company.Repositories;
 namespace My_Company.Areas.Warehouse.Controllers
 {
     [Area("Warehouse")]
+    [Authorize(Roles = Constants.Roles.MainAdministrator)]
     public class SuppliersController : Controller
     {
         private readonly IMapper _mapper;
@@ -109,38 +113,74 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(supplierDto);
         }
 
-        //// GET: Warehouse/Suppliers/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet]
+        public async Task<IActionResult> GetNIPs(string prefix)
+        {
+            if (prefix == null)
+                return BadRequest();
 
-        //    var supplier = await _context.Suppliers
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (supplier == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var nips = await _repositoryWrapper.SuppliersRepository.GetSuppliersNIPsByPrefix(prefix);
+            List<object> list = new List<object>();
+            foreach(string nip in nips)
+            {
+                list.Add(new { nip = nip });
+            }
 
-        //    return View(supplier);
-        //}
+            return Ok(list);
+        }
 
-        //// POST: Warehouse/Suppliers/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var supplier = await _context.Suppliers.FindAsync(id);
-        //    _context.Suppliers.Remove(supplier);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetEmails(string prefix)
+        {
+            if (prefix == null)
+                return BadRequest();
 
-        //private bool SupplierExists(int id)
-        //{
-        //    return _context.Suppliers.Any(e => e.Id == id);
-        //}
+            var emails = await _repositoryWrapper.SuppliersRepository.GetSuppliersEmailssByPrefix(prefix);
+            List<object> list = new List<object>();
+            foreach(string email in emails)
+            {
+                list.Add(new { email = email });
+            }
+
+            return Ok(list);
+        }
+
+        [HttpGet]
+        public IActionResult GetList(SuppliersListFilters filters)
+        {
+            if (filters == null)
+                return BadRequest();
+
+            return ViewComponent("SuppliersList", filters);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var supplier = await _repositoryWrapper.SuppliersRepository.GetById(id.Value);
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _repositoryWrapper.SuppliersRepository.Delete(supplier);
+                await _repositoryWrapper.Save();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            
+
+            return Ok();
+        }
+
     }
 }
