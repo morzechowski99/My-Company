@@ -9,13 +9,15 @@ using Attribute = My_Company.Models.Attribute;
 
 namespace My_Company.AutoMapper
 {
-    public class AutoMapperProfile: Profile
+    public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
             CreateMap<NewWarehouseViewModel, Warehouse>();
 
-            CreateMap<NewProductViewModel, Product>();
+            CreateMap<NewProductViewModel, Product>()
+                .ForMember(x => x.ProductCategories, opt => opt.MapFrom(y => y.Categories))
+                .ForMember(x => x.ProductAttributes, opt => opt.MapFrom(y => y.Attributes));
 
             CreateMap<CreateUserViewModel, AppUser>();
 
@@ -47,11 +49,14 @@ namespace My_Company.AutoMapper
 
             CreateMap<Category, CategoryDetailsViewModel>();
 
-            CreateMap<Attribute, AttributeDetailsViewModel>()
+            CreateMap<Attribute, AttributeViewModel>()
                 .ForMember(a => a.Values, opt => opt.MapFrom(y => y.AttributeDictionaryValues.Select(aa => aa.Value)));
 
             CreateMap<string, AttributeDictionaryValues>()
                 .ForMember(adv => adv.Value, opt => opt.MapFrom(y => y));
+
+            CreateMap<AttributeDictionaryValues, string>()
+                .ConvertUsing(a => a.Value);
 
             CreateMap<Category, EditCategoryViewModel>()
                 .ReverseMap();
@@ -63,6 +68,17 @@ namespace My_Company.AutoMapper
                 .ReverseMap();
 
             CreateMap<Supplier, SupplierListItem>();
+
+            CreateMap<Attribute, AttributeProductViewModel>()
+                .ForMember(a => a.Values, opt => opt.MapFrom(a => a.AttributeDictionaryValues));
+
+            CreateMap<AttributeProductViewModel, ProductAttribute>()
+                .ForMember(x => x.AttributeId, opt => opt.MapFrom(y => y.Id))
+                .ForMember(x => x.Value, opt => opt.MapFrom(y => y.Value))
+                .ForAllOtherMembers(x => x.Ignore());
+
+            CreateMap<int, ProductCategory>()
+                .ForMember(x => x.CategoryId, opt => opt.MapFrom(y => y));
         }
     }
 }

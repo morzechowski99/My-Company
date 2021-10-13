@@ -1,0 +1,41 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.NewProductsAttributesViewModel
+
+@using My_Company.EnumTypes
+
+<h4>Atrybuty</h4>
+<div class="row d-flex align-items-center">
+    @for (int i = 0; i < Model.Attributes.Count; i++)
+    {
+        <div class="col-md-4 @(@Model.Attributes[i].Type == AttributeType.Bool ? "form-check" : "form-group")">
+            @if (Model.Attributes[i].Type != AttributeType.Bool)
+            {
+                <label class="control-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
+            }
+
+            <input type="hidden" asp-for="Attributes[i].Id" />
+            @{
+                @switch (Model.Attributes[i].Type)
+                {
+                    case AttributeType.Text:
+                        <input class="form-control" asp-for="Attributes[i].Value" />
+                        break;
+                    case AttributeType.Bool:
+                        <input type="checkbox" class="form-check-input" asp-for="Attributes[i].Value">
+                        <label class="form-check-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
+                        break;
+                    case AttributeType.Date:
+                        <input type="date" class="form-control" asp-for="Attributes[i].Value" />
+                        break;
+                    case AttributeType.Dictionary:
+                        <select class="form-control" asp-for="Attributes[i].Value" asp-items="@new SelectList(Model.Attributes[i].Values)" ></select>
+                        break;
+                    case AttributeType.Numeric:
+                        <input class="form-control" type="number" asp-for="Attributes[i].Value">
+                        break;
+                }
+            }
+
+            <span class="text-danger" asp-validation-for="Attributes[i].Value" />
+        </div>
+    }
+</div>

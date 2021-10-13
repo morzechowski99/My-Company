@@ -9,52 +9,103 @@
 <h4>Produkt</h4>
 <hr />
 
-<form asp-action="Create">
-    <div class="row">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EANCode" class="control-label"></label>
-                <input asp-for="EANCode" class="form-control" />
-                <span asp-validation-for="EANCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SupplierId" class="control-label"></label>
-                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="VATRateId" class="control-label"></label>
-                <select asp-for="VATRateId" class="form-control" asp-items="ViewBag.VATRateId"></select>
+<form asp-action="Create" id="createForm"  enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="tab">
+        <h4>Wybierz kategorię</h4>
+        <div class="row">
+            <div class="col-md-6 " id="categorySelects">
+                <div class="form-group categorySelectContainer" data-id="0">
+                    <label asp-for="Categories" class="control-label"></label>
+                    <select asp-for="Categories[0]" class="form-control categorySelect" data-id="0"
+                            data-val-range="Pole wymagane" data-val-range-min="1" asp-items="ViewBag.CategoryId">
+                        <option selected value="0">Wybierz</option>
+
+                    </select>
+                    <span asp-validation-for="Categories[0]" class="text-danger" id="categoriesValidationSpan"></span>
+                </div>
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+    <div class="tab">
+        <h4>Dane podstawowe</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EANCode" class="control-label"></label>
+                    <input asp-for="EANCode" class="form-control" />
+                    <span asp-validation-for="EANCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VATRateId" class="control-label"></label>
+                    <select asp-for="VATRateId" class="form-control" asp-items="ViewBag.VATRateId"></select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="tab">
+        <h4>Opis</h4>
+        <textarea class="editor" id="decription" asp-for="Description" rows="20"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+
+    </div>
+    <div class="tab" id="attributesTab">
+
+    </div>
+    <div class="tab">
+        <h4>Wybierz dostawcę produktu</h4>
+        <div class="row">
+
+            <div class="col-md-6 ">
+
+                <div class="form-group">
+                    <label asp-for="SupplierId" class="control-label"></label>
+                    <select asp-for="SupplierId" class="form-control" id="supplierSelect"></select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>    
+<div class="tab">
+    <h4>Zdjęcia</h4>
+    
+        <div class="row">
+            <div class="col-12 buttonContainer my-2">
+                <button type="button" id="addNextPhotoBtn" class="btn btn-outline-success">Dodaj kolejne zdjęcie</button>
+                
+            </div>
+           
+        </div>
+</div>
+
+    <div class="d-flex justify-content-between">
+        
+        <div>
+            <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
+        </div>
+        <div>
+            <button class="btn  btn-outline-primary" type="button" id="prevBtn">Wróć</button>
+            <button class="btn btn-outline-primary" type="button" id="nextBtn">Dalej</button>
+        </div>
     </div>
 </form>
 
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link type="text/css" rel="stylesheet" href="~/lib/jquery-te/jquery-te-1.4.0.css" />
+}
 
 @section Scripts {
+    <script src="~/lib/jquery-te/jquery-te-1.4.0.min.js"></script>
+    <script src="~/lib/selectize/selectize.min.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/shared/Validation.js"></script>
+    <script src="~/js/Warehouse/Products/Create/Create.js"></script>
 }

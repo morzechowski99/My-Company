@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,22 +12,28 @@ namespace My_Company.Areas.Warehouse.ViewModels
     {
         [Display(Name ="Nazwa")]
         [Required]
+        [MaxLength(25)]
         public string Name { get; set; }
         [Display(Name = "Kod EAN")]
-        [RegularExpression(@"^\d$",ErrorMessage ="Pole może zawierać tylko cyfry")]
+        [RegularExpression(@"^\d{13}$",ErrorMessage ="Pole może zawierać tylko cyfry")]
+        [MinLength(13)]
+        [MaxLength(13)]
+        [Remote(action: "CheckEAN", controller: "Products", areaName: "Warehouse")]
         [Required]
         public string EANCode { get; set; }
         [DataType(DataType.MultilineText)]
         [Display(Name = "Opis")]
+        [MaxLength(15000)]
         public string Description { get; set; }
         [Required]
         [Display(Name = "Kategoria")]
-        public int CategoryId { get; set; }
+        public List<int> Categories { get; set; }
         [Display(Name = "Dostawca")]
         [Required]
         public int SupplierId { get; set; }
         [Display(Name = "Stawka VAT")]
         [Required]
         public int VATRateId { get; set; }
+        public List<AttributeProductViewModel> Attributes { get; set; } 
     }
 }

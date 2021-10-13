@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.DIctionaries;
 using My_Company.EnumTypes;
@@ -352,6 +353,17 @@ namespace My_Company.Areas.Warehouse.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChildCategories(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var categories = await _repositoryWrapper.CategoriesRepository.ChildCategoriesById(id).ToListAsync();
+            var categoriesView = categories.Select(c => new { c.Id, c.CategoryName }).ToList();
+            return Ok(categoriesView);
         }
 
     }

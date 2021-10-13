@@ -16,6 +16,6 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Drzewo kategorii")]
         public string CategoryTree { get; set; }
         [Display(Name ="Atrybuty")]
-        public List<AttributeDetailsViewModel> Attributes { get; set; }
+        public List<AttributeViewModel> Attributes { get; set; }
     }
 }

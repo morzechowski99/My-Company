@@ -31,6 +31,7 @@
     <Folder Include="Areas\Shop\Views\" />
     <Folder Include="Areas\Warehouse\Data\" />
     <Folder Include="Areas\Warehouse\Models\" />
+    <Folder Include="wwwroot\Content\" />
   </ItemGroup>
 
   <ItemGroup>

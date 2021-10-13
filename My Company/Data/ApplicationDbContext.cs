@@ -102,6 +102,12 @@ namespace My_Company.Data
                     .WithMany(a => a.ProductAttributes)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            builder.Entity<Product>(entity =>
+            {
+                entity.HasIndex(e => e.EANCode)
+                    .IsUnique();
+            });
         }
 
     }

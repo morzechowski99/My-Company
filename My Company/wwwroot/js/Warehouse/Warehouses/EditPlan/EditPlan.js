@@ -9,7 +9,7 @@
     $("#addSectorsForm").submit(function (e) {
         e.preventDefault()
         if (!$(this).validate().form()) return;
-        $.post("AddSectors", $(this).serialize())
+        $.post("/Warehouse/Warehouses/AddSectors", $(this).serialize())
             .done(function (data) {
                 const rows = $(document).find('tr[aria-rowId]').toArray()
                 rows.forEach(row => {
@@ -45,7 +45,7 @@
         e.preventDefault()
         if (!$(this).validate().form()) return;
         $(".spinner").removeClass('spinnerHidden')
-        $.post("AddRow?warehouseId=" + warehouseId, $(this).serialize())
+        $.post("/Warehouse/Warehouses/AddRow?warehouseId=" + warehouseId, $(this).serialize())
             .fail(function (data) {
                 if (data.responseText == 'name already exists')
                     $('#addRowForm .validationMessage').text("Podana nazwa jest zajęta")
@@ -183,7 +183,7 @@
 
 const swapRows = function (rowId, direction) {
     $.ajax({
-        url: 'SwapRows',
+        url: '/Warehouse/Warehouses/SwapRows',
         type: 'PUT',
         data: {
             rowId: rowId,
@@ -217,7 +217,7 @@ const swapRows = function (rowId, direction) {
 
 const deleteRow = function (rowId) {
     $.ajax({
-        url: 'DeleteRow',
+        url: '/Warehouse/Warehouses/DeleteRow',
         type: 'DELETE',
         data: {
             rowId: rowId,
@@ -331,7 +331,7 @@ const getBtnUp = function (rowid) {
 
 const deleteSector = function (sectorId) {
     $.ajax({
-        url: 'DeleteSector',
+        url: '/Warehouse/Warehouses/DeleteSector',
         type: 'DELETE',
         data: {
             sectorId: sectorId,

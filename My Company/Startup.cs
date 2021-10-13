@@ -60,6 +60,7 @@ namespace My_Company
 
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IFilesService, LocalFilesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

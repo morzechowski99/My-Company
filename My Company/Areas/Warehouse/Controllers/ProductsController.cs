@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +22,13 @@ namespace My_Company.Areas.Warehouse.Controllers
     {
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
+        private readonly IFilesService filesService;
 
-        public ProductsController(IRepositoryWrapper repositoryWrapper,IMapper mapper)
+        public ProductsController(IRepositoryWrapper repositoryWrapper, IMapper mapper, IFilesService filesService)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
+            this.filesService = filesService;
         }
 
         //// GET: Warehouse/Products
@@ -59,9 +62,8 @@ namespace My_Company.Areas.Warehouse.Controllers
         // GET: Warehouse/Products/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(repositoryWrapper.CategoriesRepository.FindAll(), "Id", "CategoryName");
-            ViewData["SupplierId"] = ViewHelpers.GetSuppliersSelectList(repositoryWrapper.SuppliersRepository.FindAll(), null);
-            ViewData["VATRateId"] = ViewHelpers.GetVatRatesSelectList(repositoryWrapper.VATRatesRepository.FindAll(),null);
+            ViewData["CategoryId"] = new SelectList(repositoryWrapper.CategoriesRepository.ChildCategoriesById(null), "Id", "CategoryName");
+            ViewData["VATRateId"] = ViewHelpers.GetVatRatesSelectList(repositoryWrapper.VATRatesRepository.FindAll(), null);
             return View();
         }
 
@@ -70,24 +72,68 @@ namespace My_Company.Areas.Warehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewProductViewModel productViewModel)
+        public async Task<IActionResult> Create([FromForm] NewProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
                 var productDb = mapper.Map<Product>(productViewModel);
+
+                IEnumerable<string> paths = await filesService.UploadFiles(Request.Form.Files);
+
+                foreach(var path in paths)
+                {
+                    productDb.Photos.Add(new Photo
+                    {
+                        Path = path
+                    });
+                }
 
                 repositoryWrapper.ProductRepository.Create(productDb);
 
                 await repositoryWrapper.Save();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(repositoryWrapper.CategoriesRepository.FindAll(), "Id", "CategoryName", productViewModel.CategoryId);
-            ViewData["SupplierId"] = ViewHelpers.GetSuppliersSelectList(repositoryWrapper.SuppliersRepository.FindAll(), productViewModel.SupplierId);
+            ViewData["CategoryId"] = new SelectList(repositoryWrapper.CategoriesRepository.ChildCategoriesById(null), "Id", "CategoryName");
             ViewData["VATRateId"] = ViewHelpers.GetVatRatesSelectList(repositoryWrapper.VATRatesRepository.FindAll(), productViewModel.VATRateId);
             return View(productViewModel);
         }
 
-      
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> CheckEAN(NewProductViewModel newProductDto)
+        {
+            bool exists = await repositoryWrapper.ProductRepository.CheckEANExists(newProductDto.EANCode);
+
+            if (!exists)
+                return Json(true);
+            else
+                return Json("Podany kod jest już zajęty");
+        }
+
+        [HttpGet]
+        public IActionResult GetAttributesViewComponent(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            else
+                return ViewComponent("ProductAttributes", new { id = id.Value });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSuppliersToSelect(string query)
+        {
+            if (query == null)
+                return BadRequest();
+
+            var suppliers = await repositoryWrapper.SuppliersRepository.GetSuppliersByQuery(query);
+            List<object> list = new List<object>();
+            foreach (var supplier in suppliers)
+            {
+                list.Add(new { Id = supplier.Id, Description = $"{supplier.Name} \n{supplier.Street} {supplier.PostalCode} {supplier.City}" });
+            }
+
+            return Ok(list);
+        }
 
         // GET: Warehouse/Products/Edit/5
         //public async Task<IActionResult> Edit(int? id)

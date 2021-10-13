@@ -15,5 +15,6 @@ namespace My_Company.Interfaces
         Task<IEnumerable<string>> GetSuppliersNIPsByPrefix(string prefix);
         Task<IEnumerable<string>> GetSuppliersEmailssByPrefix(string prefix);
         Task<bool> CheckSupplierDeletable(Supplier supplier);
+        Task<IEnumerable<Supplier>> GetSuppliersByQuery(string query);
     }
 }

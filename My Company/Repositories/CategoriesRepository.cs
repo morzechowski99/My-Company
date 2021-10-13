@@ -44,6 +44,28 @@ namespace My_Company.Repositories
             }
 
             return attributes;
+        }  
+        
+        public async Task<IEnumerable<Models.Attribute>> GetAllAttributesByCategoryIdWithDictionaryValues(int? categoryId)
+        {
+            var categories = await FindAll()
+                .Include(c => c.Attributes)
+                .ThenInclude(a => a.AttributeDictionaryValues)
+                .ToListAsync();
+
+            var category = categories.FirstOrDefault(c => c.Id == categoryId);
+            if (category == null)
+                return null;
+            List<Models.Attribute> attributes  = new();
+            while(category != null)
+            {
+                if(category.Attributes != null)
+                    attributes.AddRange(category.Attributes);
+
+                category = categories.FirstOrDefault(c => c.Id == category.ParentCategoryId);
+            }
+
+            return attributes;
         }
 
         public async Task<IEnumerable<CategoryTree>> GetCategoriesTree()
@@ -141,6 +163,14 @@ namespace My_Company.Repositories
         public async Task<Category> GetCategoryWithAttributesTracked(int id)
         {
             return await GetTracked().Include(c => c.Attributes).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public IQueryable<Category> ChildCategoriesById(int? id)
+        {
+            if (id == null)
+                return FindByCondition(c => c.ParentCategoryId == null);
+            else
+                return FindByCondition(c => c.ParentCategoryId == id);
         }
     }
 }

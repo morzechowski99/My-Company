@@ -89,5 +89,16 @@ namespace My_Company.Repositories
         {
             return !await FindByCondition(s => s.Id == supplier.Id).AnyAsync(s => s.Products.Any());
         }
+
+        public async Task<IEnumerable<Supplier>> GetSuppliersByQuery(string query)
+        {
+            query = query.ToLower();
+            return await FindByCondition(s => s.City.ToLower().Contains(query) || query.Contains(s.City.ToLower()) ||
+                s.Name.ToLower().Contains(query) || query.Contains(s.Name.ToLower()) || 
+                s.NIP.Contains(query) || query.Contains(s.NIP) ||
+                s.PostalCode.Contains(query) || query.Contains(s.PostalCode) || 
+                s.Street.ToLower().Contains(query) || query.Contains(s.Street.ToLower()))
+                .ToListAsync();
+        }
     }
 }

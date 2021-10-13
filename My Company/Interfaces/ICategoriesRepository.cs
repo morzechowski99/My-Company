@@ -2,6 +2,7 @@
 using My_Company.Models;
 using My_Company.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,5 +22,7 @@ namespace My_Company.Interfaces
         Task<Category> GetCategoryWithAttributes(int id);
         Task<bool> CheckNameToEdit(string categoryName,int categoryId);
         Task<Category> GetCategoryWithAttributesTracked(int id);
+        IQueryable<Category> ChildCategoriesById(int? id);
+        Task<IEnumerable<Models.Attribute>> GetAllAttributesByCategoryIdWithDictionaryValues(int? categoryId);
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_Company.Data;
 
 namespace My_Company.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211004162938_addValueFieldToProductAttributeTable")]
+    partial class addValueFieldToProductAttributeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -358,21 +360,6 @@ namespace My_Company.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderStatuses");
-                });
-
-            modelBuilder.Entity("My_Company.Models.Photo", b =>
-                {
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Path");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("My_Company.Models.Product", b =>
@@ -751,17 +738,6 @@ namespace My_Company.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("My_Company.Models.Photo", b =>
-                {
-                    b.HasOne("My_Company.Models.Product", "Product")
-                        .WithMany("Photos")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("My_Company.Models.Product", b =>
                 {
                     b.HasOne("My_Company.Models.Supplier", "Supplier")
@@ -919,8 +895,6 @@ namespace My_Company.Data.Migrations
 
             modelBuilder.Entity("My_Company.Models.Product", b =>
                 {
-                    b.Navigation("Photos");
-
                     b.Navigation("ProductAttributes");
 
                     b.Navigation("ProductCategories");

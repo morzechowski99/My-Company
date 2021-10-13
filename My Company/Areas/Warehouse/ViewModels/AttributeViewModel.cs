@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
-    public class AttributeDetailsViewModel
+    public class AttributeViewModel
     {
         public int Id { get; set; }
         [Display(Name = "Nazwa")]
