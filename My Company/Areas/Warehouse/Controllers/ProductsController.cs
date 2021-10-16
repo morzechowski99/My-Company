@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
-using My_Company.Data;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
@@ -31,12 +26,37 @@ namespace My_Company.Areas.Warehouse.Controllers
             this.filesService = filesService;
         }
 
-        //// GET: Warehouse/Products
-        //public async Task<IActionResult> Index()
-        //{
-        //    var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.Supplier).Include(p => p.VATRate);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            ViewData["Categories"] = new SelectList(await repositoryWrapper.CategoriesRepository.GetCategoriesTree(), "Id", "Tree");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetList(ProductsListFilters filters)
+        {
+            if (filters == null)
+                return BadRequest();
+
+            return ViewComponent("ProductsList", filters);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEANs(string prefix)
+        {
+            if (prefix == null)
+                return BadRequest("no prefix given");
+
+            var codes = await repositoryWrapper.ProductRepository.GetCodesByPrefix(prefix);
+            List<object> list = new();
+            foreach (string code in codes)
+            {
+                list.Add(new { code = code });
+            }
+
+            return Ok(list);
+        }
 
         //// GET: Warehouse/Products/Details/5
         //public async Task<IActionResult> Details(int? id)
@@ -80,13 +100,21 @@ namespace My_Company.Areas.Warehouse.Controllers
 
                 IEnumerable<string> paths = await filesService.UploadFiles(Request.Form.Files);
 
-                foreach(var path in paths)
+                foreach (var path in paths)
                 {
                     productDb.Photos.Add(new Photo
                     {
                         Path = path
                     });
                 }
+
+                var resizedImage = PhotosHelpers.GetResizedImage(Request.Form.Files[0], height: 300);
+                string mainPath = filesService.UploadFile(resizedImage);
+                productDb.Photos.Add(new Photo
+                {
+                    Path = mainPath,
+                    IsListPhoto = true
+                });
 
                 repositoryWrapper.ProductRepository.Create(productDb);
 

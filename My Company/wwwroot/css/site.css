@@ -116,3 +116,9 @@ body {
 .jqte_tool_label {
     min-height:20px;
 }
+
+/*selectize input*/
+.selectize-input {
+    max-height:200px;
+    overflow:auto !important;
+}

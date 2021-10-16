@@ -1,77 +1,79 @@
-﻿@model IEnumerable<My_Company.Models.Product>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Produkty";
 }
 
-<h1>Index</h1>
+<h1>Produkty</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj nowy</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MagazineCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Demand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EANCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Supplier)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VATRate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MagazineCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Demand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EANCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Category.Id)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Supplier.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VATRate.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row d-md-none">
+    <div class="col">
+        <button class="w-100 btn btn-outline-success" id="showHideFiltersBtn" type="button">Pokaż filtry</button>
+    </div>
+</div>
+<div class="row " id="filters">
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="searchValue" placeholder="Szukaj">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" id="stateSelect" multiple></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" id="eanSelect" multiple></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" multiple id="supplierSelect"></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" multiple id="statusSelect"></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" multiple id="categorySelect" asp-items="ViewBag.Categories"></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="0">Sortowanie</option>
+                <option value="1">Nazwa od A do Z</option>
+                <option value="2">Nazwa od Z do A</option>
+                <option value="3">EAN rosnąco</option>
+                <option value="4">EAN malejąco</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table" style="min-height:300px">
+    @await Component.InvokeAsync("ProductsList", new My_Company.Areas.Warehouse.ViewModels.ProductsListFilters())
+</div>
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
-    </tbody>
-</table>
+
+@section Scripts{
+    <script src="~/lib/selectize/selectize.min.js"></script>
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Products/Index/Index.js">
+
+    </script>
+}
+

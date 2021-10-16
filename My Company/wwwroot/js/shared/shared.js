@@ -28,3 +28,67 @@ function setResetModalOnClose() {
 function registerTooltips() {
     $('[data-toggle="tooltip"]').tooltip()
 }
+
+
+//source: https://github.com/shaack/bootstrap-detect-breakpoint
+const bootstrapDetectBreakpoint = function () {
+    // cache some values on first call
+    if (!this.breakpointValues) {
+        this.breakpointNames = ["xl", "lg", "md", "sm", "xs"]
+        this.breakpointValues = []
+        for (const breakpointName of this.breakpointNames) {
+            this.breakpointValues[breakpointName] = window.getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-' + breakpointName)
+        }
+    }
+    let i = this.breakpointNames.length
+    for (const breakpointName of this.breakpointNames) {
+        i--
+        if (window.matchMedia("(min-width: " + this.breakpointValues[breakpointName] + ")").matches) {
+            return { name: breakpointName, index: i }
+        }
+    }
+    return null
+}
+
+//selectize plugins
+Selectize.define('tag_limit', function (options) {
+    const self = this
+    options.tagLimit = options.tagLimit
+    this.onBlur = (function (e) {
+        const original = self.onBlur
+
+        return function (e) {
+            original.apply(this, e);
+            if (!e)
+                return
+            const $control = this.$control
+            const $items = $control.find('.item')
+            const limit = options.tagLimit
+            if (limit === undefined || $items.length <= limit)
+                return
+
+            $items.toArray().forEach((item, index) => {
+                if (index < limit)
+                    return
+                $(item).hide()
+            });
+
+            $control.append(`<span><b>+${$items.length - limit}</b></span>`)
+        };
+    })()
+
+    this.onFocus = (function (e) {
+        const original = self.onFocus
+
+        return function (e) {
+            original.apply(this, e);
+            if (!e)
+                return
+            const $control = this.$control
+            const $items = $control.find('.item')
+            $items.show()
+            $control.find('span').remove()
+
+        };
+    })()
+});

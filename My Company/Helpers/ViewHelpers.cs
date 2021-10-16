@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Models;
 using My_Company.ViewModels;
 using System;
@@ -41,5 +42,15 @@ namespace My_Company.Helpers
 
             return new SelectList(suppliersView, "Id", "Description", selectedSupplierId.HasValue? selectedSupplierId : null);
         }
+
+        public static StockState GetProductStockStatus(Product p)
+        {
+            if (p.MagazineCount > p.Demand * 1.15)
+                return StockState.Good;
+            else if (p.MagazineCount > p.Demand)
+                return StockState.RunningOut;
+            else
+                return StockState.Critical;
+        } 
     }
 }

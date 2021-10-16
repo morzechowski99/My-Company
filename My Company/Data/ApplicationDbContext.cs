@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.EnumTypes;
 
 namespace My_Company.Data
 {
@@ -107,6 +108,9 @@ namespace My_Company.Data
             {
                 entity.HasIndex(e => e.EANCode)
                     .IsUnique();
+
+                entity.Property(e => e.Status)
+                    .HasDefaultValue(ProductStatus.Active);
             });
         }
 

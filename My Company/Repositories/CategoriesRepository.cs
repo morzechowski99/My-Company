@@ -93,7 +93,7 @@ namespace My_Company.Repositories
                 }
                 );
             }
-            return categoryTrees;
+            return categoryTrees.OrderBy(c => c.Tree);
         }
 
         public async Task<string> GetCategoryTree(Category category)

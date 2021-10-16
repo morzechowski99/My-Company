@@ -79,6 +79,9 @@ namespace My_Company.AutoMapper
 
             CreateMap<int, ProductCategory>()
                 .ForMember(x => x.CategoryId, opt => opt.MapFrom(y => y));
+
+            CreateMap<Product, ProductListItemViewModel>()
+                .ForMember(x => x.SupplierData, opt => opt.MapFrom(y => y.Supplier.Name));
         }
     }
 }

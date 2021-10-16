@@ -11,6 +11,7 @@ namespace My_Company.Models
         [Key]
         public string Path { get; set; }
         public int ProductId { get; set; }
+        public bool IsListPhoto { get; set; }
         public virtual Product Product { get; set; }
     }
 }

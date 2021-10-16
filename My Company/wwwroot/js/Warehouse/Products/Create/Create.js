@@ -95,9 +95,9 @@ $(function () {
     registerPhotoInputs()
 
     $('#addNextPhotoBtn').click(function () {
-        const count = $('.item').length
-      
-        const template = `<div class="col-12 item d-flex justify-content-center " data-id="${count}">
+        const count = $('.photoItem').length
+        console.log($('.photoItem'))
+        const template = `<div class="col-12 photoItem d-flex justify-content-center " data-id="${count}">
                     <div class="form-group col-md-6">
                         <input type="file" data-id="${count}" class="form-control-file photoInput" data-val="true"
                         data-val-filesize="Maksymalny rozmiar pliku to 5 MB" data-val-filesize-size="5000000"
@@ -129,7 +129,8 @@ const registerPhotoInputs = function () {
         e.stopImmediatePropagation();
         const [file] = this.files
         const id = $(this).data('id')
-        $(`.item[data-id='${id}'] .card`).remove()
+       
+        $(`.photoItem[data-id='${id}'] .card`).remove()
         if (file) {
             const src = URL.createObjectURL(file)
 
@@ -144,9 +145,9 @@ const registerPhotoInputs = function () {
             $('.deleteBtn').click(function (e) {
                 e.stopImmediatePropagation();
                 const id = $(this).data('id')
-                $(`.item[data-id='${id}']`).remove()
+                $(`.photoItem[data-id='${id}']`).remove()
 
-                $('.item').toArray().forEach((elem) => {
+                $('.photoItem').toArray().forEach((elem) => {
                     const $elem = $(elem)
                     const elemId = $elem.data('id')
                     if (id == 0 && elemId == 1)

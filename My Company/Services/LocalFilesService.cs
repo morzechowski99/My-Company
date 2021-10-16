@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using My_Company.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,8 +26,17 @@ namespace My_Company.Services
             string filePath = Path.Combine(baseUrl, fileName);
             using FileStream stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
-            return filePath;
+            return $"/Content/{fileName}";
 
+        }
+
+        public string UploadFile(Bitmap image)
+        {
+            string fileName = $"{Guid.NewGuid()}.jpg";
+            string filePath = Path.Combine(baseUrl, fileName);
+            using FileStream stream = new FileStream(filePath, FileMode.Create);
+            image.Save(stream, ImageFormat.Jpeg);
+            return $"/Content/{fileName}";
         }
 
         public async Task<IEnumerable<string>> UploadFiles(IFormFileCollection files)

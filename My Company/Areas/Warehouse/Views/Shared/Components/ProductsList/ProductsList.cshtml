@@ -1,0 +1,86 @@
+﻿@model My_Company.ViewModels.PagedList<My_Company.Areas.Warehouse.ViewModels.ProductListItemViewModel>
+@using My_Company.Areas.Warehouse.EnumTypes
+
+<div class="d-flex justify-content-between row">
+    <div class="col-sm-12 col-md-6 m-2">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn @(Model.PageSize == 10 ? "btn-primary" : "btn-outline-primary") changePageSize" value="10">10</button>
+            <button type="button" class="btn @(Model.PageSize == 25 ? "btn-primary" : "btn-outline-primary") changePageSize" value="25">25</button>
+            <button type="button" class="btn @(Model.PageSize == 50 ? "btn-primary" : "btn-outline-primary") changePageSize" value="50">50</button>
+            <button type="button" class="btn @(Model.PageSize == 100 ? "btn-primary" : "btn-outline-primary") changePageSize" value="100">100</button>
+        </div>
+    </div>
+    <div class="col d-flex justify-content-end m-2">
+        <ul class="pagination ">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a href="#" class="page-link prevPageBtn">Poprzednia</a>
+            </li>
+
+            <li class="page-item"><input type="number" min="1" max="@Model.TotalPages" class="form-control" value="@Model.CurrentPage" id="pageValue2" /></li>
+            <li class="page-item ">
+                <a class="page-link" href="#" id="changePageBtn2">Przejdź</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "") ">
+                <a class="page-link nextPageBtn" href="#">Następna</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-6 col-md-3 my-2">
+
+            <div class="card @(item.StockStatus == StockState.Good ? "border-success" :
+            item.StockStatus == StockState.RunningOut ? "border-warning" : "border-danger") ">
+                <h6 class="card-header">@item.Name</h6>
+                <img class="card-img-top" src="@Url.Content(item.PhotoUrl)" alt="@item.Name">
+                <div class="card-body mb-0">
+                    <b>@Html.DisplayNameFor(model => item.SupplierData)</b>
+                    <p>@Html.DisplayFor(model => item.SupplierData)</p>
+                    <b>@Html.DisplayNameFor(model => item.EANCode)</b>
+                    <p class="mb-0">@Html.DisplayFor(model => item.EANCode)</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-link">Szczegóły</a>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+<div class="d-flex justify-content-between mt-2 row">
+    <div class="col-sm-12 col-md-6 m-2">
+        Jesteś na stronie @Model.CurrentPage z @Model.TotalPages
+    </div>
+    <div class="col d-flex justify-content-end m-2">
+        <ul class="pagination">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "") prevPageBtn">
+                <a href="#" class="page-link">Poprzednia</a>
+            </li>
+
+            <li class="page-item"><input type="number" min="1" max="@Model.TotalPages" class="form-control" value="@Model.CurrentPage" id="pageValue1" /></li>
+            <li class="page-item ">
+                <a class="page-link" id="changePageBtn1" href="#">Przejdź</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link nextPageBtn" href="#">Następna</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var currentPage = @Model.CurrentPage;
+    var totalPages = @Model.TotalPages;
+    var pageSize = @Model.PageSize;
+</script>
+
+<style>
+    .card-img-top {
+        min-height: 20vh;
+        max-height: 20vh;
+        object-fit: scale-down;
+    }
+</style>

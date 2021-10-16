@@ -1,4 +1,5 @@
-﻿using System;
+﻿using My_Company.EnumTypes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace My_Company.Models
         public string Description { get; set; }
         public int SupplierId { get; set; }
         public int VATRateId { get; set; }
+        public ProductStatus Status { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual VATRate VATRate { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
