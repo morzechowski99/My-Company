@@ -112,6 +112,23 @@ namespace My_Company.Repositories
             else return "-";
             return tree;
         }
+        
+        public async Task<string> GetCategoryTreeWithCategoryName(Category category)
+        {
+            string tree = "";
+            int? parent = category.ParentCategoryId;
+            if (parent.HasValue)
+            {
+                while (parent.HasValue)
+                {
+                    var parentCategory = await GetById(parent.Value);
+                    tree = parentCategory.CategoryName + "/" + tree;
+                    parent = parentCategory.ParentCategoryId;
+                }
+            }
+            else return category.CategoryName;
+            return tree + $"{category.CategoryName}";
+        }
 
         public async Task<Category> GetById(int id)
         {

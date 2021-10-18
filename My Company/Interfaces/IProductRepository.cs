@@ -12,5 +12,6 @@ namespace My_Company.Interfaces
         Task<bool> CheckEANExists(string EANCode);
         IQueryable<Product> GetProductsByFilters(ProductsListFilters filters);
         Task<IEnumerable<string>> GetCodesByPrefix(string prefix);
+        Task<Product> GetProductById(int id);
     }
 }

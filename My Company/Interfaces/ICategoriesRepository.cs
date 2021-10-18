@@ -20,9 +20,10 @@ namespace My_Company.Interfaces
         Task<bool> CheckIfRemovable(int id);
         Task<Category> GetById(int id);
         Task<Category> GetCategoryWithAttributes(int id);
-        Task<bool> CheckNameToEdit(string categoryName,int categoryId);
+        Task<bool> CheckNameToEdit(string categoryName, int categoryId);
         Task<Category> GetCategoryWithAttributesTracked(int id);
         IQueryable<Category> ChildCategoriesById(int? id);
         Task<IEnumerable<Models.Attribute>> GetAllAttributesByCategoryIdWithDictionaryValues(int? categoryId);
+        Task<string> GetCategoryTreeWithCategoryName(Category category);
     }
 }

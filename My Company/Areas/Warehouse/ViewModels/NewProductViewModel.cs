@@ -34,6 +34,11 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Stawka VAT")]
         [Required]
         public int VATRateId { get; set; }
+        [Display(Name = "Cena (netto,zł)")]
+        [Required]
+        [DataType(DataType.Currency)]
+        [RegularExpression(@"^(\d*\,\d{1,2}|\d+)$")]
+        public string NettoPrice { get; set; }
         public List<AttributeProductViewModel> Attributes { get; set; } 
     }
 }

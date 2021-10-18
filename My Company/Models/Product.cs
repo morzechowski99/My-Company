@@ -29,6 +29,7 @@ namespace My_Company.Models
         public int SupplierId { get; set; }
         public int VATRateId { get; set; }
         public ProductStatus Status { get; set; }
+        public int NettoPrice { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual VATRate VATRate { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }

@@ -121,5 +121,18 @@ namespace My_Company.Repositories
 
             return query;
         }
+
+        public async Task<Product> GetProductById(int id)
+        {
+            return await FindByCondition(p => p.Id == id)
+                .Include(p => p.VATRate)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .Include(p => p.Supplier)
+                .Include(p => p.ProductAttributes)
+                .ThenInclude(p => p.Attribute)
+                .Include(p => p.Photos)
+                .FirstOrDefaultAsync();
+        }
     }
 }

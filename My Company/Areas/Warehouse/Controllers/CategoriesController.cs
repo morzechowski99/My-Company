@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
-using My_Company.DIctionaries;
+using My_Company.Dictionaries;
 using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
