@@ -9,6 +9,7 @@ using My_Company.Interfaces;
 using My_Company.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +31,9 @@ namespace My_Company
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://192.168.8.106:5000");
+                   // webBuilder.UseUrls("http://192.168.1.4:64279");
+                    
+
                 });
 
         private async static Task CreateDbIfNotExists(IHost host)

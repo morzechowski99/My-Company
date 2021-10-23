@@ -16,10 +16,21 @@ namespace My_Company.AutoMapper
         {
             CreateMap<NewWarehouseViewModel, Warehouse>();
 
-            CreateMap<NewProductViewModel, Product>()
+            CreateMap<CreateEditProductViewModel, Product>()
                 .ForMember(x => x.ProductCategories, opt => opt.MapFrom(y => y.Categories))
                 .ForMember(x => x.ProductAttributes, opt => opt.MapFrom(y => y.Attributes))
-                .ForMember(x => x.NettoPrice, opt => opt.MapFrom(y => (int)(decimal.Parse(y.NettoPrice) * 100.0M)));
+                .ForMember(x => x.NettoPrice, opt => opt.MapFrom(y => (int)(decimal.Parse(y.NettoPrice) * 100.0M)))
+                .ForMember(x => x.Photos, opt => opt.Ignore());
+
+            CreateMap<Photo, PhotoViewModel>();
+
+            CreateMap<ProductCategory, int>()
+                .ConstructUsing(p => p.CategoryId);
+
+            CreateMap<Product, CreateEditProductViewModel>()
+                .ForMember(x => x.Categories, opt => opt.MapFrom(y => y.ProductCategories))
+                .ForMember(x => x.Attributes, opt => opt.MapFrom(y => y.ProductAttributes))
+                .ForMember(x => x.NettoPrice, opt => opt.MapFrom(y => (decimal)(y.NettoPrice) / 100.0M));
 
             CreateMap<CreateUserViewModel, AppUser>();
 
@@ -94,7 +105,14 @@ namespace My_Company.AutoMapper
 
             CreateMap<ProductAttribute, AttributeProductViewModel>()
                 .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Attribute.Name))
-                .ForMember(x => x.Type, opt => opt.MapFrom(y => y.Attribute.Type));
+                .ForMember(x => x.Type, opt => opt.MapFrom(y => y.Attribute.Type))
+                .ForMember(x => x.Values, opt => opt.MapFrom(y => y.Attribute.AttributeDictionaryValues));
+
+            CreateMap<AttributeDictionaryValues, string>()
+                .ConvertUsing(x => x.Value);
+
+            CreateMap<ProductBasicInfoEditViewModel,Product>()
+                .ForMember(x => x.NettoPrice, opt => opt.MapFrom(y => (int)(decimal.Parse(y.NettoPrice) * 100.0M)));
         }
     }
 }

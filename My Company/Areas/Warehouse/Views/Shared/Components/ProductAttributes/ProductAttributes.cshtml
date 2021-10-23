@@ -1,4 +1,4 @@
-﻿@model My_Company.Areas.Warehouse.ViewModels.NewProductsAttributesViewModel
+﻿@model My_Company.Areas.Warehouse.ViewModels.ProductsAttributesViewModel
 
 @using My_Company.EnumTypes
 
@@ -20,14 +20,16 @@
                         <input class="form-control" asp-for="Attributes[i].Value" />
                         break;
                     case AttributeType.Bool:
-                        <input type="checkbox" class="form-check-input" asp-for="Attributes[i].Value">
-                        <label class="form-check-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="Attributes[i].Value">
+                            <label class="form-check-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
+                        </div>
                         break;
                     case AttributeType.Date:
                         <input type="date" class="form-control" asp-for="Attributes[i].Value" />
                         break;
                     case AttributeType.Dictionary:
-                        <select class="form-control" asp-for="Attributes[i].Value" asp-items="@new SelectList(Model.Attributes[i].Values)" ></select>
+                        <select class="form-control" asp-for="Attributes[i].Value" asp-items="@new SelectList(Model.Attributes[i].Values,Model.Attributes[i].Value)"></select>
                         break;
                     case AttributeType.Numeric:
                         <input class="form-control" type="number" asp-for="Attributes[i].Value">

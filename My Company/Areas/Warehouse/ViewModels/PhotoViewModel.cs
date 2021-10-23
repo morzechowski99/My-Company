@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
-    public class NewProductsAttributesViewModel
+    public class PhotoViewModel
     {
-        public List<AttributeProductViewModel> Attributes { get; set; }
+        public string Path { get; set; }
+        public bool IsMainPhoto { get; set; }
     }
 }

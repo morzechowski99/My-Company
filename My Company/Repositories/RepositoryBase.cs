@@ -2,7 +2,6 @@
 using My_Company.Data;
 using My_Company.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -52,6 +51,11 @@ namespace My_Company.Repositories
         public IQueryable<T> GetTracked()
         {
             return _context.Set<T>().AsTracking();
+        }
+
+        public async Task<T> GetOne(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(expression);
         }
     }
 }

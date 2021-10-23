@@ -4,7 +4,6 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,9 +16,9 @@ namespace My_Company.Repositories
         {
         }
 
-        public async Task<bool> CheckEANExists(string EANCode)
+        public async Task<bool> CheckEANExists(string EANCode, int id)
         {
-            return await FindAll().AnyAsync(p => p.EANCode == EANCode);
+            return await FindAll().AnyAsync(p => p.EANCode == EANCode && p.Id != id);
         }
 
         public new void Create(Product p)
@@ -96,13 +95,13 @@ namespace My_Company.Repositories
                 }
                 else
                 {
-                    if(filters.States.Contains(StockState.Critical) && filters.States.Contains(StockState.Good))
+                    if (filters.States.Contains(StockState.Critical) && filters.States.Contains(StockState.Good))
                     {
                         query = query.Where(p => p.MagazineCount > p.Demand * 1.15 || p.MagazineCount < p.Demand);
                     }
-                    else if (filters.States.Contains(StockState.Good) && filters.States.Contains(StockState.RunningOut)) 
+                    else if (filters.States.Contains(StockState.Good) && filters.States.Contains(StockState.RunningOut))
                     {
-                        query = query.Where(p => p.MagazineCount > p.Demand );
+                        query = query.Where(p => p.MagazineCount > p.Demand);
                     }
                     else
                     {
@@ -110,11 +109,11 @@ namespace My_Company.Repositories
                     }
                 }
             }
-            if(filters.Statuses != null && filters.Statuses.Any())
+            if (filters.Statuses != null && filters.Statuses.Any())
             {
                 query = query.Where(p => filters.Statuses.Contains(p.Status));
             }
-            if(filters.Suppliers != null && filters.Suppliers.Any())
+            if (filters.Suppliers != null && filters.Suppliers.Any())
             {
                 query = query.Where(p => filters.Suppliers.Contains(p.SupplierId));
             }
@@ -133,6 +132,30 @@ namespace My_Company.Repositories
                 .ThenInclude(p => p.Attribute)
                 .Include(p => p.Photos)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Product> GetProductWithCategoriesAndAttributesByIdTracked(int id)
+        {
+            return await GetTracked()
+                .Include(p => p.ProductCategories)
+                .Include(p => p.ProductAttributes)
+                .ThenInclude(pa => pa.Attribute)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Product> GetProductWithoutVirtualPropertiesById(int id)
+        {
+            return await GetOne(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<ProductAttribute>> GetAttributesByProductId(int id)
+        {
+            return (await FindByCondition(p => p.Id == id)
+                .Include(p => p.ProductAttributes)
+                .ThenInclude(pa => pa.Attribute)
+                .ThenInclude(a => a.AttributeDictionaryValues)
+                .FirstOrDefaultAsync())
+                .ProductAttributes;        
         }
     }
 }

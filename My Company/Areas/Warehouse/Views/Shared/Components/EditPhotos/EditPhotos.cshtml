@@ -1,0 +1,23 @@
+﻿@model IEnumerable<My_Company.Areas.Warehouse.ViewModels.PhotoViewModel>
+
+<div class="row">
+    @foreach (var photo in Model)
+    {
+        <div class="col-md-6 my-2">
+            <div class="card border-success ">
+                <img class="card-img-top" src="@Url.Content(photo.Path)" alt="">
+                <div class="card-body text-center" style="min-height:65px">
+                    @if (photo.IsMainPhoto)
+                    {
+                        <span><strong>To jest zdjęcie główne</strong></span>
+                    }
+                </div>
+                <div class="card-footer ">
+                    <button class="m-2 w-100 btn btn-outline-danger deleteBtn" type="button" data-toggle="modal"
+                            data-target="#confirmPhotoDelete" data-path="@photo.Path">Usuń</button>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -16,5 +14,6 @@ namespace My_Company.Interfaces
         void Update(T entity);
         void Delete(T entity);
         Task<bool> Exists(int id);
+        Task<T> GetOne(Expression<Func<T, bool>> expression);
     }
 }

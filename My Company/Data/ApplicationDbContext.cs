@@ -8,14 +8,23 @@ using System.Linq;
 using System.Text;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.EnumTypes;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using System.Diagnostics;
 
 namespace My_Company.Data
 {
-    public class ApplicationDbContext 
-        : IdentityDbContext<AppUser,AppRole,string,IdentityUserClaim<string>, 
+    public class ApplicationDbContext
+        : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
             AppUserRole, IdentityUserLogin<string>,
             IdentityRoleClaim<string>, IdentityUserToken<string>>
-    {
+    { 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(m => Debug.WriteLine(m)).EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -59,15 +68,10 @@ namespace My_Company.Data
             {
                 entity.HasKey(e => new { e.SectorId, e.ProductId });
             });
-            
+
             builder.Entity<ProductCategory>(entity =>
             {
                 entity.HasKey(e => new { e.ProductId, e.CategoryId });
-            });
-
-             builder.Entity<ProductAttribute>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductId, e.AttributeId });
             });
 
             builder.Entity<AppUserRole>(userRole =>

@@ -12,5 +12,6 @@ namespace My_Company.Interfaces
         Task AddAttributeValue(int attributeId, List<string> values);
         Task<Attribute> GetAttributeWithCategoryAndValuesById(int id);
         Task<Attribute> GetAttributeWithCategoryAndValuesTrackedById(int id);
+        Task<List<Attribute>> GetAttributesByCategoryId(int categoryId);
     }
 }

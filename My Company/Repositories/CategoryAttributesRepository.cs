@@ -37,6 +37,11 @@ namespace My_Company.Repositories
             return await FindByCondition(a => a.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<List<Attribute>> GetAttributesByCategoryId(int categoryId)
+        {
+            return await FindAll().Where(a => a.CategoryId == categoryId).ToListAsync();
+        }
+
         /*get attribute type dictionary*/
         public async Task<Attribute> GetAttributeWithCategoryAndValuesById(int id)
         {

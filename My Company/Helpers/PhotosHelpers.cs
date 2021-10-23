@@ -11,12 +11,23 @@ namespace My_Company.Helpers
 {
     public static class PhotosHelpers
     {
-        public static Bitmap GetResizedImage(IFormFile file, int height = 0 , int width = 0)
+        public static Bitmap GetResizedImage(IFormFile file, int height = 0, int width = 0)
         {
             var image = Image.FromStream(file.OpenReadStream());
+            return Resize(image, height, width);
+        }
+
+        public static Bitmap GetResizedImage(string path, int height = 0, int width = 0)
+        {
+            var image = Image.FromStream(new FileStream(path, FileMode.Open));
+            return Resize(image, height, width);
+        }
+
+        private static Bitmap Resize(Image image, int height, int width)
+        {
             var h = image.Height;
             var w = image.Width;
-            if(height == 0 && width == 0)
+            if (height == 0 && width == 0)
             {
                 throw new ArgumentOutOfRangeException("One of dimenions must be given");
             }

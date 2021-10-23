@@ -13,5 +13,6 @@ namespace My_Company.Interfaces
         Task<IEnumerable<string>> UploadFiles(IFormFileCollection files);
         Task<string> UploadFile(IFormFile file);
         string UploadFile(Bitmap image);
+        void DeletePhoto(string path);
     }
 }

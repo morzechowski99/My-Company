@@ -1,69 +1,226 @@
-﻿@model My_Company.Models.Product
+﻿@model My_Company.Areas.Warehouse.ViewModels.CreateEditProductViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = Model.Name + " - Edycja";
 }
 
-<h1>Edit</h1>
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div>
+    <h1 class="display-4">@Html.DisplayFor(model => model.Name)</h1>
+    <h4>Edycja</h4>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MagazineCount" class="control-label"></label>
-                <input asp-for="MagazineCount" class="form-control" />
-                <span asp-validation-for="MagazineCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Demand" class="control-label"></label>
-                <input asp-for="Demand" class="form-control" />
-                <span asp-validation-for="Demand" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EANCode" class="control-label"></label>
-                <input asp-for="EANCode" class="form-control" />
-                <span asp-validation-for="EANCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+    <ul class="nav nav-pills justify-content-center" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="status-tab" data-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="true">Status</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link " id="category-tab" data-toggle="tab" href="#category" role="tab" aria-controls="category" aria-selected="true">Kategoria</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link " id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Informacje podstawowe</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Opis</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="attributes-tab" data-toggle="tab" href="#attributes" role="tab" aria-controls="attributes" aria-selected="false">Atrybuty</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="photos" aria-selected="false">Zdjęcia</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content mb-md-5">
+        <div class="tab-pane fade show active" id="status" role="tabpanel" aria-labelledby="status-tab">
+            <form id="changeStatusForm">
+                <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Status"></label>
+                            <select asp-for="Status" asp-items="ViewBag.Statuses" class="form-control"></select>
+                            <span class="text-danger" asp-validation-for="Status" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">Zmień status</button>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="category" role="tabpanel" aria-labelledby="category-tab">
+            <form id="categoryForm">
+                <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-6 " id="categorySelects">
+
+                        <label asp-for="Categories" class="control-label"></label>
+                        @for (int i = 0; i < Model.Categories.Count; i++)
+                        {
+                            <div class="form-group categorySelectContainer" data-id="@i">
+                                @if (i == 0)
+                                {
+                                    <select asp-for="Categories[i]" class="form-control categorySelect" data-id="@i"
+                                            data-val-range="Pole wymagane" data-val-range-min="1" asp-items="ViewBag.CategoryId[i]">
+                                        <option value="0">Wybierz</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select asp-for="Categories[i]" class="form-control categorySelect" data-id="@i"
+                                            asp-items="ViewBag.CategoryId[i]">
+                                        <option value="0">Wybierz</option>
+                                    </select>
+                                }
+                                <span asp-validation-for="Categories[i]" class="text-danger" id="categoriesValidationSpan"></span>
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Zmiana kategorii spowoduje utratę atrybutów niepowiązanych z nowymi kategoriami">
+                        <button class="btn btn-success" type="submit">Zapisz zmiany</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
+            <form id="basicInfoForm">
+                <input type="hidden" asp-for="Id" />
+                <div class="row my-2">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Name"></label>
+                            <input class="form-control w-75" asp-for="Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="EANCode"></label>
+                            <input class="form-control w-75" asp-for="EANCode" />
+                            <span asp-validation-for="EANCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="SupplierId"></label>
+                            <select class="form-control w-75" id="supplierSelect" asp-for="SupplierId">
+                                <option selected value="@Model.SupplierId">@ViewBag.SupplierDescription</option>
+                            </select>
+                            <span asp-validation-for="SupplierId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" asp-for="NettoPrice"></label>
+                            <input class="form-control w-75" asp-for="NettoPrice" />
+                            <span asp-validation-for="NettoPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="VATRateId"></label>
+                            <select class="form-control w-75" asp-for="VATRateId" asp-items="ViewBag.VATRateId"></select>
+                            <span asp-validation-for="VATRateId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-content-end d-flex">
+                    <button class="btn btn-success" type="submit">Zapisz</button>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+            <form id="descriptionForm">
+                <input type="hidden" asp-for="Id" />
+                <textarea class="editor" id="decriptionTextArea" asp-for="Description" rows="20"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">Zmień opis</button>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
+            <form id="attributesForm">
+                <div class="attributesContainer">
+                    @await Component.InvokeAsync("ProductAttributes", new { id = Model.Id, isEdit = true })
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success" type="submit">Zapisz atrybuty</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="tab-pane fade my-2" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+            <div id="photosContainer">
+                @await Component.InvokeAsync("EditPhotos", new { photos = Model.Photos })
+            </div>           
+            <form id="addPhotoForm" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id"/>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Dodaj zdjęcie</label>
+                            <input type="file" class="form-control-file" id="photoInput" name="file" accept="image/*" />
+                            <span class="text-danger" id="photoInputValidation"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Wróć do listy</a>
+    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@Model.Id">Powrót</a>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="confirmPhotoDelete">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Potwierdź usunięcie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            @*<div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="SupplierId" class="control-label"></label>
-                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-                <span asp-validation-for="SupplierId" class="text-danger"></span>
+            <div class="modal-body">
+                <p>Czy na peno chcesz usunąć to zdjęcie?</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger " data-dismiss="modal" id="deletePhoto">Usuń</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="VATRateId" class="control-label"></label>
-                <select asp-for="VATRateId" class="form-control" asp-items="ViewBag.VATRateId"></select>
-                <span asp-validation-for="VATRateId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    .carousel-control-prev-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+    }
+
+    .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+    }
+
+    .card-img-top {
+        height: 50vh;
+        object-fit: scale-down;
+    }
+</style>
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link type="text/css" rel="stylesheet" href="~/lib/jquery-te/jquery-te-1.4.0.css" />
+}
 
 @section Scripts {
+    <script src="~/lib/selectize/selectize.min.js"></script>
+
+    <script src="~/lib/jquery-te/jquery-te-1.4.0.min.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Warehouse/Products/Edit/Edit.js"></script>
 }

@@ -21,14 +21,24 @@ namespace My_Company.Areas.Warehouse.ViewComponents
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id)
+        public async Task<IViewComponentResult> InvokeAsync(int id, bool isEdit = false)
         {
-            var attributes = await _repositoryWrapper.CategoriesRepository.GetAllAttributesByCategoryIdWithDictionaryValues(id);
+            List<AttributeProductViewModel> attributesDtos;
+            if (!isEdit)
+            {
+                var attributes = await _repositoryWrapper.CategoriesRepository.GetAllAttributesByCategoryIdWithDictionaryValues(id);
+                attributesDtos = _mapper.Map<List<AttributeProductViewModel>>(attributes);
+            }
+            else
+            {
+                var attributes = await _repositoryWrapper.ProductRepository.GetAttributesByProductId(id);
+                attributesDtos = _mapper.Map<List<AttributeProductViewModel>>(attributes);
+            }
 
-            var attributesDtos = _mapper.Map<List<AttributeProductViewModel>>(attributes);
-
-            return View("ProductAttributes",new NewProductsAttributesViewModel() { Attributes = attributesDtos});
+            return View("ProductAttributes",new ProductsAttributesViewModel() { Attributes = attributesDtos});
 
         }
+
+     
     }
 }

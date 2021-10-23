@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using My_Company.EnumTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
-    public class NewProductViewModel
+    public class CreateEditProductViewModel
     {
+        public int Id { get; set; }
         [Display(Name ="Nazwa")]
         [Required]
         [MaxLength(25)]
@@ -18,7 +20,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [RegularExpression(@"^\d{13}$",ErrorMessage ="Pole może zawierać tylko cyfry")]
         [MinLength(13)]
         [MaxLength(13)]
-        [Remote(action: "CheckEAN", controller: "Products", areaName: "Warehouse")]
+        [Remote(action: "CheckEAN", controller: "Products", areaName: "Warehouse",AdditionalFields ="Id")]
         [Required]
         public string EANCode { get; set; }
         [DataType(DataType.MultilineText)]
@@ -39,6 +41,9 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [DataType(DataType.Currency)]
         [RegularExpression(@"^(\d*\,\d{1,2}|\d+)$")]
         public string NettoPrice { get; set; }
-        public List<AttributeProductViewModel> Attributes { get; set; } 
+        [Display(Name="Status")]
+        public ProductStatus Status { get; set; }
+        public List<AttributeProductViewModel> Attributes { get; set; }
+        public List<PhotoViewModel> Photos { get; set; }
     }
 }

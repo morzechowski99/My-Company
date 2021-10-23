@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using My_Company.Data;
 using My_Company.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -21,6 +18,8 @@ namespace My_Company.Repositories
         private IProductRepository productRepository;
         private IUserRepository userRepository;
         private ICategoryAttributesRepository categoryAttributesRepository;
+        private IProductAttributeRepository productAttributeRepository;
+        private IPhotosRepository photosRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -31,7 +30,9 @@ namespace My_Company.Repositories
             get
             {
                 if (warehouseRepository == null)
+                {
                     warehouseRepository = new WarehouseRepository(_context);
+                }
 
                 return warehouseRepository;
             }
@@ -42,7 +43,9 @@ namespace My_Company.Repositories
             get
             {
                 if (warehouseRowRepository == null)
+                {
                     warehouseRowRepository = new WarehouseRowRepository(_context);
+                }
 
                 return warehouseRowRepository;
             }
@@ -53,7 +56,9 @@ namespace My_Company.Repositories
             get
             {
                 if (warehouseSectorRepository == null)
+                {
                     warehouseSectorRepository = new WarehouseSectorRepository(_context);
+                }
 
                 return warehouseSectorRepository;
             }
@@ -64,7 +69,9 @@ namespace My_Company.Repositories
             get
             {
                 if (categoriesRepository == null)
+                {
                     categoriesRepository = new CategoriesRepository(_context);
+                }
 
                 return categoriesRepository;
             }
@@ -75,7 +82,9 @@ namespace My_Company.Repositories
             get
             {
                 if (_VATRatesRepository == null)
+                {
                     _VATRatesRepository = new VATRatesRepository(_context);
+                }
 
                 return _VATRatesRepository;
             }
@@ -86,7 +95,9 @@ namespace My_Company.Repositories
             get
             {
                 if (suppliersRepository == null)
+                {
                     suppliersRepository = new SuppliersRepository(_context);
+                }
 
                 return suppliersRepository;
             }
@@ -97,7 +108,9 @@ namespace My_Company.Repositories
             get
             {
                 if (productRepository == null)
+                {
                     productRepository = new ProductRepository(_context);
+                }
 
                 return productRepository;
             }
@@ -108,23 +121,52 @@ namespace My_Company.Repositories
             get
             {
                 if (userRepository == null)
+                {
                     userRepository = new UserRepository(_context);
+                }
 
                 return userRepository;
             }
-        } 
-        
+        }
+
         public ICategoryAttributesRepository CategoryAttributesRepository
         {
             get
             {
                 if (categoryAttributesRepository == null)
+                {
                     categoryAttributesRepository = new CategoryAttributesRepository(_context);
+                }
 
                 return categoryAttributesRepository;
             }
         }
 
+        public IProductAttributeRepository ProductAttributeRepository
+        {
+            get
+            {
+                if (productAttributeRepository == null)
+                {
+                    productAttributeRepository = new ProductAttributesRepository(_context);
+                }
+
+                return productAttributeRepository;
+            }
+        } 
+        
+        public IPhotosRepository PhotosRepository
+        {
+            get
+            {
+                if (photosRepository == null)
+                {
+                    photosRepository = new PhotosRepository(_context);
+                }
+
+                return photosRepository;
+            }
+        }
         public async Task<IDbContextTransaction> BeginTransaction()
         {
             return await _context.Database.BeginTransactionAsync();

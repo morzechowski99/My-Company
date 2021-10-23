@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +11,9 @@ using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Attribute = My_Company.Models.Attribute;
 
 namespace My_Company.Areas.Warehouse.Controllers
@@ -70,7 +70,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> Create([FromForm] CreateCategoryViewModel createCategoryDto)
         {
             if (createCategoryDto == null)
+            {
                 return BadRequest();
+            }
 
             var categoryDb = _mapper.Map<Category>(createCategoryDto);
 
@@ -91,7 +93,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public IActionResult GetInheritedAttributes(int? id)
         {
             if (id == null)
+            {
                 return BadRequest();
+            }
 
             return ViewComponent("InheritedAttributesTable", new { parentCategoryId = id.Value });
         }
@@ -103,9 +107,13 @@ namespace My_Company.Areas.Warehouse.Controllers
             var exists = await _repositoryWrapper.CategoriesRepository.CheckName(createCategoryDto.CategoryName);
 
             if (!exists)
+            {
                 return Json(true);
+            }
             else
+            {
                 return Json("Nazwa zajęta");
+            }
         }
 
         [AcceptVerbs("Get", "Post")]
@@ -114,21 +122,29 @@ namespace My_Company.Areas.Warehouse.Controllers
             var exists = await _repositoryWrapper.CategoriesRepository.CheckNameToEdit(editCategoryDto.CategoryName, editCategoryDto.Id);
 
             if (!exists)
+            {
                 return Json(true);
+            }
             else
+            {
                 return Json("Nazwa zajęta");
+            }
         }
 
         [HttpGet]
         public IActionResult CreateAttributesValues()
         {
             if (TempData["attributes"] == null)
+            {
                 return BadRequest();
+            }
 
             var attributes = JsonConvert.DeserializeObject<List<Attribute>>(TempData["attributes"] as string);
 
             if (attributes.Count() == 0)
+            {
                 return RedirectToAction(nameof(Index));
+            }
 
             var attributeValuesDtos = _mapper.Map<List<AttributeValuesViewModel>>(attributes);
 
@@ -140,7 +156,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> CreateAttributesValues(List<AttributeValuesViewModel> attributes)
         {
             if (attributes == null)
+            {
                 return BadRequest();
+            }
 
             foreach (var attr in attributes)
             {
@@ -157,7 +175,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public IActionResult GetList(CategoryListFilters filters)
         {
             if (filters == null)
+            {
                 return BadRequest();
+            }
 
             return ViewComponent("CategoriesList", filters);
         }
@@ -260,12 +280,16 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> EditAttributes(int? id)
         {
             if (id == null)
+            {
                 return BadRequest();
+            }
 
             var category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributes(id.Value);
 
             if (category == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.ParentCategoryId = category.ParentCategoryId;
             ViewBag.CategoryName = category.CategoryName;
@@ -281,7 +305,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> EditAttributes(int? id, List<EditAttributeViewModel> attributeDtos)
         {
             if (id == null)
+            {
                 return BadRequest();
+            }
 
             Category category;
             category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributesTracked(id.Value);
@@ -291,7 +317,9 @@ namespace My_Company.Areas.Warehouse.Controllers
                 foreach (var attrDb in category.Attributes)
                 {
                     if (!attributeDtos.Any(a => a.Id == attrDb.Id))
+                    {
                         category.Attributes.Remove(attrDb);
+                    }
                 }
                 List<Attribute> newAttributes = new();
                 foreach (var attrDto in attributeDtos)
@@ -335,14 +363,18 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> Delete([FromRoute] int? id)
         {
             if (id == null)
+            {
                 return BadRequest();
+            }
 
             try
             {
                 var category = await _repositoryWrapper.CategoriesRepository.GetById(id.Value);
 
                 if (category == null)
+                {
                     return NotFound();
+                }
 
                 _repositoryWrapper.CategoriesRepository.Delete(category);
 
@@ -359,7 +391,9 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> GetChildCategories(int? id)
         {
             if (id == null)
+            {
                 return BadRequest();
+            }
 
             var categories = await _repositoryWrapper.CategoriesRepository.ChildCategoriesById(id).ToListAsync();
             var categoriesView = categories.Select(c => new { c.Id, c.CategoryName }).ToList();
