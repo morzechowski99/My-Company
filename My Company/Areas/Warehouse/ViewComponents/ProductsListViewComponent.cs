@@ -36,7 +36,7 @@ namespace My_Company.Areas.Warehouse.ViewComponents
             {
                 var item = _mapper.Map<ProductListItemViewModel>(product);
                 Photo photo = product.Photos.FirstOrDefault(p => p.IsListPhoto);
-                item.PhotoUrl = photo == null ? "/img/photoPlaceholder.png" : photo.Path;
+                item.PhotoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
                 item.StockStatus = ViewHelpers.GetProductStockStatus(product);
                 listView.Add(item);
             }

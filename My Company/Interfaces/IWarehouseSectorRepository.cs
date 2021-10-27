@@ -10,9 +10,10 @@ namespace My_Company.Interfaces
     {
         Task<bool> IsEmpty(int sectorId);
         Task<WarehouseSector> GetById(int id);
-        Task<WarehouseSector> GetByWithRowId(int id);
+        Task<WarehouseSector> GetByIdWithRow(int id);
         Task DeleteSector(WarehouseSector sector);
         Task<IEnumerable<WarehouseSector>> GetSectorsByRow(int rowId);
+        Task<IEnumerable<WarehouseSector>> GetAll();
     }
     
 }

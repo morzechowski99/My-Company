@@ -20,6 +20,7 @@ namespace My_Company.Repositories
         private ICategoryAttributesRepository categoryAttributesRepository;
         private IProductAttributeRepository productAttributeRepository;
         private IPhotosRepository photosRepository;
+        private IDeliveriesRepository deliveriesRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -153,8 +154,8 @@ namespace My_Company.Repositories
 
                 return productAttributeRepository;
             }
-        } 
-        
+        }
+
         public IPhotosRepository PhotosRepository
         {
             get
@@ -165,6 +166,19 @@ namespace My_Company.Repositories
                 }
 
                 return photosRepository;
+            }
+        }
+
+        public IDeliveriesRepository DeliveriesRepository
+        {
+            get
+            {
+                if (deliveriesRepository == null)
+                {
+                    deliveriesRepository = new DeliveriesRepository(_context);
+                }
+
+                return deliveriesRepository;
             }
         }
         public async Task<IDbContextTransaction> BeginTransaction()

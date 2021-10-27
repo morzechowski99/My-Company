@@ -16,5 +16,7 @@ namespace My_Company.Interfaces
         Task<Product> GetProductWithCategoriesAndAttributesByIdTracked(int id);
         Task<Product> GetProductWithoutVirtualPropertiesById(int id);
         Task<IEnumerable<ProductAttribute>> GetAttributesByProductId(int id);
+        Task<Product> GetProductByEANCode(string ean);
+        Task<IEnumerable<Product>> SearchProductByQueryStringWithoutArchived(string query);
     }
 }

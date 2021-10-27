@@ -24,19 +24,32 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.IsInRole(Constants.Roles.MainAdministrator))
                         {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Administracja
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twoje magazyny</a>
-                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Products" asp-action="Index">Produkty</a>
-                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Employee" asp-action="Index">Pracownicy</a>
-                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Categories" asp-action="Index">Kategorie</a>
-                                <a class="dropdown-item" asp-area="Warehouse" asp-controller="Suppliers" asp-action="Index">Zarządzaj dostawcami</a>
-                            </div>
-                        </li>
-                       
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="administrationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Administracja
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="administrationDropdown">
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twoje magazyny</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Products" asp-action="Index">Produkty</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Employee" asp-action="Index">Pracownicy</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Categories" asp-action="Index">Kategorie</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Suppliers" asp-action="Index">Zarządzaj dostawcami</a>
+                                </div>
+                            </li>
+
+                        }
+                        @if (User.IsInRole(Constants.Roles.MainAdministrator) || User.IsInRole(Constants.Roles.WarehouseEmployee))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="deliveriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Dostawy
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="deliveriesDropdown">
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Deliveries" asp-action="Index">Lista dostaw</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Deliveries" asp-action="New">Nowa dostawa</a>
+                                </div>
+                            </li>
+
                         }
                     </ul>
                    

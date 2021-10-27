@@ -1,9 +1,6 @@
 ﻿using My_Company.EnumTypes;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Models
 {
@@ -14,6 +11,7 @@ namespace My_Company.Models
             ProductOrders = new HashSet<ProductOrder>();
             ProductCategories = new HashSet<ProductCategory>();
             ProductAttributes = new HashSet<ProductAttribute>();
+            ProductDeliveries = new HashSet<ProductDelivery>();
             Photos = new HashSet<Photo>();
         }
 
@@ -35,6 +33,7 @@ namespace My_Company.Models
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
+        public virtual ICollection<ProductDelivery> ProductDeliveries { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
     }
 }

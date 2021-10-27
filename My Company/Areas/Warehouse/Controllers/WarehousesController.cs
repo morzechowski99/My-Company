@@ -376,7 +376,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (SectorId == null)
                     return BadRequest();
 
-                var sector = await _repositoryWrapper.WarehouseSectorRepository.GetByWithRowId(SectorId.Value);
+                var sector = await _repositoryWrapper.WarehouseSectorRepository.GetByIdWithRow(SectorId.Value);
 
                 if (sector == null)
                     return NotFound("invalid Id");

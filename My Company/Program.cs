@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using My_Company.InitializeDb;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company
@@ -21,8 +15,8 @@ namespace My_Company
         {
             var host = CreateHostBuilder(args).Build();
 
-           // CreateDbIfNotExists(host);
-            
+            // CreateDbIfNotExists(host);
+
             host.Run();
         }
 
@@ -31,8 +25,8 @@ namespace My_Company
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                   // webBuilder.UseUrls("http://192.168.1.4:64279");
-                    
+                    // webBuilder.UseUrls("http://192.168.1.4:64279");
+
 
                 });
 

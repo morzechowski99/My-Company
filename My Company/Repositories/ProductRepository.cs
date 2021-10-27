@@ -2,6 +2,7 @@
 using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
+using My_Company.EnumTypes;
 using My_Company.Interfaces;
 using My_Company.Models;
 using System.Collections.Generic;
@@ -150,12 +151,28 @@ namespace My_Company.Repositories
 
         public async Task<IEnumerable<ProductAttribute>> GetAttributesByProductId(int id)
         {
-            return (await FindByCondition(p => p.Id == id)
+            var product = await FindByCondition(p => p.Id == id)
                 .Include(p => p.ProductAttributes)
                 .ThenInclude(pa => pa.Attribute)
                 .ThenInclude(a => a.AttributeDictionaryValues)
-                .FirstOrDefaultAsync())
-                .ProductAttributes;        
+                .FirstOrDefaultAsync();
+
+            return product == null ? new List<ProductAttribute>() : product.ProductAttributes;
+
+        }
+
+        public async Task<Product> GetProductByEANCode(string ean)
+        {
+            return await FindByCondition(p => p.EANCode == ean)
+                .Include(p => p.Photos) 
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Product>> SearchProductByQueryStringWithoutArchived(string query)
+        {
+            query = query.ToLower();
+            return await FindByCondition(p => (query.Contains(p.Name.ToLower()) || p.Name.ToLower().Contains(query)
+                || p.EANCode.Contains(query) || query.Contains(p.EANCode)) && p.Status != ProductStatus.Archived).ToListAsync();
         }
     }
 }

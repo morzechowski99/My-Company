@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
+using My_Company.Extensions;
 using My_Company.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Attribute = My_Company.Models.Attribute;
 
 namespace My_Company.AutoMapper
@@ -47,7 +46,8 @@ namespace My_Company.AutoMapper
 
             CreateMap<WarehouseRow, WarehouseRowViewModel>();
 
-            CreateMap<WarehouseSector, WarehouseSectorViewModel>();
+            CreateMap<WarehouseSector, WarehouseSectorViewModel>()
+                .ForMember(x => x.Barcode, opt => opt.MapFrom(y => y.Id.ToBarcode()));
 
             CreateMap<AppUser, EmployeeListItem>()
                 .ForMember(x => x.NameAndSurname, opt => opt.MapFrom(y => $"{y.Name} {y.Surname}"))
@@ -111,8 +111,15 @@ namespace My_Company.AutoMapper
             CreateMap<AttributeDictionaryValues, string>()
                 .ConvertUsing(x => x.Value);
 
-            CreateMap<ProductBasicInfoEditViewModel,Product>()
+            CreateMap<ProductBasicInfoEditViewModel, Product>()
                 .ForMember(x => x.NettoPrice, opt => opt.MapFrom(y => (int)(decimal.Parse(y.NettoPrice) * 100.0M)));
+
+            //deliveries
+            CreateMap<DeliveryViewModel, Delivery>()
+                .ForMember(x => x.DeliveryDate, opt => opt.MapFrom(y => DateTime.Now))
+                .ForMember(x => x.ProductDeliveries, opt => opt.MapFrom(y => y.Items));
+
+            CreateMap<DeliveryItemViewModel, ProductDelivery>();
         }
     }
 }

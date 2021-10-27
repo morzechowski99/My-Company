@@ -18,7 +18,7 @@
     </div>
 
     <table class="table table-bordered">
-        
+
         <thead>
             <tr class="d-flex">
                 <th class="col-2"></th>
@@ -45,11 +45,11 @@
                         <button class="btn openRemoveRowModal m-0" data-toggle="modal" data-target="#removeRowModal" data-rowId="@item.Id"><i class="bi bi-trash-fill"></i></button>
                         @if (item.Order != 1)
                         {
-                        <button class="btn moveUpBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-up"></i></button>
+                            <button class="btn moveUpBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-up"></i></button>
                         }
                         @if (item.Order != Model.Count())
                         {
-                        <button class="btn moveDownBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-down"></i></button>
+                            <button class="btn moveDownBtn m-0" data-rowId="@item.Id"><i class="bi bi-arrow-down"></i></button>
                         }
                     </td>
                 </tr>
@@ -60,6 +60,7 @@
                             @Html.DisplayFor(modelItem => item.RowName)@Html.DisplayFor(modelItem => sector.Order)
                         </td>
                         <td class="col-sm-6 col-md-7">
+                            <barcode code="@sector.Barcode" content="Drukuj kod"></barcode>
                             @if (sector.Order == item.Sectors.Last().Order && item.Sectors.Count() > 1)
                             {
                                 if (sector.Deletable)
@@ -68,10 +69,11 @@
                                 }
                                 else
                                 {
-                                    <button disabled class="btn m-0"><i class="bi bi-trash-fill"></i></button> 
+                                    <button disabled class="btn m-0"><i class="bi bi-trash-fill"></i></button>
                                     <span class="text-danger">Usuń wszystkie produkty z sektora</span>
                                 }
                             }
+
                         </td>
                     </tr>
                 }
@@ -84,8 +86,8 @@
     @await Component.InvokeAsync("RemoveSectorModal")
 </div>
 
-<div class="spinner-border spinner spinnerHidden text-primary" >
-    
+<div class="spinner-border spinner spinnerHidden text-primary">
+
 </div>
 
 <div class="alert alert-danger alert-dismissible fade hide" role="alert">

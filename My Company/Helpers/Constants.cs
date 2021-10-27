@@ -13,5 +13,12 @@ namespace My_Company.Helpers
             public const string WarehouseEmployee = "Warehouse Employee";
             public const string ShopUser = "ShopUser";
         }
+
+        public static class AuthorizationPolicies
+        {
+            public const string WarehousePolicy = "WarehousePolicy";
+        }
+
+        public const string ImagePlaceholder = "/img/photoPlaceholder.png";
     }
 }

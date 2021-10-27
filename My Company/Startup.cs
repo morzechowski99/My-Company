@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using My_Company.Data;
+using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Repositories;
@@ -47,6 +49,11 @@ namespace My_Company
                 })
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy(Constants.AuthorizationPolicies.WarehousePolicy,
+                    o => o.RequireRole(new string[] { Constants.Roles.MainAdministrator, Constants.Roles.WarehouseEmployee }));
+            });
 
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUsersService, UsersService>();

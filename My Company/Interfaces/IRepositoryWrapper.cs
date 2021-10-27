@@ -19,6 +19,7 @@ namespace My_Company.Interfaces
         ICategoryAttributesRepository CategoryAttributesRepository { get; }
         IProductAttributeRepository ProductAttributeRepository { get; }
         IPhotosRepository PhotosRepository { get; }
+        IDeliveriesRepository DeliveriesRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
         bool EnsureCreated();

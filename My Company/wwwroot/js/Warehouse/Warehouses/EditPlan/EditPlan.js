@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    const warehouseId = getUrlVars()["id"]
+    const warehouseId = getRouteValueAt(3)
 
     setResetModalOnClose()
 
@@ -21,16 +21,16 @@
                 expander.removeClass("bi-caret-right")
                 expander.addClass("bi-caret-down")
                 let prevrow = trprev;
-                data.sectors.forEach((sector,idx,array) => {
+                data.sectors.forEach((sector, idx, array) => {
                     newrow = $(`<tr style="display:flex" aria-rowId="${data.id}" class="bg-light">
                     <td class="col-2">
                             ${data.rowName}${sector.order}
                     </td>
                 </tr>`)
-                    const td2 = $(` <td class="col-sm-6 col-md-7"></td>`)
-                    if (idx === array.length-1) {
+                    const td2 = $(` <td class="col-sm-6 col-md-7">${barcode(sector.id)}</td>`)
+                    if (idx === array.length - 1) {
                         td2.append(getDeleteSectorBtn(sector.id, false))
-                        
+
                     }
                     newrow.append(td2)
                     prevrow.after(newrow)
@@ -55,10 +55,10 @@
                     showAlert()
                 }
 
-                
+
             })
             .done(function (data) {
-                
+
                 const tableBody = $('.table tbody')
                 const newFirstRow = $(`<tr class="d-flex rowDetails" id="row-${data.id}"</tr>`)
                 /*expander*/
@@ -88,7 +88,7 @@
                     const rowId = $(this).data("rowid")
                     $("#removeRowModal input[name=RowId]").val(rowId)
                 })
-             
+
                 //append elements
                 actionsTd.append(addSectorsBtn)
                 actionsTd.append('&nbsp;')
@@ -113,7 +113,7 @@
                         swapRows(rowId, 1)
                         $(".spinner").addClass('spinnerHidden')
                     })
-                    
+
                     prevRowDetails.find('td').last().append(swapDownBtn)
                 }
                 newFirstRow.append(expander)
@@ -127,6 +127,10 @@
                         <td class="col-2">
                             ${data.rowName}${sector.order}
                         </td>
+                        <td class= "col-sm-6 col-md-7" >
+                            ${barcode(sector.id)}
+                            ${index == sectors.length - 1 ? getDeleteSectorBtn(sector.id, false).prop('outerHTML') : ''}
+                        </td >
                     </tr>`)
                     tableBody.append(tr)
                 })
@@ -193,10 +197,10 @@ const swapRows = function (rowId, direction) {
 
             if (direction == 1) {
                 $(`#row-${rowId}`).insertAfter($(`#row-${data}`))
-                
+
             } else {
                 $(`#row-${rowId}`).insertBefore($(`#row-${data}`))
-                
+
             }
 
             fixArrows()
@@ -231,16 +235,16 @@ const deleteRow = function (rowId) {
             })
             $(`#row-${data}`).hide("slow", null, function () { $(this).remove() })
             const detailsRows = $('.rowDetails').toArray()
-           
+
             if (detailsRows.length === 2) {
                 $(detailsRows[0]).find('.moveUpBtn').remove()
                 $(detailsRows[0]).find('.moveDownBtn').remove()
             }
-            else  {
+            else {
                 $(detailsRows[0]).find('.moveUpBtn').remove()
                 $(detailsRows[1]).find('.moveDownBtn').remove()
             }
-            
+
         },
         error: function (data) {
             if (data.responseText == "cannot delete this row")
@@ -348,7 +352,7 @@ const deleteSector = function (sectorId) {
                         </td>`)
                 tr.append(td1)
                 const td2 = $(` <td class="col-sm-6 col-md-7"></td>`)
-                
+
                 if (idx === 0) {
                     td2.append(getDeleteSectorBtn(sector.id, !sector.deletable))
                     if (!sector.deletable)
@@ -377,4 +381,14 @@ const getDeleteSectorBtn = function (sectorId, disabled) {
     else
         btn = $(`<button disabled class="btn m-0"><i class="bi bi-trash-fill"></i></button> `)
     return btn
+}
+
+const barcode = function (id) {
+    const code = getBarcode(id)
+    return `<a href="https://bwipjs-api.metafloor.com/?bcid=code128&amp;text=${code}&amp;scale=3&amp;includetext" 
+    target="_blank">Drukuj kod</a>`
+}
+
+const getBarcode = function (id) {
+    return ("0000000000000" + id).substr(-13, 13)
 }
