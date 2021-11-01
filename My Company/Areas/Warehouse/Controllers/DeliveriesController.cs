@@ -35,6 +35,16 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult GetList(DeliveriesListFilters filters)
+        {
+            if (filters == null)
+            {
+                return BadRequest();
+            }
+
+            return ViewComponent("DeliveriesList", filters);
+        }
+
         //// GET: Warehouse/Deliveries/Details/5
         //public async Task<IActionResult> Details(int? id)
         //{
@@ -66,20 +76,30 @@ namespace My_Company.Areas.Warehouse.Controllers
             try
             {
                 if (ean == null || supplierId == null)
+                {
                     return BadRequest();
+                }
 
                 var product = await repositoryWrapper.ProductRepository.GetProductByEANCode(ean);
                 if (product == null)
+                {
                     return NotFound("invalid Code");
+                }
+
                 if (product.SupplierId != supplierId)
+                {
                     return Ok(new { Error = "invalid supplier for this product" });
-                if(product.Status == ProductStatus.Archived)
+                }
+
+                if (product.Status == ProductStatus.Archived)
+                {
                     return Ok(new { Error = "product is archived" });
+                }
 
                 var photo = product.Photos.FirstOrDefault(p => p.IsListPhoto);
                 var photoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
 
-                return Ok(new { Product = new { Name=product.Name, Photo = photoUrl, Id=product.Id } });
+                return Ok(new { Product = new { Name = product.Name, Photo = photoUrl, Id = product.Id } });
             }
             catch
             {
@@ -92,13 +112,15 @@ namespace My_Company.Areas.Warehouse.Controllers
             try
             {
                 if (query == null)
+                {
                     return BadRequest();
+                }
 
                 var products = await repositoryWrapper.ProductRepository.SearchProductByQueryStringWithoutArchived(query);
 
                 return Ok(products.Select(p => new { Ean = p.EANCode, Description = $"{p.Name} ({p.EANCode})" }));
             }
-            catch 
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -107,25 +129,31 @@ namespace My_Company.Areas.Warehouse.Controllers
         public async Task<IActionResult> GetSectors()
         {
             var sectors = await repositoryWrapper.WarehouseSectorRepository.GetAll();
-            return Ok(sectors.Select(p => new { Id = p.Id, Order = p.Order, RowId = p.RowId}));
+            return Ok(sectors.Select(p => new { Id = p.Id, Order = p.Order, RowId = p.RowId }));
         }
 
         public async Task<IActionResult> ValidateSectorEan(string ean)
         {
             if (ean == null)
+            {
                 return BadRequest(new { Error = "no ean given" });
+            }
 
             try
             {
                 var id = int.Parse(ean);
                 if (await repositoryWrapper.WarehouseSectorRepository.Exists(id))
+                {
                     return Ok(id);
+                }
                 else
+                {
                     return Ok(new { Error = "sector not exists" });
+                }
             }
-            catch 
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,new { Error = "internal error" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = "internal error" });
             }
         }
 
@@ -138,6 +166,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 {
                     Delivery deliveryDb = mapper.Map<Delivery>(model);
                     deliveryDb.ProductDeliveries = repositoryWrapper.DeliveriesRepository.RemoveDuplicates(deliveryDb.ProductDeliveries as List<ProductDelivery>);
+                    deliveryDb.PZNumber = await repositoryWrapper.DeliveriesRepository.CreatePZNumber();
                     repositoryWrapper.DeliveriesRepository.Create(deliveryDb);
                     await repositoryWrapper.Save();
                     return Ok(deliveryDb.Id);

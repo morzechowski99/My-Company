@@ -1,41 +1,66 @@
-﻿@model IEnumerable<My_Company.Models.Delivery>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Dostawy";
 }
 
-<h1>Index</h1>
+<h1>Dostawy</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="New">Nowa dostawa</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DeliveryDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Supplier)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supplier.City)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row filtersContainer">
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <select class="form-control" id="supplierSelect">
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="dateFrom" placeholder="Data od" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="dateTo" placeholder="Data do" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="PZNumber" placeholder="Numer PZ">
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 filter">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="0">Sortowanie</option>
+                <option value="1">Dostawca od A do Z</option>
+                <option value="2">Dostawca od Z do A</option>
+                <option value="3">Data rosnąco</option>
+                <option value="4">Data malejąco</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <button class="w-100 my-2 btn btn-outline-secondary" type="button" id="showHideFilters">
+            Ukryj filtry
+        </button>
+    </div>
+</div>
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table">
+    @await Component.InvokeAsync("DeliveriesList", new My_Company.Areas.Warehouse.ViewModels.DeliveriesListFilters())
+</div>
+
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
-    </tbody>
-</table>
+
+@section Scripts{
+    <script src="~/lib/selectize/selectize.min.js"></script>
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Deliveries/Index/Index.js"></script>
+}
+

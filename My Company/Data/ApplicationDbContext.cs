@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using My_Company.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.EnumTypes;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
+using My_Company.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace My_Company.Data
 {
@@ -18,7 +12,7 @@ namespace My_Company.Data
         : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
             AppUserRole, IdentityUserLogin<string>,
             IdentityRoleClaim<string>, IdentityUserToken<string>>
-    { 
+    {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(m => Debug.WriteLine(m)).EnableSensitiveDataLogging();
@@ -47,9 +41,9 @@ namespace My_Company.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<AttributeDictionaryValues> AttributeDictionaryValues { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
-        
 
-        
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -62,8 +56,8 @@ namespace My_Company.Data
             builder.Entity<ProductOrder>(entity =>
             {
                 entity.HasKey(e => new { e.OrderId, e.ProductId });
-            }); 
-            
+            });
+
             builder.Entity<ProductSector>(entity =>
             {
                 entity.HasKey(e => new { e.SectorId, e.ProductId });
@@ -115,6 +109,12 @@ namespace My_Company.Data
 
                 entity.Property(e => e.Status)
                     .HasDefaultValue(ProductStatus.Active);
+            });
+
+            builder.Entity<Delivery>(entity =>
+            {
+                entity.HasIndex(e => e.PZNumber)
+                    .IsUnique();
             });
         }
 

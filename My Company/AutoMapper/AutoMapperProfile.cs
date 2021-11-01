@@ -120,6 +120,9 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.ProductDeliveries, opt => opt.MapFrom(y => y.Items));
 
             CreateMap<DeliveryItemViewModel, ProductDelivery>();
+
+            CreateMap<Delivery, DeliveryListItem>()
+                .ForMember(d => d.Supplier, opt => opt.MapFrom(y => y.Supplier.Name));
         }
     }
 }
