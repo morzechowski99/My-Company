@@ -1,4 +1,4 @@
-﻿@model My_Company.Areas.Warehouse.ViewModels.DeliveryDetailsViewModel
+﻿@model My_Company.Areas.Warehouse.ViewModels.CorrectedDeliveryViewModel
 
 @{
     ViewData["Title"] = "Szczegóły dostawy - " + Model.PZNumber;
@@ -8,11 +8,7 @@
 
 <div>
     <h4>@Html.DisplayFor(m => m.PZNumber)</h4>
-    @if (Model.WasCorrected)
-    {
-        <h6 class="text-danger">Ta dostawa była korygowana <a asp-action="Details" asp-route-id="@Model.CorrectingId">Szczegóły</a></h6>
-    }
-
+    <h6>Jest to korekta dostawy nr. <a asp-action="Details" asp-route-id="@Model.CorrectedId">@Model.CorrectedNumber</a></h6>
     <hr />
     <div class="row">
         <div class="col-md-6">
@@ -42,13 +38,21 @@
         {
             <div class="col-6 col-md-3 my-2">
                 <div class="card border-success">
-                    <h6 class="card-header">@Html.DisplayFor(m => item.Name)</h6>
-                    <img class="card-img-top" src="@Url.Content(item.Photo)" alt="@item.Name">
+                    <h6 class="card-header">@Html.DisplayFor(m => item.AfterCorrection.Name)</h6>
+                    <img class="card-img-top" src="@Url.Content(item.AfterCorrection.Photo)" alt="@item.AfterCorrection.Name">
                     <div class="card-body mb-0">
-                        <b>@Html.DisplayNameFor(m => item.Count)</b>
-                        <p class="mb-0">@Html.DisplayFor(m => item.Count)</p>
-                        <b>@Html.DisplayNameFor(m => item.Sector)</b>
-                        <p class="mb-0">@Html.DisplayFor(m => item.Sector)</p>
+                        <b>@Html.DisplayNameFor(m => item.AfterCorrection.Count)</b>
+                        @if (item.AfterCorrection.Count != item.Orginal.Count)
+                        {
+                            <p class="mb-0"><del class="text-danger">@Html.DisplayFor(m => item.Orginal.Count)</del> @Html.DisplayFor(m => item.AfterCorrection.Count)</p>
+                        }
+                        else
+                        {
+                            <p class="mb-0">@Html.DisplayFor(m => item.AfterCorrection.Count)</p>
+                        }
+
+                        <b>@Html.DisplayNameFor(m => item.AfterCorrection.Sector)</b>
+                        <p class="mb-0">@Html.DisplayFor(m => item.AfterCorrection.Sector)</p>
                     </div>
                 </div>
             </div>
@@ -57,11 +61,6 @@
 </div>
 <div class="d-flex justify-content-between">
     <a class="btn btn-outline-primary" asp-action="Index">Powrót do listy</a>
-    @if (!Model.WasCorrected)
-    {
-        <a class="btn btn-outline-secondary" asp-action="Correct" asp-route-id="@Model.Id">Koryguj</a>
-    }
-
 </div>
 <style>
     .card-img-top {

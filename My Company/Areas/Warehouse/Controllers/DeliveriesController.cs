@@ -9,6 +9,7 @@ using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             this.mapper = mapper;
         }
 
-        //// GET: Warehouse/Deliveries
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = repositoryWrapper.DeliveriesRepository.FindAll().Include(d => d.Supplier);
@@ -45,25 +45,58 @@ namespace My_Company.Areas.Warehouse.Controllers
             return ViewComponent("DeliveriesList", filters);
         }
 
-        //// GET: Warehouse/Deliveries/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
 
-        //    var delivery = await _context.Deliveries
-        //        .Include(d => d.Supplier)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (delivery == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var delivery = await repositoryWrapper.DeliveriesRepository.GetDeliveryById(id.Value);
 
-        //    return View(delivery);
-        //}
+            if (delivery == null)
+            {
+                return NotFound();
+            }
 
+            if (!delivery.IsCorrecting)
+            {
+                var deliveryDto = mapper.Map<DeliveryDetailsViewModel>(delivery);
+                List<DeliveryProductViewModel> products = new();
+                foreach (var pd in delivery.ProductDeliveries)
+                {
+                    var photo = pd.Product.Photos.FirstOrDefault(p => p.IsListPhoto);
+                    var photoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
+                    var productDto = mapper.Map<DeliveryProductViewModel>(pd);
+                    productDto.Photo = photoUrl;
+                    products.Add(productDto);
+                }
+                deliveryDto.Products = products;
+
+                return View(deliveryDto);
+            }
+            else
+            {
+                var orginal = await repositoryWrapper.DeliveriesRepository.GetDeliveryCorrectedDeliveryById(delivery.Id);
+                var deliveryDto = mapper.Map<CorrectedDeliveryViewModel>(delivery);
+                List<DeliveryCorrectedProductViewModel> products = new();
+                foreach (var pd in delivery.ProductDeliveries)
+                {
+                    var photo = pd.Product.Photos.FirstOrDefault(p => p.IsListPhoto);
+                    var photoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
+                    var productDto = mapper.Map<DeliveryCorrectedProductViewModel>(pd);
+                    productDto.AfterCorrection.Photo = photoUrl;
+                    var orgPd = orginal.ProductDeliveries.FirstOrDefault(p => p.ProductId == pd.ProductId && pd.SectorId == p.SectorId);
+                    productDto.Orginal = new DeliveryItemViewModel { SectorId = orgPd.SectorId, ProductId = orgPd.ProductId, Count = orgPd.Count };
+                    products.Add(productDto);
+                }
+                deliveryDto.Products = products;
+                deliveryDto.CorrectedId = orginal.Id;
+                deliveryDto.CorrectedNumber = orginal.PZNumber;
+                return View("CorrectedDetails",deliveryDto);
+            }
+
+        }
 
         public IActionResult New()
         {
@@ -164,11 +197,37 @@ namespace My_Company.Areas.Warehouse.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    using var tr = await repositoryWrapper.BeginTransaction();
                     Delivery deliveryDb = mapper.Map<Delivery>(model);
                     deliveryDb.ProductDeliveries = repositoryWrapper.DeliveriesRepository.RemoveDuplicates(deliveryDb.ProductDeliveries as List<ProductDelivery>);
                     deliveryDb.PZNumber = await repositoryWrapper.DeliveriesRepository.CreatePZNumber();
+                    foreach (var item in deliveryDb.ProductDeliveries)
+                    {
+                        var product = await repositoryWrapper.ProductRepository
+                            .GetProductWithoutVirtualPropertiesById(item.ProductId);
+                        product.MagazineCount += item.Count;
+                        repositoryWrapper.ProductRepository.Update(product);
+                        var productSector = await repositoryWrapper.ProductSectorRepository.GetByProductAndSector(item.ProductId, item.SectorId);
+                        if (productSector == null)
+                        {
+                            repositoryWrapper.ProductSectorRepository.Create(new ProductSector
+                            {
+                                Count = item.Count,
+                                ProductId = item.ProductId,
+                                SectorId = item.SectorId
+                            });
+                        }
+                        else
+                        {
+                            productSector.Count += item.Count;
+                            repositoryWrapper.ProductSectorRepository.Update(productSector);
+                        }
+                        await repositoryWrapper.Save();
+                        repositoryWrapper.ClearTracked();
+                    }
                     repositoryWrapper.DeliveriesRepository.Create(deliveryDb);
                     await repositoryWrapper.Save();
+                    await tr.CommitAsync();
                     return Ok(deliveryDb.Id);
                 }
 
@@ -180,92 +239,92 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
         }
 
-        //// GET: Warehouse/Deliveries/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Correct(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var delivery = await _context.Deliveries.FindAsync(id);
-        //    if (delivery == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "City", delivery.SupplierId);
-        //    return View(delivery);
-        //}
+            var delivery = await repositoryWrapper.DeliveriesRepository.GetDeliveryById(id.Value);
+            if (delivery == null || delivery.CorrectingId.HasValue)
+            {
+                return NotFound();
+            }
 
-        //// POST: Warehouse/Deliveries/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,SupplierId,DeliveryDate")] Delivery delivery)
-        //{
-        //    if (id != delivery.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            var deliveryDto = mapper.Map<DeliveryEditViewModel>(delivery);
+            List<DeliveryProductCorrectViewModel> products = new();
+            foreach (var pd in delivery.ProductDeliveries)
+            {
+                var photo = pd.Product.Photos.FirstOrDefault(p => p.IsListPhoto);
+                var photoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
+                var productDto = mapper.Map<DeliveryProductCorrectViewModel>(pd);
+                productDto.Photo = photoUrl;
+                products.Add(productDto);
+            }
+            deliveryDto.Products = products;
+            return View(deliveryDto);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(delivery);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!DeliveryExists(delivery.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "City", delivery.SupplierId);
-        //    return View(delivery);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Correct(int id, DeliveryEditViewModel deliveryDto)
+        {
+            if (id != deliveryDto.Id)
+            {
+                return NotFound();
+            }
+            Delivery deliveryDb = await repositoryWrapper.DeliveriesRepository.GetDeliveryById(id);
+            if (deliveryDb == null)
+            {
+                return NotFound();
+            }
 
-        //// GET: Warehouse/Deliveries/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (ModelState.IsValid)
+            {
+                Delivery correcting = new Delivery { IsCorrecting = true, SupplierId = deliveryDb.SupplierId, DeliveryDate = DateTime.Now };
+                for (int i = 0; i < deliveryDto.Products.Count; i++)
+                {
+                    var item = deliveryDto.Products[i];
+                    var orginal = deliveryDb.ProductDeliveries.FirstOrDefault(pd => pd.Id == item.Id);
+                    var productSector = await repositoryWrapper.ProductSectorRepository.GetByProductAndSector(orginal.ProductId, orginal.SectorId);
+                    if (productSector.Count - (orginal.Count - item.Count) < 0)
+                    {
+                        ModelState.AddModelError($"Products[{i}].Count", "W tym sektorze jest za mało produktów, aby usunąć tyle sztuk");
+                        deliveryDto = mapDelivery(deliveryDto, deliveryDb);
+                        return View(deliveryDto);
+                    }
+                    correcting.ProductDeliveries.Add(new() { ProductId = orginal.ProductId, SectorId = orginal.SectorId, Count = item.Count });
+                    productSector.Count += item.Count - orginal.Count;
+                    repositoryWrapper.ProductSectorRepository.Update(productSector);
+                }
+                deliveryDb.Correcting = correcting;
+                correcting.PZNumber = await repositoryWrapper.DeliveriesRepository.CreateKPZNumber();
+                deliveryDb.ProductDeliveries = null;
+                repositoryWrapper.DeliveriesRepository.Update(deliveryDb);
+                repositoryWrapper.DeliveriesRepository.Create(correcting);
+                await repositoryWrapper.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            deliveryDto = mapDelivery(deliveryDto, deliveryDb);
+            return View(deliveryDto);
+        }
 
-        //    var delivery = await _context.Deliveries
-        //        .Include(d => d.Supplier)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (delivery == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(delivery);
-        //}
-
-        //// POST: Warehouse/Deliveries/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var delivery = await _context.Deliveries.FindAsync(id);
-        //    _context.Deliveries.Remove(delivery);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool DeliveryExists(int id)
-        //{
-        //    return _context.Deliveries.Any(e => e.Id == id);
-        //}
+        private DeliveryEditViewModel mapDelivery(DeliveryEditViewModel deliveryDto, Delivery deliveryDb)
+        {
+            deliveryDto = mapper.Map(deliveryDb, deliveryDto);
+            List<DeliveryProductCorrectViewModel> products = new();
+            foreach (var pd in deliveryDb.ProductDeliveries)
+            {
+                var photo = pd.Product.Photos.FirstOrDefault(p => p.IsListPhoto);
+                var photoUrl = photo == null ? Constants.ImagePlaceholder : photo.Path;
+                var productDto = mapper.Map<DeliveryProductCorrectViewModel>(pd);
+                productDto.Count = deliveryDto.Products.FirstOrDefault(p => p.Id == pd.Id).Count;
+                productDto.Photo = photoUrl;
+                products.Add(productDto);
+            }
+            deliveryDto.Products = products;
+            return deliveryDto;
+        }
     }
 }

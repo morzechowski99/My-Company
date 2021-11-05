@@ -123,6 +123,30 @@ namespace My_Company.AutoMapper
 
             CreateMap<Delivery, DeliveryListItem>()
                 .ForMember(d => d.Supplier, opt => opt.MapFrom(y => y.Supplier.Name));
+
+            CreateMap<Delivery, DeliveryDetailsViewModel>()
+                .ForMember(d => d.Supplier, opt => opt.MapFrom(y => y.Supplier.Name))
+                .ForMember(d => d.WasCorrected, opt => opt.MapFrom(y => y.CorrectingId.HasValue));
+
+            CreateMap<ProductDelivery, DeliveryProductViewModel>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Product.Name))
+                .ForMember(x => x.Sector, opt => opt.MapFrom(y => y.Sector.Row.RowName + y.Sector.Order));
+
+            CreateMap<Delivery, DeliveryEditViewModel>()
+                .ForMember(d => d.Supplier, opt => opt.MapFrom(y => y.Supplier.Name));
+
+            CreateMap<ProductDelivery, DeliveryProductCorrectViewModel>()
+               .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Product.Name))
+               .ForMember(x => x.Sector, opt => opt.MapFrom(y => y.Sector.Row.RowName + y.Sector.Order));
+
+            CreateMap<Delivery, CorrectedDeliveryViewModel>()
+              .ForMember(d => d.Supplier, opt => opt.MapFrom(y => y.Supplier.Name))
+              .ForMember(d => d.Products, opt => opt.Ignore());
+
+            CreateMap<ProductDelivery, DeliveryCorrectedProductViewModel>()
+                .ForMember(x => x.AfterCorrection, opt => opt.MapFrom(y => y))
+                .ForMember(x => x.Orginal, opt => opt.Ignore());
+
         }
     }
 }

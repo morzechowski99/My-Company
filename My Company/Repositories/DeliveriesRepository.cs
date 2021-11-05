@@ -17,10 +17,18 @@ namespace My_Company.Repositories
         {
         }
 
+        public async Task<string> CreateKPZNumber()
+        {
+            var now = DateTime.Now;
+            var count = await FindByCondition(d => d.DeliveryDate.Year == now.Year && d.DeliveryDate.Month == now.Month && d.IsCorrecting).CountAsync();
+            string number = ("0000" + (count + 1))[^4..];
+            return $"KPZ/{number}/{now.Month}/{now.Year}";
+        }
+
         public async Task<string> CreatePZNumber()
         {
             var now = DateTime.Now;
-            var count = await FindByCondition(d => d.DeliveryDate.Year == now.Year && d.DeliveryDate.Month == now.Month).CountAsync();
+            var count = await FindByCondition(d => d.DeliveryDate.Year == now.Year && d.DeliveryDate.Month == now.Month && !d.IsCorrecting).CountAsync();
             string number = ("0000" + (count + 1))[^4..];
             return $"PZ/{number}/{now.Month}/{now.Year}";
         }
@@ -57,6 +65,24 @@ namespace My_Company.Repositories
             };
 
             return query;
+        }
+
+        public async Task<Delivery> GetDeliveryById(int id)
+        {
+            return await FindByCondition(d => d.Id == id)
+                .Include(d => d.Supplier)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Product.Photos)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Sector.Row)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Delivery> GetDeliveryCorrectedDeliveryById(int id)
+        {
+            return await FindByCondition(d => d.CorrectingId == id)
+                .Include(d => d.ProductDeliveries)
+                .FirstOrDefaultAsync();
         }
 
         public ICollection<ProductDelivery> RemoveDuplicates(List<ProductDelivery> productDeliveries)

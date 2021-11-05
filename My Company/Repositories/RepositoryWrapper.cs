@@ -21,6 +21,7 @@ namespace My_Company.Repositories
         private IProductAttributeRepository productAttributeRepository;
         private IPhotosRepository photosRepository;
         private IDeliveriesRepository deliveriesRepository;
+        private IProductSectorRepository productSectorRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -181,9 +182,28 @@ namespace My_Company.Repositories
                 return deliveriesRepository;
             }
         }
+
+        public IProductSectorRepository ProductSectorRepository
+        {
+            get
+            {
+                if (productSectorRepository == null)
+                {
+                    productSectorRepository = new ProductSectorRepository(_context);
+                }
+
+                return productSectorRepository;
+            }
+        }
+
         public async Task<IDbContextTransaction> BeginTransaction()
         {
             return await _context.Database.BeginTransactionAsync();
+        }
+
+        public void ClearTracked()
+        {
+            _context.ChangeTracker.Clear();
         }
 
         public bool EnsureCreated()

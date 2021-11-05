@@ -100,9 +100,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View();
         }
 
-        // POST: Warehouse/Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] CreateEditProductViewModel productViewModel)
@@ -464,7 +461,14 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (photoToDelete == null)
                     return BadRequest();
 
-                filesService.DeletePhoto(path);
+                try
+                {
+                    filesService.DeletePhoto(path);
+                }
+                catch
+                {
+
+                }
                 productPhotos.Remove(photoToDelete);
                 repositoryWrapper.PhotosRepository.Delete(photoToDelete);
                 if (photoToDelete.IsMainPhoto)

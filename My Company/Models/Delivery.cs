@@ -16,6 +16,9 @@ namespace My_Company.Models
         public DateTime DeliveryDate { get; set; }
         [Required]
         public string PZNumber { get; set; }
+        public bool IsCorrecting { get; set; }
+        public int? CorrectingId { get; set; }
+        public virtual Delivery Correcting { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<ProductDelivery> ProductDeliveries { get; set; }
     }
