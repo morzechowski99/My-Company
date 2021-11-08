@@ -3,6 +3,7 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
 using My_Company.Extensions;
 using My_Company.Models;
+using My_Company.Models.DBViews;
 using System;
 using System.Linq;
 using Attribute = My_Company.Models.Attribute;
@@ -146,6 +147,29 @@ namespace My_Company.AutoMapper
             CreateMap<ProductDelivery, DeliveryCorrectedProductViewModel>()
                 .ForMember(x => x.AfterCorrection, opt => opt.MapFrom(y => y))
                 .ForMember(x => x.Orginal, opt => opt.Ignore());
+
+            //orders
+            CreateMap<OrdersToComplete, OrderListItemViewModel>();
+
+            CreateMap<Order, OrderPickingViewModel>()
+                .ForMember(x => x.Items, opt => opt.MapFrom(y => y.ProductOrders))
+                .ForMember(x => x.PickedItems,opt => opt.MapFrom(y => y.Picking.PickingItems));
+
+            CreateMap<ProductOrder, OrderPickingItemViewModel>()
+                .ForMember(x => x.ProductOrderId, opt => opt.MapFrom(y => y.Id))
+                .ForMember(x => x.ProductSectors, opt => opt.MapFrom(y => y.Product.ProductSectors
+                .Where(ps => ps.Count > 0)
+                .OrderBy(ps => ps.Sector.Row.Order)
+                .ThenBy(ps => ps.Sector.Order)
+                .Take(5)));
+
+            CreateMap<ProductSector, OrderPickingProductSector>()
+                .ForMember(x => x.SectorName, opt => opt.MapFrom(y => y.Sector.Row.RowName + y.Sector.Order));
+
+            CreateMap<PickingItem, PickedItemViewModel>()
+                .ForMember(x => x.Sector, opt => opt.MapFrom(y => y.Sector.Row.RowName + y.Sector.Order))
+                .ForMember(x => x.EANCode, opt => opt.MapFrom(y => y.ProductOrder.Product.EANCode))
+                .ForMember(x => x.ProductName, opt => opt.MapFrom(y => y.ProductOrder.Product.Name));
 
         }
     }

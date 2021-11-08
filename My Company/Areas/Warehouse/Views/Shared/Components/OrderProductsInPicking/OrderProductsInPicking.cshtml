@@ -1,0 +1,36 @@
+﻿@model List<My_Company.Areas.Warehouse.ViewModels.OrderPickingItemViewModel>
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <div class="col-md-4 my-2" data-id="@Model[i].ProductOrderId">
+        <div class="card border-success">
+            <h6 class="card-header">@Html.DisplayFor(m => Model[i].Product.Name)</h6>
+            <img class="card-img-top" src="@Url.Content(Model[i].Product.PhotoUrl)" alt="@Model[i].Product.PhotoUrl">
+            <div class="card-body mb-0">
+                <div class="row">
+                    <div class="col-6">
+                        <b>@Html.DisplayNameFor(m => Model[i].Product.EANCode)</b>
+                        <p class="mb-0">@Html.DisplayFor(m => Model[i].Product.EANCode)</p>
+                        <b>@Html.DisplayNameFor(m => Model[i].Count)</b>
+                        <p class="mb-0">@Html.DisplayFor(m => Model[i].Count)</p>
+                        <b>@Html.DisplayNameFor(m => Model[i].Completed)</b>
+                        <p class="mb-0 @(Model[i].Count ==Model[i].Completed ? "text-success" : "text-danger" )">
+                            @Html.DisplayFor(m => Model[i].Completed)
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <b>@Html.DisplayNameFor(m => Model[i].ProductSectors)</b>
+                        @foreach (var pd in Model[i].ProductSectors)
+                        {
+                            <p class="mb-0">
+                                @Html.DisplayFor(m => pd.SectorName)&nbsp;
+                                <b>@Html.DisplayNameFor(m => pd.Count):</b>&nbsp;
+                                @Html.DisplayFor(m => pd.Count)
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

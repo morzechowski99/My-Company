@@ -1,0 +1,22 @@
+﻿@model IEnumerable<My_Company.Areas.Warehouse.ViewModels.PickedItemViewModel>
+
+<ul class="list-group list-group-flush">
+    @foreach (var pi in Model)
+    {
+        <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <b>@Html.DisplayNameFor(m => pi.ProductName):</b>
+                @Html.DisplayFor(m => pi.ProductName)
+                <b>@Html.DisplayNameFor(m => pi.EANCode):</b>
+                @Html.DisplayFor(m => pi.EANCode)
+                <b>@Html.DisplayNameFor(m => pi.Sector):</b>
+                @Html.DisplayFor(m => pi.Sector)
+                <b>@Html.DisplayNameFor(m => pi.Count):</b>
+                @Html.DisplayFor(m => pi.Count)
+            </div>
+            <button type="button" class="close deletePickedItem" data-id="@pi.Id" >
+                <span class="text-danger">&times;</span>
+            </button>
+        </li>
+    }
+</ul>

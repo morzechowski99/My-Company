@@ -8,6 +8,7 @@ namespace My_Company.Models
         public WarehouseSector()
         {
             ProductDeliveries = new HashSet<ProductDelivery>();
+            ProductSectors = new HashSet<ProductSector>();
         }
 
         public int Id { get; set; }
@@ -17,5 +18,6 @@ namespace My_Company.Models
         public int RowId { get; set; }
         public virtual WarehouseRow Row { get; set; }
         public virtual ICollection<ProductDelivery> ProductDeliveries { get; set; }
+        public virtual ICollection<ProductSector> ProductSectors { get; set; }
     }
 }

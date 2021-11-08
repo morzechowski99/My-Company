@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using My_Company.Data;
+using My_Company.DBViews;
 using My_Company.Interfaces;
 using System.Threading.Tasks;
 
@@ -22,6 +23,10 @@ namespace My_Company.Repositories
         private IPhotosRepository photosRepository;
         private IDeliveriesRepository deliveriesRepository;
         private IProductSectorRepository productSectorRepository;
+        private IOrdersToCompleteView ordersToCompleteView;
+        private IOrdersRepository ordersRepository;
+        private IPickingRepository pickingRepository;
+        private IPickingItemsRepository pickingItemsRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -193,6 +198,58 @@ namespace My_Company.Repositories
                 }
 
                 return productSectorRepository;
+            }
+        }
+
+        public IOrdersToCompleteView OrdersToCompleteView
+        {
+            get
+            {
+                if (ordersToCompleteView == null)
+                {
+                    ordersToCompleteView = new OrdersToCompleteView(_context);
+                }
+
+                return ordersToCompleteView;
+            }
+        }
+
+        public IOrdersRepository OrdersRepository
+        {
+            get
+            {
+                if (ordersRepository == null)
+                {
+                    ordersRepository = new OrdersRepository(_context);
+                }
+
+                return ordersRepository;
+            }
+        }
+
+        public IPickingRepository PickingRepository
+        {
+            get
+            {
+                if (pickingRepository == null)
+                {
+                    pickingRepository = new PickingRepository(_context);
+                }
+
+                return pickingRepository;
+            }
+        }
+
+        public IPickingItemsRepository PickingItemsRepository
+        {
+            get
+            {
+                if(pickingItemsRepository == null)
+                {
+                    pickingItemsRepository = new PickingItemsRepository(_context);
+                }
+
+                return pickingItemsRepository;
             }
         }
 

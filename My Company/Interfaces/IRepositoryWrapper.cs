@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Threading.Tasks;
 
 namespace My_Company.Interfaces
@@ -18,6 +19,10 @@ namespace My_Company.Interfaces
         IPhotosRepository PhotosRepository { get; }
         IDeliveriesRepository DeliveriesRepository { get; }
         IProductSectorRepository ProductSectorRepository { get; }
+        IOrdersToCompleteView OrdersToCompleteView { get; }
+        IOrdersRepository OrdersRepository { get; }
+        IPickingRepository PickingRepository { get; }
+        IPickingItemsRepository PickingItemsRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
         bool EnsureCreated();

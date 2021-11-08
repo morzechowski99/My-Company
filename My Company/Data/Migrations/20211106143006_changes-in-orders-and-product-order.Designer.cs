@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_Company.Data;
 
 namespace My_Company.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211106143006_changes-in-orders-and-product-order")]
+    partial class changesinordersandproductorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,7 +422,10 @@ namespace My_Company.Data.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PickingId")
+                    b.Property<int>("PickingId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PickingOrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ProductOrderId")
@@ -431,7 +436,7 @@ namespace My_Company.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PickingId");
+                    b.HasIndex("PickingOrderId");
 
                     b.HasIndex("ProductOrderId");
 
@@ -899,9 +904,8 @@ namespace My_Company.Data.Migrations
                 {
                     b.HasOne("My_Company.Models.Picking", "Picking")
                         .WithMany("PickingItems")
-                        .HasForeignKey("PickingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("PickingOrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("My_Company.Models.ProductOrder", "ProductOrder")
                         .WithMany()

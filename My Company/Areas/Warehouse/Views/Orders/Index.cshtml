@@ -1,0 +1,46 @@
+﻿@model IEnumerable<My_Company.Areas.Warehouse.ViewModels.OrderListItemViewModel>
+
+@{
+    ViewData["Title"] = "Zamówienia do skompletowania";
+}
+
+<h1 class="display-4 mb-5">Wybierz zamówienie do skompletowania</h1>
+<h6 class="text-danger">@TempData["Error"]</h6>
+<div class="table-responsive-md">
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @if (item.PickingStarted != null && item.PickingStarted.Value == true)
+                        {
+                            <a asp-action="Complete" asp-route-id="@item.Id">Kontynuuj kompletowanie</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Complete" asp-route-id="@item.Id">Kompletuj</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

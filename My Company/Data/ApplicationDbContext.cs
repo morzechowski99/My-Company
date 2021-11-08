@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using My_Company.EnumTypes;
 using My_Company.Models;
+using My_Company.Models.DBViews;
 using System.Diagnostics;
 using System.Linq;
 
@@ -28,7 +29,6 @@ namespace My_Company.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<ProductOrder> ProductOrders { get; set; }
         public DbSet<ProductSector> ProductSectors { get; set; }
@@ -41,6 +41,7 @@ namespace My_Company.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<AttributeDictionaryValues> AttributeDictionaryValues { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<OrdersToComplete> OrdersToComplete { get; set; }
 
 
 
@@ -55,7 +56,8 @@ namespace My_Company.Data
 
             builder.Entity<ProductOrder>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.ProductId });
+                entity.HasIndex(e => new { e.OrderId, e.ProductId })
+                    .IsUnique();
             });
 
             builder.Entity<ProductSector>(entity =>
@@ -115,6 +117,11 @@ namespace My_Company.Data
             {
                 entity.HasIndex(e => e.PZNumber)
                     .IsUnique();
+            });
+
+            builder.Entity<OrdersToComplete>(entity =>
+            {
+                entity.ToView("OrdersToComplete");
             });
         }
 

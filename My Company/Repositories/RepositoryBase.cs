@@ -41,9 +41,9 @@ namespace My_Company.Repositories
             _context.Update(entity);
         }
 
-        public async Task<bool> Exists(int id)
+        public async Task<bool> Exists(params object[] values)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            var entity = await _context.Set<T>().FindAsync(values);
 
             return entity == null ? false : true;
         }

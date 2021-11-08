@@ -474,8 +474,11 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (photoToDelete.IsMainPhoto)
                 {
                     var listPhoto = productPhotos.FirstOrDefault(p => p.IsListPhoto);
-                    filesService.DeletePhoto(listPhoto.Path);
-                    repositoryWrapper.PhotosRepository.Delete(listPhoto);
+                    if (listPhoto != null)
+                    {
+                        filesService.DeletePhoto(listPhoto.Path);
+                        repositoryWrapper.PhotosRepository.Delete(listPhoto);
+                    }
                     if (productPhotos.Count > 1)
                     {
                         var newMainPhoto = productPhotos.FirstOrDefault(p => !p.IsListPhoto);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_Company.Data;
 
 namespace My_Company.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211106092819_add-picking-class")]
+    partial class addpickingclass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,36 +412,6 @@ namespace My_Company.Data.Migrations
                     b.ToTable("Picking");
                 });
 
-            modelBuilder.Entity("My_Company.Models.PickingItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PickingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ProductOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PickingId");
-
-                    b.HasIndex("ProductOrderId");
-
-                    b.HasIndex("SectorId");
-
-                    b.ToTable("PickingItem");
-                });
-
             modelBuilder.Entity("My_Company.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -567,26 +539,18 @@ namespace My_Company.Data.Migrations
 
             modelBuilder.Entity("My_Company.Models.ProductOrder", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("OrderId", "ProductId")
-                        .IsUnique();
 
                     b.ToTable("ProductOrders");
                 });
@@ -895,33 +859,6 @@ namespace My_Company.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("My_Company.Models.PickingItem", b =>
-                {
-                    b.HasOne("My_Company.Models.Picking", "Picking")
-                        .WithMany("PickingItems")
-                        .HasForeignKey("PickingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("My_Company.Models.ProductOrder", "ProductOrder")
-                        .WithMany()
-                        .HasForeignKey("ProductOrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("My_Company.Models.WarehouseSector", "Sector")
-                        .WithMany()
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Picking");
-
-                    b.Navigation("ProductOrder");
-
-                    b.Navigation("Sector");
-                });
-
             modelBuilder.Entity("My_Company.Models.Product", b =>
                 {
                     b.HasOne("My_Company.Models.Supplier", "Supplier")
@@ -1028,13 +965,13 @@ namespace My_Company.Data.Migrations
             modelBuilder.Entity("My_Company.Models.ProductSector", b =>
                 {
                     b.HasOne("My_Company.Models.Product", "Product")
-                        .WithMany("ProductSectors")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("My_Company.Models.WarehouseSector", "Sector")
-                        .WithMany("ProductSectors")
+                        .WithMany()
                         .HasForeignKey("SectorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1106,11 +1043,6 @@ namespace My_Company.Data.Migrations
                     b.Navigation("ProductOrders");
                 });
 
-            modelBuilder.Entity("My_Company.Models.Picking", b =>
-                {
-                    b.Navigation("PickingItems");
-                });
-
             modelBuilder.Entity("My_Company.Models.Product", b =>
                 {
                     b.Navigation("Photos");
@@ -1122,8 +1054,6 @@ namespace My_Company.Data.Migrations
                     b.Navigation("ProductDeliveries");
 
                     b.Navigation("ProductOrders");
-
-                    b.Navigation("ProductSectors");
                 });
 
             modelBuilder.Entity("My_Company.Models.Supplier", b =>
@@ -1149,8 +1079,6 @@ namespace My_Company.Data.Migrations
             modelBuilder.Entity("My_Company.Models.WarehouseSector", b =>
                 {
                     b.Navigation("ProductDeliveries");
-
-                    b.Navigation("ProductSectors");
                 });
 #pragma warning restore 612, 618
         }

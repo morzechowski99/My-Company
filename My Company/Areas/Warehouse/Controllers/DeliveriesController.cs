@@ -93,7 +93,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 deliveryDto.Products = products;
                 deliveryDto.CorrectedId = orginal.Id;
                 deliveryDto.CorrectedNumber = orginal.PZNumber;
-                return View("CorrectedDetails",deliveryDto);
+                return View("CorrectedDetails", deliveryDto);
             }
 
         }

@@ -1,0 +1,26 @@
+﻿@model Guid
+
+<div class="row d-flex align-content-start">
+    @await Component.InvokeAsync("OrderProductsInPicking", new { orderId = Model })
+</div>
+
+@if (ViewBag.Completed == true)
+{
+    <div class="row d-flex justify-content-end">
+        <button class="btn btn-outline-success" id="submit">Zapisz</button>
+    </div>
+}
+
+<hr />
+<div>
+    <h5>Zebrano: </h5>
+    <div class="row">
+        <div class="col-md-6">
+            @await Component.InvokeAsync("PickingDetails", new { pickingId = Model })
+        </div>
+
+    </div>
+</div>
+@{
+    Layout = null;
+}

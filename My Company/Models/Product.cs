@@ -12,6 +12,7 @@ namespace My_Company.Models
             ProductCategories = new HashSet<ProductCategory>();
             ProductAttributes = new HashSet<ProductAttribute>();
             ProductDeliveries = new HashSet<ProductDelivery>();
+            ProductSectors = new HashSet<ProductSector>();
             Photos = new HashSet<Photo>();
         }
 
@@ -34,6 +35,7 @@ namespace My_Company.Models
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
         public virtual ICollection<ProductDelivery> ProductDeliveries { get; set; }
+        public virtual ICollection<ProductSector> ProductSectors { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
     }
 }
