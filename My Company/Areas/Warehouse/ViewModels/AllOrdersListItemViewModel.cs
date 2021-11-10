@@ -1,4 +1,5 @@
-﻿using System;
+﻿using My_Company.EnumTypes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
-    public class OrderListItemViewModel
+    public class AllOrdersListItemViewModel
     {
-        [Display(Name = "Id zamówienia")]
+        [Display(Name ="Numer zamówienia")]
         public Guid Id { get; set; }
-        [Display(Name = "Data zamówienia")]
-        [DataType(DataType.Date)]
+        [Display(Name = "Data")]
         public DateTime OrderDate { get; set; }
-        public bool? PickingStarted { get; set; }
-        [Display(Name ="Status")]
+        [Display(Name = "Status")]
         public string Status { get; set; }
     }
 }

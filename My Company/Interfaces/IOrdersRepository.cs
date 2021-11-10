@@ -1,6 +1,8 @@
-﻿using My_Company.Models;
+﻿using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company.Interfaces
@@ -13,5 +15,7 @@ namespace My_Company.Interfaces
         Task<IEnumerable<Product>> GetProducts(Guid orderId);
         Task<Order> GetOrderWithProductsAndPicking(Guid orderId);
         Task<Order> GetOrderWithProductsInfoById(Guid id);
+        IQueryable<Order> GetOrdersByFilters(OrdersListFilters filters);
+        Task<List<Guid>> GetNumbersByQuery(string query);
     }
 }

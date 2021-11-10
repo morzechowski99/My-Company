@@ -182,7 +182,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             return ViewComponent("CategoriesList", filters);
         }
 
-        // GET: Warehouse/Categories/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

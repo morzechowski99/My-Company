@@ -1,5 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Zamówienia";
 }
+
+<h1>Zamówienia</h1>
+
+<div class="row d-md-none">
+    <div class="col">
+        <button class="w-100 btn btn-outline-success" id="showHideFiltersBtn" type="button">Pokaż filtry</button>
+    </div>
+</div>
+<div class="row d-flex justify-content-between" id="filters">
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" id="orderNumberSelect"></select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="dateFrom" placeholder="Data od" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <input type="text" class="form-control" id="dateTo" placeholder="Data do" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 ">
+        <div class="input-group my-2">
+            <select class="form-control" multiple id="statusSelect"></select>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <div class="input-group my-2">
+            <select class="form-control" id="sortSelect">
+                <option selected value="0">Sortowanie</option>
+                <option value="1">Od najstarszych</option>
+                <option value="2">Od najmłodszych</option>
+                <option value="3">Status rosnąco</option>
+                <option value="4">Status malejąco</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div id="table" style="min-height:300px">
+    @await Component.InvokeAsync("OrdersList", new My_Company.Areas.Warehouse.ViewModels.OrdersListFilters())
+</div>
+
+@section Head {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+@section Scripts{
+    <script src="~/lib/selectize/selectize.min.js"></script>
+    <script src="~/js/shared/selectizePlugins.js"></script>
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Warehouse/Orders/OrdersList/OrdersList.js"></script>
+}
+

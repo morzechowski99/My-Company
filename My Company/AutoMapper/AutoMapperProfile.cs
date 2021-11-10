@@ -153,7 +153,7 @@ namespace My_Company.AutoMapper
 
             CreateMap<Order, OrderPickingViewModel>()
                 .ForMember(x => x.Items, opt => opt.MapFrom(y => y.ProductOrders))
-                .ForMember(x => x.PickedItems,opt => opt.MapFrom(y => y.Picking.PickingItems));
+                .ForMember(x => x.PickedItems, opt => opt.MapFrom(y => y.Picking.PickingItems));
 
             CreateMap<ProductOrder, OrderPickingItemViewModel>()
                 .ForMember(x => x.ProductOrderId, opt => opt.MapFrom(y => y.Id))
@@ -171,6 +171,8 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.EANCode, opt => opt.MapFrom(y => y.ProductOrder.Product.EANCode))
                 .ForMember(x => x.ProductName, opt => opt.MapFrom(y => y.ProductOrder.Product.Name));
 
+            CreateMap<Order, AllOrdersListItemViewModel>()
+                .ForMember(x => x.Status, opt => opt.MapFrom(y => OrderStatusesDictionary.Dictionary[y.Status]));
         }
     }
 }

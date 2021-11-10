@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using My_Company.Areas.Warehouse.EnumTypes;
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.EnumTypes;
 using My_Company.Interfaces;
@@ -90,6 +92,39 @@ namespace My_Company.Repositories
                 .ThenInclude(p => p.PickingItems)
                 .ThenInclude(pi => pi.Sector.Row)
                 .FirstOrDefaultAsync();
+        }
+
+        public IQueryable<Order> GetOrdersByFilters(OrdersListFilters filters)
+        {
+            IQueryable<Order> query = FindAll();
+
+            if (filters.OrderId != null)
+                query = query.Where(o => o.Id == filters.OrderId);
+            if (filters.DateFrom != null)
+                query = query.Where(o => o.OrderDate >= filters.DateFrom);
+            if (filters.DateTo != null)
+                query = query.Where(o => o.OrderDate <= filters.DateTo);
+            if (filters.Statuses != null && filters.Statuses.Any())
+                query = query.Where(o => filters.Statuses.Contains(o.Status));
+
+            query = filters.SortOrder switch
+            {
+                var sort when sort == OrdersSortOrderEnum.Default => query,
+                var sort when sort == OrdersSortOrderEnum.Newest => query.OrderByDescending(o => o.OrderDate),
+                var sort when sort == OrdersSortOrderEnum.Oldest => query.OrderBy(o => o.OrderDate),
+                var sort when sort == OrdersSortOrderEnum.StatusDESC => query.OrderBy(o => o.Status),
+                var sort when sort == OrdersSortOrderEnum.StatusASC => query.OrderByDescending(o => o.Status),
+                _ => query
+            };
+            return query;
+        }
+
+        public async Task<List<Guid>> GetNumbersByQuery(string query)
+        {
+            return await FindByCondition(o => o.Id.ToString()
+                .Contains(query))
+                .Select(o => o.Id)
+                .ToListAsync();
         }
     }
 }

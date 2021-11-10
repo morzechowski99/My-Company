@@ -1,0 +1,94 @@
+﻿@model My_Company.ViewModels.PagedList<My_Company.Areas.Warehouse.ViewModels.AllOrdersListItemViewModel>
+
+<div class="d-flex justify-content-between row">
+    <div class="col-sm-12 col-md-6 m-2">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn @(Model.PageSize == 10 ? "btn-primary" : "btn-outline-primary") changePageSize" value="10">10</button>
+            <button type="button" class="btn @(Model.PageSize == 25 ? "btn-primary" : "btn-outline-primary") changePageSize" value="25">25</button>
+            <button type="button" class="btn @(Model.PageSize == 50 ? "btn-primary" : "btn-outline-primary") changePageSize" value="50">50</button>
+            <button type="button" class="btn @(Model.PageSize == 100 ? "btn-primary" : "btn-outline-primary") changePageSize" value="100">100</button>
+        </div>
+    </div>
+    <div class="col d-flex justify-content-end m-2">
+        <ul class="pagination ">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a href="#" class="page-link prevPageBtn">Poprzednia</a>
+            </li>
+
+            <li class="page-item"><input type="number" min="1" max="@Model.TotalPages" class="form-control" value="@Model.CurrentPage" id="pageValue2" /></li>
+            <li class="page-item ">
+                <a class="page-link" href="#" id="changePageBtn2">Przejdź</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "") ">
+                <a class="page-link nextPageBtn" href="#">Następna</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="table-responsive-md">
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Status)
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>                      
+                        <a class="btn m-0 p-0" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-between mt-2 row">
+    <div class="col-sm-12 col-md-6 m-2">
+        Jesteś na stronie @Model.CurrentPage z @Model.TotalPages
+    </div>
+    <div class="col d-flex justify-content-end m-2">
+        <ul class="pagination">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "") prevPageBtn">
+                <a href="#" class="page-link">Poprzednia</a>
+            </li>
+
+            <li class="page-item"><input type="number" min="1" max="@Model.TotalPages" class="form-control" value="@Model.CurrentPage" id="pageValue1" /></li>
+            <li class="page-item ">
+                <a class="page-link" id="changePageBtn1" href="#">Przejdź</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link nextPageBtn" href="#">Następna</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var currentPage = @Model.CurrentPage;
+    var totalPages = @Model.TotalPages;
+    var pageSize = @Model.PageSize;
+</script>

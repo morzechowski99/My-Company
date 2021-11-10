@@ -269,6 +269,27 @@ namespace My_Company.Areas.Warehouse.Controllers
         public IActionResult OrdersList()
         {
             return View();
+        }  
+        
+        [HttpPost]
+        [Authorize(Roles =Constants.Roles.MainAdministrator)]
+        public IActionResult GetList(OrdersListFilters filters)
+        {
+            if (filters == null)
+                return BadRequest();
+
+            return ViewComponent("OrdersList", filters);
+        } 
+        
+        [HttpGet]
+        [Authorize(Roles =Constants.Roles.MainAdministrator)]
+        public async Task<IActionResult> GetNumbers(string query)
+        {
+            if (query == null)
+                return BadRequest();
+
+            var numbers = await repositoryWrapper.OrdersRepository.GetNumbersByQuery(query);
+            return Ok(numbers.Select(n => new { Id = n }));
         }
     }
 
