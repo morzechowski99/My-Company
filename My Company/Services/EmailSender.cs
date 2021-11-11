@@ -1,37 +1,42 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
+using MimeKit;
+using MimeKit.Text;
 using System.Threading.Tasks;
 
 namespace My_Company.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IConfiguration _config;
+        private readonly int port;
+        private readonly string pass;
+        private readonly string smpt;
+        private readonly string userAdress;
 
         public EmailSender(IConfiguration config)
         {
-            _config = config;
+            userAdress = config.GetValue<string>("SmtpServers:login");
+            port = config.GetValue<int>("SmtpServers:port");
+            pass = config.GetValue<string>("SmtpServers:password");
+            smpt = config.GetValue<string>("SmtpServers:host");
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            MailMessage mail = new MailMessage();
-            mail.To.Add(email);
-            mail.From = new MailAddress(_config.GetValue<string>("SmtpServers:login"));
-            mail.Subject = subject;
-            mail.Body = htmlMessage;
-            mail.IsBodyHtml = true;
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = _config.GetValue<string>("SmtpServers:host");
-            smtp.Port = _config.GetValue<int>("SmtpServers:port");
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential(_config.GetValue<string>("SmtpServers:login"), _config.GetValue<string>("SmtpServers:password"));
-            smtp.EnableSsl = true;
-            await smtp.SendMailAsync(mail);
+            var message = new MimeMessage();
+            message.From.Add(MailboxAddress.Parse(userAdress));
+            message.To.Add(MailboxAddress.Parse(email));
+            message.Subject = subject;
+            message.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };
+
+            using var client = new SmtpClient();
+            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            await client.ConnectAsync(smpt, port, SecureSocketOptions.Auto);
+            await client.AuthenticateAsync(userAdress, pass);
+            await client.SendAsync(message);
+            client.Disconnect(true);
         }
     }
 }

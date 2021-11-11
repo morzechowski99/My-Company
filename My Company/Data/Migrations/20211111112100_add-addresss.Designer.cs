@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_Company.Data;
 
 namespace My_Company.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211111112100_add-addresss")]
+    partial class addaddresss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +130,9 @@ namespace My_Company.Data.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -141,6 +146,10 @@ namespace My_Company.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -381,9 +390,6 @@ namespace My_Company.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
@@ -400,8 +406,6 @@ namespace My_Company.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -829,10 +833,17 @@ namespace My_Company.Data.Migrations
 
             modelBuilder.Entity("My_Company.Models.Address", b =>
                 {
+                    b.HasOne("My_Company.Models.Order", "Order")
+                        .WithOne("Address")
+                        .HasForeignKey("My_Company.Models.Address", "OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("My_Company.Models.AppUser", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Order");
 
                     b.Navigation("User");
                 });
@@ -908,18 +919,10 @@ namespace My_Company.Data.Migrations
 
             modelBuilder.Entity("My_Company.Models.Order", b =>
                 {
-                    b.HasOne("My_Company.Models.Address", "Address")
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("My_Company.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
@@ -1124,11 +1127,6 @@ namespace My_Company.Data.Migrations
                     b.Navigation("Row");
                 });
 
-            modelBuilder.Entity("My_Company.Models.Address", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("My_Company.Models.AppRole", b =>
                 {
                     b.Navigation("UserRoles");
@@ -1166,6 +1164,8 @@ namespace My_Company.Data.Migrations
 
             modelBuilder.Entity("My_Company.Models.Order", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Picking");
 
                     b.Navigation("ProductOrders");

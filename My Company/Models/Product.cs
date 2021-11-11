@@ -37,5 +37,10 @@ namespace My_Company.Models
         public virtual ICollection<ProductDelivery> ProductDeliveries { get; set; }
         public virtual ICollection<ProductSector> ProductSectors { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} ({EANCode})";
+        }
     }
 }

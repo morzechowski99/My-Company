@@ -256,6 +256,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 order.Picking.End = DateTime.Now;
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
+                TempData["success"] = $"Zamówienie {orderId} skompletowane pomyślnie";
                 return Ok();
             }
             catch 
@@ -290,6 +291,18 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             var numbers = await repositoryWrapper.OrdersRepository.GetNumbersByQuery(query);
             return Ok(numbers.Select(n => new { Id = n }));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var order = await repositoryWrapper.OrdersRepository.GetOrderById(id);
+
+            return View(mapper.Map<OrderDetailsViewModel>(order));
         }
     }
 

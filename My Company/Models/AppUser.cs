@@ -12,11 +12,13 @@ namespace My_Company.Models
         {
             Orders = new HashSet<Order>();
             UserRoles = new HashSet<AppUserRole>();
+            Addresses = new HashSet<Address>();
         }
 
         public string Name { get; set; }
         public string Surname { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<AppUserRole> UserRoles { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
     }
 }

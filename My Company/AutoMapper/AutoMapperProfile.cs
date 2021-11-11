@@ -173,6 +173,14 @@ namespace My_Company.AutoMapper
 
             CreateMap<Order, AllOrdersListItemViewModel>()
                 .ForMember(x => x.Status, opt => opt.MapFrom(y => OrderStatusesDictionary.Dictionary[y.Status]));
+
+            CreateMap<Order, OrderDetailsViewModel>()
+                .ForMember(x => x.Status, opt => opt.MapFrom(y => OrderStatusesDictionary.Dictionary[y.Status]))
+                .ForMember(x => x.PickingUser, opt => opt.MapFrom(y => $"{y.Picking.User.Name} {y.Picking.User.Surname} ({y.User.UserName})"))
+                .ForMember(x => x.Address, opt => opt.MapFrom(y => y.Address.ToString()));
+
+            CreateMap<ProductOrder, ProductOrderDetailsViewModel>()
+                .ForMember(x => x.ProductDescritpion, opt => opt.MapFrom(y => y.Product.ToString()));
         }
     }
 }

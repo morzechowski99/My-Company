@@ -126,5 +126,16 @@ namespace My_Company.Repositories
                 .Select(o => o.Id)
                 .ToListAsync();
         }
+
+        public async Task<Order> GetOrderById(Guid? id)
+        {
+            return await FindByCondition(o => o.Id == id)
+                .Include(o => o.ProductOrders)
+                .ThenInclude(o => o.Product)
+                .Include(o => o.User)
+                .Include(o => o.Picking.User)
+                .Include(o => o.Address)
+                .FirstOrDefaultAsync();
+        }
     }
 }

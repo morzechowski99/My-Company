@@ -20,8 +20,10 @@ namespace My_Company.Models
         public string Comment { get; set; }
         public OrderStatus Status { get; set; }
         public bool Paid { get; set; }
+        public int AddressId { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual Picking Picking { get; set; }
+        public virtual Address Address { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace My_Company.Interfaces
         Task<Order> GetOrderWithProductsInfoById(Guid id);
         IQueryable<Order> GetOrdersByFilters(OrdersListFilters filters);
         Task<List<Guid>> GetNumbersByQuery(string query);
+        Task<Order> GetOrderById(Guid? id);
     }
 }

@@ -8,8 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Shop\Data\**" />
+    <Content Remove="Areas\Shop\Data\**" />
+    <EmbeddedResource Remove="Areas\Shop\Data\**" />
+    <None Remove="Areas\Shop\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
@@ -23,16 +31,14 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="MimeKit" Version="2.15.1" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Shop\Controllers\" />
-    <Folder Include="Areas\Shop\Data\" />
-    <Folder Include="Areas\Shop\Models\" />
-    <Folder Include="Areas\Shop\Views\" />
+    <Folder Include="Areas\Shop\ViewModels\" />
+    <Folder Include="Areas\Shop\Views\Shared\Components\" />
     <Folder Include="Areas\Warehouse\Data\" />
-    <Folder Include="Areas\Warehouse\Models\" />
     <Folder Include="wwwroot\Content\" />
   </ItemGroup>
 

@@ -1,0 +1,100 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Dostawa nr" + Model.Id.ToString() + " - Szczegóły";
+}
+
+<h6 class="display-4">Szczegóły zamówienia</h6>
+<hr />
+<div class="row my-2">
+    <div class="col-md-6 ">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.Id)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.Id)</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.OrderDate)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.OrderDate)</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.Comment)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.Comment)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.Status)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.Status)</span>
+                </div>
+            </div>  
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.Address)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.Address)</span>
+                </div>
+            </div>
+            @if (Model.PickingUser != null)
+            {
+                <div class="col-12">
+                    <div>
+                        <span><small class="text-muted">@Html.DisplayNameFor(m => m.PickingUser)</small></span>
+                    </div>
+                    <div>
+                        <span>@Html.DisplayFor(m => m.PickingUser)</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<hr />
+<h4>@Html.DisplayNameFor(m => m.ProductOrders)</h4>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+            @foreach (var pi in Model.ProductOrders)
+            {
+                <li class="list-group-item list-group-item-light">
+                    <div>
+                        <b>@Html.DisplayNameFor(m => pi.ProductDescritpion):</b>
+                        @Html.DisplayFor(m => pi.ProductDescritpion)
+                        <b>@Html.DisplayNameFor(m => pi.Count):</b>
+                        @Html.DisplayFor(m => pi.Count)
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<a class="btn btn-outline-primary" asp-action="OrdersList">Powrót</a>
+
+<style>
+    .carousel-control-prev-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+    }
+
+    .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+    }
+</style>

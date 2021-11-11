@@ -42,8 +42,8 @@ namespace My_Company.Data
         public DbSet<AttributeDictionaryValues> AttributeDictionaryValues { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<OrdersToComplete> OrdersToComplete { get; set; }
-
-
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Config> Config { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
