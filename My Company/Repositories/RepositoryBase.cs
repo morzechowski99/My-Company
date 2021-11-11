@@ -11,6 +11,7 @@ namespace My_Company.Repositories
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         private readonly ApplicationDbContext _context;
+        protected ApplicationDbContext Context { get;}
         public RepositoryBase(ApplicationDbContext context)
         {
             _context = context;

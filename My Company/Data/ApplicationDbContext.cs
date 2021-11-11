@@ -25,6 +25,11 @@ namespace My_Company.Data
         {
         }
 
+        public ApplicationDbContext()
+            : base()
+        {
+        }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }

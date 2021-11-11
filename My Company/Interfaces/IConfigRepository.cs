@@ -6,6 +6,6 @@ namespace My_Company.Interfaces
     public interface IConfigRepository
     {
         Task<Dictionary<string, string>> GetValues();
-        Task<bool> SetValue(string key, string value);
+        Task SetValue(string key, string value);
     }
 }
