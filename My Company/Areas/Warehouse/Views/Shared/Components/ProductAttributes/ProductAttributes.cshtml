@@ -17,23 +17,23 @@
                 @switch (Model.Attributes[i].Type)
                 {
                     case AttributeType.Text:
-                        <input class="form-control" asp-for="Attributes[i].Value" />
-                        break;
+                    <input class="form-control" asp-for="Attributes[i].Value" />
+                    break;
                     case AttributeType.Bool:
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" asp-for="Attributes[i].Value">
-                            <label class="form-check-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
-                        </div>
-                        break;
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="Attributes[i].Value">
+                        <label class="form-check-label">@Html.DisplayFor(m => m.Attributes[i].Name)</label>
+                    </div>
+                    break;
                     case AttributeType.Date:
-                        <input type="date" class="form-control" asp-for="Attributes[i].Value" />
-                        break;
+                    <input type="date" class="form-control" asp-for="Attributes[i].Value" />
+                    break;
                     case AttributeType.Dictionary:
-                        <select class="form-control" asp-for="Attributes[i].Value" asp-items="@new SelectList(Model.Attributes[i].Values,Model.Attributes[i].Value)"></select>
-                        break;
+                    <select class="form-control" asp-for="Attributes[i].Value" asp-items="@new SelectList(Model.Attributes[i].Values,Model.Attributes[i].Value)"></select>
+                    break;
                     case AttributeType.Numeric:
-                        <input class="form-control" type="number" asp-for="Attributes[i].Value">
-                        break;
+                    <input class="form-control" type="number" asp-for="Attributes[i].Value">
+                    break;
                 }
             }
 

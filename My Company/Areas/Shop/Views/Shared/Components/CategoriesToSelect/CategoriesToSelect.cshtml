@@ -1,0 +1,20 @@
+﻿@model List<Category>
+
+<div>
+    @if (ViewBag.Parent != null)
+    {
+        <a class="m-3 btn btn-outline-secondary border-0 btn-block" asp-action="Search" asp-controller="Products" asp-route-id="@((ViewBag.Parent as Category).Id)">
+            <i class="bi bi-arrow-90deg-left"></i> @((ViewBag.Parent as Category).CategoryName)
+        </a>
+    }
+    else if (!ViewBag.IsMain)
+    {
+        <a class="m-3 btn btn-outline-secondary border-0 btn-block" href="/Products/Search">
+            <i class="bi bi-arrow-90deg-left"></i> Wszystkie produkty
+        </a>
+    }
+    @foreach (var item in Model)
+    {
+        <a class="m-3 btn btn-outline-secondary border-0 btn-block" asp-action="Search" asp-controller="Products" asp-route-id="@item.Id">@item.CategoryName</a>
+    }
+</div>

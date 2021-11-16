@@ -27,6 +27,7 @@ namespace My_Company.Repositories
         private IOrdersRepository ordersRepository;
         private IPickingRepository pickingRepository;
         private IPickingItemsRepository pickingItemsRepository;
+        private IConfigRepository configRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -250,6 +251,19 @@ namespace My_Company.Repositories
                 }
 
                 return pickingItemsRepository;
+            }
+        }
+        
+        public IConfigRepository ConfigRepository
+        {
+            get
+            {
+                if(configRepository == null)
+                {
+                    configRepository = new ConfigRepository(_context);
+                }
+
+                return configRepository;
             }
         }
 

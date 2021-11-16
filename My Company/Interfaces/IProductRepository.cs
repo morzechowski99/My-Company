@@ -1,6 +1,5 @@
 ﻿using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,5 +17,6 @@ namespace My_Company.Interfaces
         Task<IEnumerable<ProductAttribute>> GetAttributesByProductId(int id);
         Task<Product> GetProductByEANCode(string ean);
         Task<IEnumerable<Product>> SearchProductByQueryStringWithoutArchived(string query);
+        IQueryable<Product> GetByFilters(My_Company.Areas.Shop.ViewModels.Products.ProductsListFilters filters);
     }
 }

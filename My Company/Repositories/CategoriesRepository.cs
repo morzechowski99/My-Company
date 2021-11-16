@@ -189,5 +189,35 @@ namespace My_Company.Repositories
             else
                 return FindByCondition(c => c.ParentCategoryId == id);
         }
+
+        public async Task<List<Category>> GetAllCategoriesInTree(int? categoryId)
+        {
+            List<Category> tree = new();
+            if (categoryId == null)
+                return tree;
+            Category category = null;
+            var id = categoryId;
+            do
+            {
+                category = await GetOne(c => c.Id == id);
+                tree.Add(category);
+                id = category.ParentCategoryId;
+            } while (id != null);
+            tree.Reverse();
+            return tree;
+        }
+
+        public async Task<List<Category>> GetChildCategoriesById(int? categoryId)
+        {
+            return await FindByCondition(c => c.ParentCategoryId == categoryId).ToListAsync();
+        }
+
+        public async Task<Category> GetParentCategory(int? categoryId)
+        {
+            if (categoryId == null)
+                return null;
+            var category = await FindByCondition(c => c.Id == categoryId).Include(c => c.ParentCategory).FirstOrDefaultAsync();
+            return category.ParentCategory;
+        }
     }
 }

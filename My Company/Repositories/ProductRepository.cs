@@ -174,5 +174,21 @@ namespace My_Company.Repositories
             return await FindByCondition(p => (query.Contains(p.Name.ToLower()) || p.Name.ToLower().Contains(query)
                 || p.EANCode.Contains(query) || query.Contains(p.EANCode)) && p.Status != ProductStatus.Archived).ToListAsync();
         }
+
+        public IQueryable<Product> GetByFilters(My_Company.Areas.Shop.ViewModels.Products.ProductsListFilters filters)
+        {
+            IQueryable<Product> products = FindByCondition(p => p.Status == ProductStatus.Active)
+                                                .Include(p => p.Photos)
+                                                .Include(p => p.VATRate)
+                                                .Include(p => p.ProductCategories.Where(pc => pc.IsProductCategory))
+                                                .ThenInclude(pc => pc.Category);
+
+            if (filters.CategoryId != null)
+                products = products.Where(p => p.ProductCategories.Any(po => po.CategoryId == filters.CategoryId));
+
+            //sorting and filters
+
+            return products;
+        }
     }
 }

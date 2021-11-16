@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using My_Company.Areas.Shop.ViewModels.Products;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
 using My_Company.Extensions;
@@ -181,6 +182,11 @@ namespace My_Company.AutoMapper
 
             CreateMap<ProductOrder, ProductOrderDetailsViewModel>()
                 .ForMember(x => x.ProductDescritpion, opt => opt.MapFrom(y => y.Product.ToString()));
+
+            //shop
+            CreateMap<Product, ListItemViewModel>()
+                .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice,y.VATRate.Rate)))
+                .ForMember(x => x.CategoryName, opt => opt.MapFrom(y => y.ProductCategories.First().Category.CategoryName));
         }
     }
 }

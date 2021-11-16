@@ -20,5 +20,12 @@ namespace My_Company.Helpers
         }
 
         public const string ImagePlaceholder = "/img/photoPlaceholder.png";
+
+        public static class ConfigKeys
+        {
+            public const string Description = "description";
+            public const string Keywords = "keywords";
+            public const string Title = "title";
+        }
     }
 }

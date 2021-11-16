@@ -16,6 +16,9 @@ namespace My_Company.Interfaces
         Task<IEnumerable<Models.Attribute>> GetAllAttributesByCategoryId(int? categoryId);
         Task<bool> CheckName(string categoryName);
         IQueryable<Category> GetCategoriesByFilters(CategoryListFilters filters);
+        Task<List<Category>> GetChildCategoriesById(int? categoryId);
+        Task<Category> GetParentCategory(int? categoryId);
+        Task<List<Category>> GetAllCategoriesInTree(int? categoryId);
         Task<string> GetCategoryTree(Category category);
         Task<bool> CheckIfRemovable(int id);
         Task<Category> GetById(int id);

@@ -4,7 +4,6 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,8 +30,8 @@ namespace My_Company.Areas.Warehouse.ViewComponents
 
             var listView = _mapper.Map<List<EmployeeListItem>>(list);
 
-            return View("EmployeeList", new PagedList<EmployeeListItem>(listView,employees.Count(),list.CurrentPage,list.PageSize));
+            return View("EmployeeList", new PagedList<EmployeeListItem>(listView, employees.Count(), list.CurrentPage, list.PageSize));
         }
     }
-   
+
 }

@@ -62,7 +62,7 @@
 
 <div class="spinner spinner-border spinnerHidden text-primary"></div>
 <div id="table" style="min-height:300px">
-    @await Component.InvokeAsync("ProductsList", new My_Company.Areas.Warehouse.ViewModels.ProductsListFilters())
+    @await Component.InvokeAsync(typeof(My_Company.Areas.Warehouse.ViewComponents.ProductsListViewComponent), new My_Company.Areas.Warehouse.ViewModels.ProductsListFilters())
 </div>
 
 @section Head {

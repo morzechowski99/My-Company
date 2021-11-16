@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Shop\Data\**" />
+    <Compile Remove="Areas\Warehouse\Data\**" />
     <Content Remove="Areas\Shop\Data\**" />
+    <Content Remove="Areas\Warehouse\Data\**" />
     <EmbeddedResource Remove="Areas\Shop\Data\**" />
+    <EmbeddedResource Remove="Areas\Warehouse\Data\**" />
     <None Remove="Areas\Shop\Data\**" />
+    <None Remove="Areas\Warehouse\Data\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Shop\ViewModels\" />
-    <Folder Include="Areas\Shop\Views\Shared\Components\" />
-    <Folder Include="Areas\Warehouse\Data\" />
     <Folder Include="wwwroot\Content\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
   <ItemGroup>

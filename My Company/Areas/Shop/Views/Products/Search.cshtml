@@ -1,0 +1,12 @@
+﻿@model int?
+
+@{
+    ViewData["Title"] = "Przeglądaj produkty";
+}
+
+@await Component.InvokeAsync(typeof(My_Company.Areas.Shop.ViewComponents.ProductsListViewComponent), new { categoryId = Model})
+
+
+
+
+

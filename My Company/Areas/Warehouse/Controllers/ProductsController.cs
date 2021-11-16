@@ -50,7 +50,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 return BadRequest();
             }
 
-            return ViewComponent("ProductsList", filters);
+            return ViewComponent(typeof(ViewComponents.ProductsListViewComponent), filters);
         }
 
         [HttpGet]
