@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using My_Company.Areas.Shop.Enums;
 using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.EnumTypes;
 using My_Company.Interfaces;
 using My_Company.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -164,7 +166,7 @@ namespace My_Company.Repositories
         public async Task<Product> GetProductByEANCode(string ean)
         {
             return await FindByCondition(p => p.EANCode == ean)
-                .Include(p => p.Photos) 
+                .Include(p => p.Photos)
                 .FirstOrDefaultAsync();
         }
 
@@ -186,9 +188,88 @@ namespace My_Company.Repositories
             if (filters.CategoryId != null)
                 products = products.Where(p => p.ProductCategories.Any(po => po.CategoryId == filters.CategoryId));
 
-            //sorting and filters
+            products = Filter(products, filters);
+            products = Sort(products, filters.SortOrder);
 
             return products;
+        }
+
+        private IQueryable<Product> Filter(IQueryable<Product> products, Areas.Shop.ViewModels.Products.ProductsListFilters filters)
+        {
+            if (filters.PriceFrom.HasValue)
+            {
+                products = products.Where(p => (p.NettoPrice / 100.0M + p.NettoPrice / 100.0M * (p.VATRate.Rate / 100.0M) >= filters.PriceFrom));
+            }
+            if (filters.PriceTo.HasValue)
+            {
+                products = products.Where(p => (p.NettoPrice / 100.0M + p.NettoPrice / 100.0M * (p.VATRate.Rate / 100.0M) <= filters.PriceTo));
+            }
+            if (filters.Attributes != null)
+            {
+                foreach (var value in filters.Attributes)
+                {
+                    switch (value.Type)
+                    {
+                        case AttributeType.Bool:
+                        if (value.Value == "true")
+                            products = products.Where(p => p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value == value.Value);
+                        break;
+                        case AttributeType.Text:
+                        var query = value.Value.ToLower();
+                        products = products.Where(p => p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value.ToLower().Contains(query) ||
+                        query.Contains(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value.ToLower()));
+                        break;
+                        case AttributeType.Numeric:
+                        int val1, val2;
+                        if (int.TryParse(value.ValueFrom, out val1))
+                        {
+                            products = products.Where(p => Convert.ToInt32(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value) >= val1);
+                        }
+                        if (int.TryParse(value.ValueTo, out val2))
+                        {
+                            products = products.Where(p => Convert.ToInt32(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value) <= val2);
+                        }
+                        break;
+                        case AttributeType.Dictionary:
+                        if (value.Values != null && value.Values.Length > 0)
+                            products = products.Where(p => value.Values.Contains(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value));
+                        break;
+                        case AttributeType.Date:
+                        DateTime date1, date2;
+                        if (DateTime.TryParse(value.ValueFrom, out date1))
+                        {
+                            products = products.Where(p => (DateTime)(object)(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value) >= date1);
+                        }
+                        if (DateTime.TryParse(value.ValueTo, out date2))
+                        {
+                            products = products.Where(p => (DateTime)(object)(p.ProductAttributes.First(pa => pa.AttributeId == value.Id).Value) <= date2);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return products;
+        }
+
+        private IQueryable<Product> Sort(IQueryable<Product> products, ProductSortEnum sortOrder)
+        {
+            products = sortOrder switch
+            {
+                var sort when sort == ProductSortEnum.Default => products,
+                var sort when sort == ProductSortEnum.NameASC => products.OrderBy(p => p.Name),
+                var sort when sort == ProductSortEnum.NameDESC => products.OrderByDescending(p => p.Name),
+                var sort when sort == ProductSortEnum.PriceASC => products.OrderBy(p => p.NettoPrice + p.NettoPrice * (p.VATRate.Rate / 100.0)),
+                var sort when sort == ProductSortEnum.PriceDESC => products.OrderByDescending(p => p.NettoPrice + p.NettoPrice * (p.VATRate.Rate / 100.0)),
+                _ => products
+            };
+            return products;
+        }
+
+        public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
+        {
+            return await FindByCondition(p => p.ProductCategories.First(pc => pc.CategoryId == categoryId).CategoryId == categoryId)
+                .ToListAsync();
         }
     }
 }

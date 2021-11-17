@@ -18,5 +18,6 @@ namespace My_Company.Interfaces
         Task<Product> GetProductByEANCode(string ean);
         Task<IEnumerable<Product>> SearchProductByQueryStringWithoutArchived(string query);
         IQueryable<Product> GetByFilters(My_Company.Areas.Shop.ViewModels.Products.ProductsListFilters filters);
+        Task<List<Product>> GetProductsByCategoryId(int value);
     }
 }

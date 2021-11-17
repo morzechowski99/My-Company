@@ -103,3 +103,16 @@ body {
         background-color: #6c757d !Important;
         border: solid 1px #6c757d;
     }
+/*spinner*/
+.spinner {
+    width: 5rem;
+    height: 5rem;
+    position: fixed;
+    top: calc(50% - 2.5rem);
+    left: calc(50% - 2.5rem);
+    z-index: 99999;
+}
+
+.spinnerHidden {
+    display: none !important;
+}

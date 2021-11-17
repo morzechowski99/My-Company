@@ -4,9 +4,12 @@
     ViewData["Title"] = "Przeglądaj produkty";
 }
 
-@await Component.InvokeAsync(typeof(My_Company.Areas.Shop.ViewComponents.ProductsListViewComponent), new { categoryId = Model})
+@await Component.InvokeAsync(typeof(My_Company.Areas.Shop.ViewComponents.ProductsListViewComponent), new { categoryId = Model })
 
-
+@section Scripts {
+    <script src="~/js/shared/shared.js"></script>
+    <script src="~/js/Shop/Products/Search/Search.js"></script>
+}
 
 
 

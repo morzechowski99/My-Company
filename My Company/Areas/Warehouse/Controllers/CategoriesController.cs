@@ -313,6 +313,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributesTracked(id.Value);
             if (ModelState.IsValid)
             {
+                using var tr = await _repositoryWrapper.BeginTransaction();
                 category = await _repositoryWrapper.CategoriesRepository.GetCategoryWithAttributesTracked(id.Value);
                 foreach (var attrDb in category.Attributes)
                 {
@@ -335,11 +336,23 @@ namespace My_Company.Areas.Warehouse.Controllers
                         category.Attributes.Add(newAttr);
                         newAttributes.Add(newAttr);
                     }
-                }
+                }              
 
                 _repositoryWrapper.CategoriesRepository.Update(category);
 
                 await _repositoryWrapper.Save();
+
+                var products = await _repositoryWrapper.ProductRepository.GetProductsByCategoryId(id.Value);
+                products.ForEach(p =>
+                {
+                    newAttributes.ForEach(a => _repositoryWrapper.ProductAttributeRepository.Create(
+                        new ProductAttribute { ProductId = p.Id, AttributeId = a.Id, Value = null })
+                    );
+                });
+
+                await _repositoryWrapper.Save();
+
+                await tr.CommitAsync();
 
                 TempData["attributes"] = JsonConvert.SerializeObject(newAttributes.Where(attr => attr.Type == AttributeType.Dictionary).ToList(),
                new JsonSerializerSettings()

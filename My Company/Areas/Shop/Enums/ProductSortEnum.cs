@@ -2,6 +2,10 @@
 {
     public enum ProductSortEnum
     {
-        Default
+        Default,
+        PriceASC,
+        PriceDESC,
+        NameASC,
+        NameDESC
     }
 }
