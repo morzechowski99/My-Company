@@ -18,8 +18,11 @@ $(function () {
         sessionStorage.removeItem(STORAGE_FILTERS)
         filters = defaultFilters
     }
+    else {
+        setInputs()
+    }
 
-    console.log(filters)
+    loadData()
 
     if (bootstrapDetectBreakpoint().index < 2)
         $('.filters').hide()
@@ -77,7 +80,7 @@ $(function () {
             else
                 attribute.value = "false"
         } else {
-            filters.attributes.push({ id: id, type: type, value: $(this).val()})
+            filters.attributes.push({ id: id, type: type, value: $(this).val() })
         }
         loadData()
     })
@@ -92,7 +95,7 @@ $(function () {
             else
                 attribute.values = attribute.values.filter(val => val != $(this).val())
         } else {
-            filters.attributes.push({ id: id, type: type, values: [$(this).val()]})
+            filters.attributes.push({ id: id, type: type, values: [$(this).val()] })
         }
         loadData()
     })
@@ -110,7 +113,7 @@ $(function () {
             else
                 attribute.value = value
         } else if (value) {
-            filters.attributes.push({ id: id, type: type, value: $(this).val()})
+            filters.attributes.push({ id: id, type: type, value: $(this).val() })
         }
         else
             return
@@ -130,7 +133,7 @@ $(function () {
             else
                 attribute.valueFrom = value
         } else if (value) {
-            filters.attributes.push({ id: id, type: type, valueFrom: $(this).val()})
+            filters.attributes.push({ id: id, type: type, valueFrom: $(this).val() })
         }
         else
             return
@@ -150,7 +153,7 @@ $(function () {
             else
                 attribute.valueTo = value
         } else if (value) {
-            filters.attributes.push({ id: id, type: type, valueTo: $(this).val()})
+            filters.attributes.push({ id: id, type: type, valueTo: $(this).val() })
         }
         else
             return
@@ -159,8 +162,15 @@ $(function () {
 
     registerBtns()
     $(window).bind('beforeunload', function () {
+        filters.page = 1
         sessionStorage.setItem(STORAGE_FILTERS, JSON.stringify(filters))
     });
+
+    $('#resetFiltersBtn').click(function () {
+        resetFilters()
+        filters = defaultFilters 
+        loadData()
+    })
 })
 
 const loadData = function () {
@@ -216,6 +226,73 @@ const registerBtns = function () {
         scrollToTop()
         loadData()
     })
+}
 
-   
+const setInputs = function () {
+    $('#priceFrom').val(filters.priceFrom)
+    $('#priceTo').val(filters.priceTo)
+    filters.attributes.forEach(attr => {
+        switch (attr.type) {
+            case 'Bool':
+                const input = $(`.checkBoxAttribute[data-id="${attr.id}"]`)
+                if (attr.value == 'true') {
+                    input.val('true')
+                    input.prop('checked', true)
+                }
+                else
+                    input.val('false')
+                break
+            case 'Numeric':
+                $(`.numericFromAttribute[data-id="${attr.id}"]`).val(attr.valueFrom)
+                $(`.numericToAttribute[data-id="${attr.id}"]`).val(attr.valueTo)
+                break
+            case 'Date':
+                $(`.dateFromAttribute[data-id="${attr.id}"]`).val(attr.valueFrom)
+                $(`.dateToAttribute[data-id="${attr.id}"]`).val(attr.valueTo)
+                break
+            case 'Text':
+                $(`.text-attribute[data-id="${attr.id}"]`).val(attr.value)
+                break
+            case 'Dictionary':
+                const inputs = $(`.dictionary-attribute[data-id="${attr.id}"]`).toArray()
+                inputs.forEach(i => {
+                    if (attr.values.find(v => v == $(i).val())) {
+                        $(i).prop('checked', true)
+                    }
+                })
+                break
+        }
+    })
+}
+
+const resetFilters = function () {
+    $('#priceFrom').val('')
+    $('#priceTo').val('')
+    filters.attributes.forEach(attr => {
+        switch (attr.type) {
+            case 'Bool':
+                const input = $(`.checkBoxAttribute[data-id="${attr.id}"]`)
+
+                input.prop('checked', false)
+                input.val('false')
+                break
+            case 'Numeric':
+                $(`.numericFromAttribute[data-id="${attr.id}"]`).val('')
+                $(`.numericToAttribute[data-id="${attr.id}"]`).val('')
+                break
+            case 'Date':
+                $(`.dateFromAttribute[data-id="${attr.id}"]`).val('')
+                $(`.dateToAttribute[data-id="${attr.id}"]`).val('')
+                break
+            case 'Text':
+                $(`.text-attribute[data-id="${attr.id}"]`).val('')
+                break
+            case 'Dictionary':
+                const inputs = $(`.dictionary-attribute[data-id="${attr.id}"]`).toArray()
+                inputs.forEach(i => {
+                    $(i).prop('checked', false)
+                })
+                break
+        }
+    })
 }
