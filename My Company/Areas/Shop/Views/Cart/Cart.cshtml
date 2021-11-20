@@ -1,0 +1,140 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Cart.Cart
+@inject My_Company.Interfaces.IConfig config;
+@inject My_Company.Interfaces.IRepositoryWrapper repo;
+@using static My_Company.Helpers.Constants
+
+<div class="container">
+    <ol class="breadcrumb bg-transparent justify-content-center">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Koszyk</li>
+    </ol>
+    <div class="text-center">
+        <h6 class="display-4">Twój koszyk</h6>
+        <small><i>@await config.GetValue(ConfigKeys.CartSubtitle, repo.ConfigRepository)</i></small>
+    </div>
+    @if (Model.Items.Count == 0)
+    {
+        <div class="text-center m-5">
+            <h6>Twój koszyk jest pusty</h6>
+        </div>
+    }
+    else
+    {
+        <div id="cardContainer">
+            <div class="d-lg-block d-none my-3">
+                <table class="table">
+                    <thead>
+                        <tr class="table-light">
+                            <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Items[0].Name)</th>
+                            <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Items[0].OneItemPrice)</th>
+                            <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Items[0].Quantity)</th>
+                            <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Items[0].Price)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr class="itemDetails" data-id="@item.Id">
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <img class="cartDetailsImg" src="@(item.Photo == null ? Url.Content(ImagePlaceholder) : Url.Content(item.Photo))"
+                                             alt="@item.Name" />
+                                        <div class="pl-3">
+                                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Id">
+                                                <h6 class="font-weight-bold text-dark">@Html.DisplayFor(m => item.Name)</h6>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle text-center itemPrice">@Html.DisplayFor(m => item.OneItemPrice)</td>
+                                <td class="align-middle text-center">
+                                    <i class="bi bi-dash-lg substractQuantity" data-id="@item.Id"></i>
+                                    <span class="quantityValue" data-id="@item.Id">@Html.DisplayFor(m => item.Quantity) </span>
+                                    <i class="bi bi-plus-lg addQuantity" data-id="@item.Id"></i>
+                                </td>
+                                <td class="align-middle text-center price">@Html.DisplayFor(m => item.Price)</td>
+                                <td class="align-middle">
+                                    <button data-id="@item.Id" type="button" class="btn btn-lg p-0 deleteFromCart">
+                                        <i class="bi bi-x text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="text-center"><b>@Html.DisplayNameFor(m => m.Total)</b></td>
+                            <td class="text-center" id="total1">@Html.DisplayFor(m => m.Total)</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-lg-none my-3">
+                <table class="table">
+                    <tr class="table-light">
+                        <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Items[0].Name)</th>
+                    </tr>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="itemDetails" data-id="@item.Id">
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img class="imageCart" src="@(item.Photo == null ? Url.Content(ImagePlaceholder) : Url.Content(item.Photo))"
+                                             alt="@item.Name" />
+                                        <div class="pl-3">
+                                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Id">
+                                                <h6 class="font-weight-bold text-dark">@Html.DisplayFor(m => item.Name)</h6>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-lg p-0 deleteFromCart" type="button" data-id="@item.Id"><i class="bi bi-x text-danger"></i></button>
+                                </div>
+                                <h6 class="text-muted font-weight-lighter">@Html.DisplayNameFor(m => item.OneItemPrice): @Html.DisplayFor(m => item.OneItemPrice)</h6>
+                                <h6 class=" font-weight-lighter">
+                                    @Html.DisplayNameFor(m => item.Quantity):
+                                    <i class="bi bi-dash-lg substractQuantity text-dark" data-id="@item.Id"></i>
+                                    <span class="quantityValue text-muted" data-id="@item.Id">@Html.DisplayFor(m => item.Quantity) </span>
+                                    <i class="bi bi-plus-lg addQuantity text-dark" data-id="@item.Id"></i>
+                                </h6>
+                                <h6>@Html.DisplayNameFor(m => item.Price): <span class="price">@Html.DisplayFor(m => item.Price)</span></h6>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <b>@Html.DisplayNameFor(m => m.Total)</b>
+                                </div>
+                                <div id="total2">
+                                    @Html.DisplayFor(m => m.Total)
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .cartDetailsImg {
+        width: 15vw;
+        height: 20vh;
+        object-fit: scale-down
+    }
+
+    .substractQuantity, .addQuantity {
+        cursor: pointer;
+    }
+</style>
+
+@section Scripts{
+    <script src="~/js/Shop/Cart/Cart/Cart.js"></script>
+}

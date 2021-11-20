@@ -200,7 +200,7 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.ProductCategories,opt => opt.MapFrom(y => y.ProductCategories.OrderBy(pc => pc.CategoryId)));
 
             CreateMap<Photo, string>()
-                .ConvertUsing(p => p.Path);
+                .ConvertUsing(p => p == null ? null : p.Path);
 
             CreateMap<Category, CategoryNameAndId>();
 

@@ -27,6 +27,7 @@ namespace My_Company.Helpers
             public const string Description = "description";
             public const string Keywords = "keywords";
             public const string Title = "title";
+            public const string CartSubtitle = "cartSubtitle";
         }
     }
 }
