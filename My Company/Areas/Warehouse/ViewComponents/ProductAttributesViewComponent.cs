@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Interfaces;
-using My_Company.Models;
-using System;
+using My_Company.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewComponents
@@ -35,10 +33,10 @@ namespace My_Company.Areas.Warehouse.ViewComponents
                 attributesDtos = _mapper.Map<List<AttributeProductViewModel>>(attributes);
             }
 
-            return View("ProductAttributes",new ProductsAttributesViewModel() { Attributes = attributesDtos});
+            return View("ProductAttributes", new ProductsAttributesViewModel() { Attributes = attributesDtos });
 
         }
 
-     
+
     }
 }

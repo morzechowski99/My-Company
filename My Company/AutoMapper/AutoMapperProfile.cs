@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using My_Company.Areas.Shop.ViewModels.Cart;
 using My_Company.Areas.Shop.ViewModels.Products;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
 using My_Company.Extensions;
 using My_Company.Models;
 using My_Company.Models.DBViews;
+using My_Company.ViewModels;
 using System;
 using System.Linq;
 using Attribute = My_Company.Models.Attribute;
@@ -187,6 +189,27 @@ namespace My_Company.AutoMapper
             CreateMap<Product, ListItemViewModel>()
                 .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice,y.VATRate.Rate)))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(y => y.ProductCategories.First().Category.CategoryName));
+
+
+            CreateMap<Product, ProductDetailsPageViewModel>()
+                .ForMember(x => x.State, opt => opt.MapFrom(y => Helpers.ViewHelpers.GetProductStockStatus(y)))
+                .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
+                .ForMember(x => x.Attributes, opt => opt.MapFrom(y => y.ProductAttributes))
+                .ForMember(x => x.Category, opt => opt.MapFrom(y => y.ProductCategories.First(pc => pc.IsProductCategory).Category.CategoryName))
+                .ForMember(x => x.CategoryId, opt => opt.MapFrom(y => y.ProductCategories.First(pc => pc.IsProductCategory).CategoryId))
+                .ForMember(x => x.ProductCategories,opt => opt.MapFrom(y => y.ProductCategories.OrderBy(pc => pc.CategoryId)));
+
+            CreateMap<Photo, string>()
+                .ConvertUsing(p => p.Path);
+
+            CreateMap<Category, CategoryNameAndId>();
+
+            CreateMap<ProductCategory, CategoryNameAndId>()
+                .IncludeMembers(s => s.Category);
+
+            CreateMap<Product, CartItem>()
+                .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
+                .ForMember(x => x.Photo, opt => opt.MapFrom(y => y.Photos.FirstOrDefault()));
         }
     }
 }

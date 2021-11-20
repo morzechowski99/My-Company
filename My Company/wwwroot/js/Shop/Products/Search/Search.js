@@ -208,7 +208,7 @@ const registerBtns = function () {
     $('.page-link').click(function (e) {
         e.preventDefault()
         const newValue = $(this).data('page')
-        if (newValue == '+1')
+        if (newValue === '+1')
             filters.page++
         else if (newValue == '-1')
             filters.page--

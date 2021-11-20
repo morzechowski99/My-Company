@@ -116,3 +116,16 @@ body {
 .spinnerHidden {
     display: none !important;
 }
+
+/*alert*/
+.alert {
+    left: 0;
+    margin: auto;
+    position: fixed;
+    width: 60%;
+    bottom: 10%;
+    right: 0;
+    bottom: 20px;
+    text-align: center;
+    z-index: 1;
+}

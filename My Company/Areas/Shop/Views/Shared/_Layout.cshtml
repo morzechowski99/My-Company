@@ -23,7 +23,10 @@
                 <div class=" row">
                     <div class="col-12 d-flex justify-content-between">
                         <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index">@await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository)</a>
-                        <partial name="_LoginPartial" />
+                        <div class="d-flex">
+                            @await Component.InvokeAsync("Cart")
+                            <partial name="_LoginPartial" />
+                        </div>
                     </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -59,6 +62,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/shared/Cart.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

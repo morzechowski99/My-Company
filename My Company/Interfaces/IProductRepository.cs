@@ -19,5 +19,7 @@ namespace My_Company.Interfaces
         Task<IEnumerable<Product>> SearchProductByQueryStringWithoutArchived(string query);
         IQueryable<Product> GetByFilters(My_Company.Areas.Shop.ViewModels.Products.ProductsListFilters filters);
         Task<List<Product>> GetProductsByCategoryId(int value);
+        Task<Product> GetProductDetailsById(int id);
+        Task<List<Product>> GetCardItems(List<int> list);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Shop.ViewModels.Products;
 using My_Company.Interfaces;
+using System.Threading.Tasks;
 
 namespace My_Company.Areas.Shop.Controllers
 {
@@ -29,6 +30,23 @@ namespace My_Company.Areas.Shop.Controllers
                 return BadRequest();
 
             return ViewComponent("Products", filters);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if(id == null)
+            {
+                return BadRequest();
+            }
+
+            var product = await repositoryWrapper.ProductRepository.GetProductDetailsById(id.Value);
+            if (product == null)
+                return NotFound();
+
+            var productDto = mapper.Map<ProductDetailsPageViewModel>(product);
+
+            return View(productDto);
         }
     }
 }

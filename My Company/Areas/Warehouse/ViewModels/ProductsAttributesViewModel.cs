@@ -1,7 +1,5 @@
-﻿using System;
+﻿using My_Company.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {

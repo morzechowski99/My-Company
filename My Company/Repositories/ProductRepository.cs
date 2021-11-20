@@ -135,6 +135,18 @@ namespace My_Company.Repositories
                 .ThenInclude(p => p.Attribute)
                 .Include(p => p.Photos)
                 .FirstOrDefaultAsync();
+        } 
+        
+        public async Task<Product> GetProductDetailsById(int id)
+        {
+            return await FindByCondition(p => p.Id == id)
+                .Include(p => p.VATRate)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .Include(p => p.ProductAttributes)
+                .ThenInclude(p => p.Attribute)
+                .Include(p => p.Photos.Where(p => !p.IsListPhoto).OrderByDescending(p => p.IsMainPhoto))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Product> GetProductWithCategoriesAndAttributesByIdTracked(int id)
@@ -269,6 +281,14 @@ namespace My_Company.Repositories
         public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
         {
             return await FindByCondition(p => p.ProductCategories.First(pc => pc.CategoryId == categoryId).CategoryId == categoryId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Product>> GetCardItems(List<int> list)
+        {
+            return await FindByCondition(p => list.Contains(p.Id))
+                .Include(p => p.VATRate)
+                .Include(p => p.Photos.Where(photo => photo.IsListPhoto))
                 .ToListAsync();
         }
     }

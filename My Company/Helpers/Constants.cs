@@ -20,6 +20,7 @@ namespace My_Company.Helpers
         }
 
         public const string ImagePlaceholder = "/img/photoPlaceholder.png";
+        public const string CART_COOKIE = "cart";
 
         public static class ConfigKeys
         {

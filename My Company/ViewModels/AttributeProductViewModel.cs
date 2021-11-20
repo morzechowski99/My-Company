@@ -1,7 +1,7 @@
 ﻿using My_Company.EnumTypes;
 using System.Collections.Generic;
 
-namespace My_Company.Areas.Warehouse.ViewModels
+namespace My_Company.ViewModels
 {
     public class AttributeProductViewModel
     {
