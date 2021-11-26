@@ -15,6 +15,7 @@ using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Repositories;
 using My_Company.Services;
+using My_Company.Services.DeliveryService;
 using My_Company.Validation;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,8 @@ namespace My_Company
 
             services.AddSingleton<IConfig>(new Services.Config());
             services.AddTransient<IParcelLockersService,ParcelLockersService>();
+            services.AddTransient<IOrdersService,OrdersService>();
+            services.AddTransient<IDeliveryService,DeliveryService>();
 
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
         }

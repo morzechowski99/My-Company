@@ -44,6 +44,7 @@ namespace My_Company.Data
         public DbSet<OrdersToComplete> OrdersToComplete { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Config> Config { get; set; }
+        public DbSet<OrderDelivery> OrderDeliveries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -123,6 +124,14 @@ namespace My_Company.Data
             {
                 entity.ToView("OrdersToComplete");
             });
+
+            builder.Entity<OrderDelivery>(entity =>
+            {
+                entity.HasDiscriminator(e => e.Type)
+                    .HasValue<PersonalPickup>(DeliveryType.personalPickup)
+                    .HasValue<InPostDelivery>(DeliveryType.PaczkomatyInPost);
+            }
+            );
         }
 
     }

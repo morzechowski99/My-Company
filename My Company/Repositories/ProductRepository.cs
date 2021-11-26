@@ -296,5 +296,12 @@ namespace My_Company.Repositories
         {
             return !await FindByCondition(p => productsIds.Contains(p.Id) && p.Status != ProductStatus.Active).AnyAsync();
         }
+
+        public async Task<List<Product>> GetProductsByIds(List<int> list)
+        {
+            return await FindByCondition(p => list.Contains(p.Id))
+                .Include(p => p.VATRate)
+                .ToListAsync();
+        }
     }
 }

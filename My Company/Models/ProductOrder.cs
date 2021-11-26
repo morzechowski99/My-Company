@@ -8,6 +8,8 @@ namespace My_Company.Models
         public int ProductId { get; set; }
         public Guid OrderId { get; set; }
         public int Count { get; set; }
+        public int ProductPrice { get; set; }
+        public int ProductVatRate { get; set; }
         public virtual Product Product { get; set; }
         public virtual Order Order { get; set; }
     }

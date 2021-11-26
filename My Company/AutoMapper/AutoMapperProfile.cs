@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using My_Company.Areas.Shop.ViewModels.Cart;
+using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.Areas.Shop.ViewModels.Products;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
@@ -187,7 +188,7 @@ namespace My_Company.AutoMapper
 
             //shop
             CreateMap<Product, ListItemViewModel>()
-                .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice,y.VATRate.Rate)))
+                .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(y => y.ProductCategories.First().Category.CategoryName));
 
 
@@ -197,7 +198,7 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Attributes, opt => opt.MapFrom(y => y.ProductAttributes))
                 .ForMember(x => x.Category, opt => opt.MapFrom(y => y.ProductCategories.First(pc => pc.IsProductCategory).Category.CategoryName))
                 .ForMember(x => x.CategoryId, opt => opt.MapFrom(y => y.ProductCategories.First(pc => pc.IsProductCategory).CategoryId))
-                .ForMember(x => x.ProductCategories,opt => opt.MapFrom(y => y.ProductCategories.OrderBy(pc => pc.CategoryId)));
+                .ForMember(x => x.ProductCategories, opt => opt.MapFrom(y => y.ProductCategories.OrderBy(pc => pc.CategoryId)));
 
             CreateMap<Photo, string>()
                 .ConvertUsing(p => p == null ? null : p.Path);
@@ -212,7 +213,11 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Photo, opt => opt.MapFrom(y => y.Photos.FirstOrDefault()));
 
             //new order
-            //CreateMap<>
+            CreateMap<NewOrderModel, Order>()
+                .ForMember(x => x.Address, opt => opt.MapFrom(y => y.ShippingAddress));
+
+            CreateMap<AddressModel, Address>();
+
         }
     }
 }

@@ -21,9 +21,12 @@ namespace My_Company.Models
         public OrderStatus Status { get; set; }
         public bool Paid { get; set; }
         public int AddressId { get; set; }
+        public DeliveryType DeliveryType { get; set; }
+        public string Email { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual Picking Picking { get; set; }
         public virtual Address Address { get; set; }
+        public virtual OrderDelivery Delivery { get; set; }
     }
 }
