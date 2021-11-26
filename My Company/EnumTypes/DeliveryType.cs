@@ -2,7 +2,7 @@
 {
     public enum DeliveryType
     {
-        personalPickup,
+        PersonalPickup,
         PaczkomatyInPost
     }
 }

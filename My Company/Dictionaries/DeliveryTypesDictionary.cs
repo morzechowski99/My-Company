@@ -7,7 +7,7 @@ namespace My_Company.Dictionaries
     {
         private static Dictionary<DeliveryType, string> deliveryTypesDictionary = new()
         {
-            { DeliveryType.personalPickup, "Odbiór osobisty" },
+            { DeliveryType.PersonalPickup, "Odbiór osobisty" },
             { DeliveryType.PaczkomatyInPost, "Paczkomaty InPost" },
         };
         public static Dictionary<DeliveryType, string> Dictionary { get { return deliveryTypesDictionary; } }

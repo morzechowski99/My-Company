@@ -2,6 +2,7 @@
 using My_Company.Areas.Shop.ViewModels.Cart;
 using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.EnumTypes;
+using My_Company.Extensions;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Services.DeliveryService;
@@ -16,13 +17,11 @@ namespace My_Company.Services
     {
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
-        private readonly IDeliveryService deliveryService;
 
-        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IDeliveryService deliveryService)
+        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
-            this.deliveryService = deliveryService;
         }
 
         public async Task<bool> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId)
@@ -78,14 +77,8 @@ namespace My_Company.Services
 
         private OrderDelivery GetDelivery(NewOrderModel order)
         {
-            IDeliveryStrategy strategy = order.DeliveryType switch
-            {
-                var dt when dt == DeliveryType.personalPickup => new PersonalPickupStrategy(),
-                var dt when dt == DeliveryType.PaczkomatyInPost => new InPostStrategy(),
-                _ => throw new ArgumentException("invalid delivary type")
-            };
+            IDeliveryService deliveryService = order.DeliveryType.GetService();
 
-            deliveryService.Strategy = strategy;
             return deliveryService.GetDelivery(order);
         }
     }

@@ -128,7 +128,7 @@ namespace My_Company.Data
             builder.Entity<OrderDelivery>(entity =>
             {
                 entity.HasDiscriminator(e => e.Type)
-                    .HasValue<PersonalPickup>(DeliveryType.personalPickup)
+                    .HasValue<PersonalPickup>(DeliveryType.PersonalPickup)
                     .HasValue<InPostDelivery>(DeliveryType.PaczkomatyInPost);
             }
             );

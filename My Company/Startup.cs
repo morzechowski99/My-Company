@@ -75,7 +75,6 @@ namespace My_Company
             services.AddSingleton<IConfig>(new Services.Config());
             services.AddTransient<IParcelLockersService,ParcelLockersService>();
             services.AddTransient<IOrdersService,OrdersService>();
-            services.AddTransient<IDeliveryService,DeliveryService>();
 
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
         }

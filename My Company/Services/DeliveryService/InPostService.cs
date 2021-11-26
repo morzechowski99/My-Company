@@ -1,9 +1,11 @@
 ﻿using My_Company.Areas.Shop.ViewModels.Order;
+using My_Company.EnumTypes;
 using My_Company.Models;
 
 namespace My_Company.Services.DeliveryService
 {
-    public class InPostStrategy : IDeliveryStrategy
+    [DeliveryType(DeliveryType.PaczkomatyInPost)]
+    public class InPostService : IDeliveryService
     {
         public OrderDelivery GetDelivery(NewOrderModel order)
         {
