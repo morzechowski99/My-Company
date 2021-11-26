@@ -15,6 +15,7 @@ namespace My_Company.Areas.Shop.ViewModels.Cart
         [DataType(DataType.Currency)]
         [Display(Name ="Suma")]
         public decimal Total { get; set; }
+        [Display(Name ="Produkty")]
         public List<CartItem> Items { get; set; }
     }
 }

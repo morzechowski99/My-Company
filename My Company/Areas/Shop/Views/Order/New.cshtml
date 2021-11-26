@@ -1,0 +1,137 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Order.NewOrderModel
+@using My_Company.Extensions
+
+@{
+    ViewData["Title"] = "Nowe zamówienie";
+}
+
+<ol class="breadcrumb bg-transparent justify-content-center">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Złóż zamówienie</li>
+</ol>
+<div class="text-center py-3">
+    <h6 class="display-4" id="header">Nowe zamówienie</h6>
+</div>
+<div class="row" id="formContainer">
+    <div class="col-12 col-lg-8 p-lg-4">
+        <form method="post" asp-action="New">
+            <h4>@Html.DisplayNameFor(m => m.ShippingAddress)</h4>
+            <div class="row ">
+                <div class="col-12">
+                    <input type="hidden" asp-for="AddressId" value="null" />
+                    @await Component.InvokeAsync("UserAddresses")
+                    <div class="row py-2">
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.FirstName"></label>
+                                <input class="form-control" asp-for="ShippingAddress.FirstName" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.FirstName"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.LastName"></label>
+                                <input class="form-control" asp-for="ShippingAddress.LastName" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.LastName"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.Street"></label>
+                                <input class="form-control" asp-for="ShippingAddress.Street" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.Street"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.ZipCode"></label>
+                                <input class="form-control" asp-for="ShippingAddress.ZipCode" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.ZipCode"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.City"></label>
+                                <input class="form-control" asp-for="ShippingAddress.City" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.City"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="ShippingAddress.PhoneNumber"></label>
+                                <input class="form-control" asp-for="ShippingAddress.PhoneNumber" />
+                                <span class="text-danger" asp-validation-for="ShippingAddress.PhoneNumber"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="text-uppercase text-muted" asp-for="Email"></label>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <input type="email" class="form-control" disabled
+                                           value="@User.GetEmail()" asp-for="Email" />
+                                }
+                                else
+                                {
+                                    <input type="email" class="form-control" asp-for="Email" />
+                                }
+
+                                <span class="text-danger" asp-validation-for="Email"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+            <h4>@Html.DisplayNameFor(m => m.DeliveryType)</h4>
+            <div class="my-3">
+                @await Component.InvokeAsync("AvailablePickingTypes")
+                <span asp-validation-for="DeliveryType" class="text-danger"></span>
+                <div class="my-2" style="display:none" id="choseParcelLocker">
+                    <input type="hidden" asp-for="PackLockerName" id="packLocekerNameInput" />
+                    <button id="choosePickingMachine" type="button" class="btn btn-lg btn-outline-secondary border-0" style="border-radius:1px"><i class="bi bi-box"></i> Wybierz paczkomat</button>
+                    <div class="m-2  pickingMachineAddress d-flex">
+                        <div class="m-2">
+                            <h6 class="text-muted">Wybrany paczkomat:</h6>
+                            <p class="p-0 m-0" id="pickingMachineAddressName"></p>
+                            <p class="p-0 m-0" id="pickingMachineAddressLine1"></p>
+                            <p class="p-0 m-0" id="pickingMachineAddressLine2"></p>
+                        </div>
+                    </div>
+                    <span class="text-danger" id="packLockerValidate"></span>
+                </div>
+                <div style="display:none" id="warehuseAddress" class="py-2">
+                    @await Component.InvokeAsync("WarehouseAddress")
+
+                </div>
+            </div>
+            <hr />
+            <h4>@Html.DisplayNameFor(m => m.PaymentMethod)</h4>
+            <div class="my-3">
+                @await Component.InvokeAsync("PaymentMethods")
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+            <div class="d-lg-flex justify-content-lg-between">
+                <a class="btn btn-link text-secondary text-uppercase" asp-controller="Cart" asp-action="Cart"><i class="bi bi-arrow-left-short"></i> Wróć do koszyka</a>
+                <button class="btn btn-dark text-uppercase" style="border-radius:1px" type="submit" value="summaryBtn">Podsumowanie</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-lg-4">
+        @await Component.InvokeAsync("OrderSummary")
+    </div>
+    <div class="spinner spinner-border spinnerHidden text-secondary"></div>
+</div>
+<div id="summary">
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Shop/Order/New/New.js"></script>
+}
+
+@section Head {
+    <script async src="https://geowidget.easypack24.net/js/sdk-for-javascript.js"></script>
+    <link rel="stylesheet" href="https://geowidget.easypack24.net/css/easypack.css" />
+}

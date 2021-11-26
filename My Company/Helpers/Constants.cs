@@ -21,6 +21,8 @@ namespace My_Company.Helpers
 
         public const string ImagePlaceholder = "/img/photoPlaceholder.png";
         public const string CART_COOKIE = "cart";
+        public const string AVAILABLE_PICKING_METHODS = "pickingMethods";
+        public const string AVAILABLE_PAYMENT_METHODS = "paymentMethods";
 
         public static class ConfigKeys
         {

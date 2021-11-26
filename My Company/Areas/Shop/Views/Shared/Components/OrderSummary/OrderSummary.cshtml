@@ -1,0 +1,50 @@
+﻿@model decimal
+
+<div class="bg-light mt-3 position-sticky" style="top:30px">
+    <div class="p-3">
+        <h4 class="text-uppercase font-weight-lighter">Podsumowanie zamówienia</h4>
+        <div class="my-2 row">
+            <div class="col-12 pt-3 d-flex justify-content-between align-content-center">
+                <div>
+                    <h4 class="text-muted">Wartość koszyka</h4>
+                </div>
+                <div>
+                    <h4 class="text-muted" id="cartValue" data-value="@Model">@String.Format("{0:C}", Model)</h4>
+                </div>
+            </div>
+            <div class="col-12">
+                <hr />
+            </div>          
+            <div class="col-12 d-flex justify-content-between">
+                <div>
+                    <h4 class="text-muted">Dostawa</h4>
+                </div>
+                <div>
+                    <h4 class="text-muted" id="shippingValue">@String.Format("{0:C}", 0.0M)</h4>
+                </div>
+            </div>
+            <div class="col-12">
+                <hr />
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+                <div>
+                    <h4 class="text-muted">Płatność</h4>
+                </div>
+                <div>
+                    <h4 class="text-muted" id="paymentValue">@String.Format("{0:C}", 0.0M)</h4>
+                </div>
+            </div>
+            <div class="col-12">
+                <hr />
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+                <div>
+                    <h4 class="text-muted">Łącznie</h4>
+                </div>
+                <div>
+                    <h4 class="font-weight-bolder" id="totalValue" data-value="@Model">@String.Format("{0:C}", Model)</h4>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>

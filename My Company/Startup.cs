@@ -72,6 +72,9 @@ namespace My_Company
             services.AddScoped<IFilesService, LocalFilesService>();
 
             services.AddSingleton<IConfig>(new Services.Config());
+            services.AddTransient<IParcelLockersService,ParcelLockersService>();
+
+            services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

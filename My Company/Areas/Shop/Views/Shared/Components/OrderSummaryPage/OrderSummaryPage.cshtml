@@ -1,0 +1,139 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Order.OrderSummaryViewModel
+@using static My_Company.Helpers.Constants;
+@using static My_Company.Dictionaries.DeliveryTypesDictionary;
+@using static My_Company.Dictionaries.PaymentMethodDictionary;
+
+<div class="container">
+    <h4>@Html.DisplayNameFor(m => m.Cart.Items)</h4>
+    <div class="d-lg-block d-none my-3">
+        <table class="table">
+            <thead>
+                <tr class="table-light">
+                    <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Cart.Items[0].Name)</th>
+                    <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Cart.Items[0].Quantity)</th>
+                    <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Cart.Items[0].Price)</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cart.Items)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <img class="cartDetailsImg" src="@(item.Photo == null ? Url.Content(ImagePlaceholder) : Url.Content(item.Photo))"
+                                     alt="@item.Name" />
+                                <div class="pl-3">
+                                    <h6 class="font-weight-bold text-dark">@Html.DisplayFor(m => item.Name)</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span>@Html.DisplayFor(m => item.Quantity) </span>
+                        </td>
+                        <td class="align-middle text-center price">@Html.DisplayFor(m => item.Price)</td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td class="text-center"><b>@Html.DisplayNameFor(m => m.Cart.Total)</b></td>
+                    <td class="text-center" id="total1">@Html.DisplayFor(m => m.Cart.Total)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="d-lg-none my-3">
+        <table class="table">
+            <tr class="table-light">
+                <th class="text-uppercase text-center">@Html.DisplayNameFor(m => m.Cart.Items[0].Name)</th>
+            </tr>
+            @foreach (var item in Model.Cart.Items)
+            {
+                <tr>
+                    <td>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img class="imageCart" src="@(item.Photo == null ? Url.Content(ImagePlaceholder) : Url.Content(item.Photo))"
+                                     alt="@item.Name" />
+                                <div class="pl-3">
+                                    <h6 class="font-weight-bold text-dark">@Html.DisplayFor(m => item.Name)</h6>
+                                </div>
+                            </div>
+                            <button class="btn btn-lg p-0 deleteFromCart" type="button"><i class="bi bi-x text-danger"></i></button>
+                        </div>
+                        <h6 class=" font-weight-lighter">
+                            @Html.DisplayNameFor(m => item.Quantity):
+                            <span class="quantityValue text-muted" data-id="@item.Id">@Html.DisplayFor(m => item.Quantity) </span>
+                        </h6>
+                        <h6>@Html.DisplayNameFor(m => item.Price): <span class="price">@Html.DisplayFor(m => item.Price)</span></h6>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <b>@Html.DisplayNameFor(m => m.Cart.Total)</b>
+                        </div>
+                        <div id="total2">
+                            @Html.DisplayFor(m => m.Cart.Total)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
+            <h4>@Html.DisplayNameFor(m => m.Order.DeliveryType)</h4>
+            <div class="p-4 mt-3 border border-secondary flex-grow-1">
+                <h5 class="p-0">@Dictionary[Model.Order.DeliveryType]</h5>
+                <small class="text-muted">@Html.DisplayFor(m => m.ShippingValue)</small>
+                @if (Model.Order.DeliveryType == My_Company.EnumTypes.DeliveryType.PaczkomatyInPost)
+                {
+                    <h5 class="text-muted">@Html.DisplayNameFor(m => m.ParcelLocker):</h5>
+                    <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Name)</p>
+                    <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Address.Line1)</p>
+                    <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Address.Line2)</p>
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
+            <h4>@Html.DisplayNameFor(m => m.Order.PaymentMethod)</h4>
+            <div class="p-4 mt-3 border border-secondary flex-grow-1">
+                <h5 class="p-0">@PaymentDictionary[Model.Order.PaymentMethod]</h5>
+                <small class="text-muted">@Html.DisplayFor(m => m.PaymentValue)</small>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
+            <h4>Adres</h4>
+            <div class="p-4 mt-3 border border-secondary flex-grow-1">
+                <div>
+                    <span class="p-0">@Html.DisplayFor(m => m.Order.ShippingAddress.FirstName) @Html.DisplayFor(m => m.Order.ShippingAddress.LastName)</span>
+                </div>
+                <div>
+                    <small>@Html.DisplayFor(m => m.Order.ShippingAddress.Street)</small>
+                </div>
+                <div>
+                    <small>@Html.DisplayFor(m => m.Order.ShippingAddress.ZipCode) @Html.DisplayFor(m => m.Order.ShippingAddress.City)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex py-3 justify-content-end">
+        <h4>@Html.DisplayNameFor(m => m.Total):</h4> <h4 class="font-weight-bolder">@Html.DisplayFor(m => m.Total)</h4>
+    </div>
+    <div class="d-lg-flex justify-content-lg-between">
+        <button class="btn btn-link text-secondary text-uppercase" id="backBtn"><i class="bi bi-arrow-left-short"></i> Cofnij</button>
+        <button class="btn btn-dark text-uppercase btn-lg" style="border-radius:1px" id="submitBtn">Zamów <i class="bi bi-arrow-right-short"></i></button>
+    </div>
+
+</div>
+<style>
+    .cartDetailsImg {
+        width: 8vw;
+        height: 12vh;
+        object-fit: scale-down
+    }
+</style>

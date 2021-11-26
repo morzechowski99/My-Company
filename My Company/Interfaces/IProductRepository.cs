@@ -21,5 +21,6 @@ namespace My_Company.Interfaces
         Task<List<Product>> GetProductsByCategoryId(int value);
         Task<Product> GetProductDetailsById(int id);
         Task<List<Product>> GetCardItems(List<int> list);
+        Task<bool> CheckProductsActive(List<int> productsIds);
     }
 }

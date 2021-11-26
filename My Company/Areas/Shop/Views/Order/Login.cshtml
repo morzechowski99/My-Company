@@ -1,0 +1,81 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Login.LoginModel
+
+@{
+    ViewData["Title"] = "Nowe zamówienie";
+}
+
+<div class="container">
+    <ol class="breadcrumb bg-transparent justify-content-center">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Złóż zamówienie</li>
+    </ol>
+    <div class="text-center py-3">
+        <h6 class="display-4">Nowe zamówienie</h6>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 p-2">
+            <div class="p-2 bg-light">
+                <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Zaloguj się</h6>
+            </div>
+            <div class="p-3">
+                <form method="post">
+                    <h5>Masz już konto?</h5>
+                    <p class="text-muted">Zaloguj się, aby kontynuować twoje zamówienie.</p>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="text-muted text-uppercase"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="text-muted text-uppercase"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                        <a id="forgot-password" href="/Identity/Account/ForgotPassword">Zapomnialeś hasła?</a>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="RememberMe" class="text-muted text-uppercase">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-outline-dark text-uppercase" style="border-radius:1px">
+                        <i class="bi bi-box-arrow-in-right"></i>&nbsp;
+                        Zaloguj się
+                    </button>
+                    <div class="my-3">
+                        <a id="resend-confirmation" href="/Identity/Account/ResendEmailConfirmation">Wyślij ponownie link aktywacyjny</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 p-2">
+            <div class="p-2 bg-light">
+                <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Nie masz konta?</h6>
+
+            </div>
+            <div class="p-3">
+                <a class="btn btn-block btn-block btn-lg btn-outline-secondary " asp-action="NewFromGuest">
+                    <i class="bi bi-cart"></i> Kontynuuj jako gość
+                </a>
+            </div>
+            <h6 class="text-muted hr-with-text-outer">
+                <span class="hr-with-text-inner">LUB</span>
+            </h6>
+            <div class="p-3">
+                <a class="btn btn-block btn-lg btn-outline-secondary border-0" href="/Identity/Account/Register">
+                    <i class="bi bi-person"></i> Zarejestruj się
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

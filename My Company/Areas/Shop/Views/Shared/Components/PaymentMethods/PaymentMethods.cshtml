@@ -1,0 +1,12 @@
+﻿@model List<My_Company.Models.Configuration.PaymentMethod>
+@using My_Company.Dictionaries;
+
+@foreach (var item in Model)
+{
+    <div class="form-check">
+        <input class="form-check-input" type="radio" data-price="@((item.Price / 100.0M).ToString().Replace(',','.'))" name="PaymentMethod" data-val="true" data-val-required="Pole wymagane" value="@item.Method">
+        <label class="form-check-label">
+            @PaymentMethodDictionary.PaymentDictionary[item.Method] (@String.Format("{0:C}", (decimal)(item.Price / 100.0M)))
+        </label>
+    </div>
+}

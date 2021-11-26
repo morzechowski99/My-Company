@@ -3,6 +3,20 @@
 @inject My_Company.Interfaces.IRepositoryWrapper repo;
 @using static My_Company.Helpers.Constants
 
+@{
+    ViewData["Title"] = "Twój koszyk";
+}
+
+@if (TempData["productNotActive"] != null)
+{
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    @TempData["productNotActive"]
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+}
+
 <div class="container">
     <ol class="breadcrumb bg-transparent justify-content-center">
         <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
@@ -119,6 +133,10 @@
 
                     </tr>
                 </table>
+            </div>
+            <div class="d-lg-flex justify-content-lg-between">
+                <a class="btn btn-link text-secondary text-uppercase" asp-controller="Products" asp-action="Search"><i class="bi bi-arrow-left-short"></i> Kontynuuj zakupy</a>
+                <a class="btn btn-dark text-uppercase" style="border-radius:1px" asp-controller="Order" asp-action="New">Zamów <i class="bi bi-arrow-right-short"></i></a>
             </div>
         </div>
     }

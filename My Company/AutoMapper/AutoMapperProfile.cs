@@ -210,6 +210,9 @@ namespace My_Company.AutoMapper
             CreateMap<Product, CartItem>()
                 .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
                 .ForMember(x => x.Photo, opt => opt.MapFrom(y => y.Photos.FirstOrDefault()));
+
+            //new order
+            //CreateMap<>
         }
     }
 }

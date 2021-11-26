@@ -28,6 +28,7 @@ namespace My_Company.Repositories
         private IPickingRepository pickingRepository;
         private IPickingItemsRepository pickingItemsRepository;
         private IConfigRepository configRepository;
+        private IAddressesRepository addressesRepository;
 
         public RepositoryWrapper(ApplicationDbContext context)
         {
@@ -264,6 +265,19 @@ namespace My_Company.Repositories
                 }
 
                 return configRepository;
+            }
+        }
+
+        public IAddressesRepository AddressesRepository
+        {
+            get
+            {
+                if (addressesRepository == null)
+                {
+                    addressesRepository = new AddressesRepository(_context);
+                }
+
+                return addressesRepository;
             }
         }
 

@@ -129,3 +129,16 @@ body {
     text-align: center;
     z-index: 1;
 }
+
+.hr-with-text-outer {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+.hr-with-text-inner {
+    background: #fff;
+    padding: 0 10px;
+}

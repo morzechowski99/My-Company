@@ -291,5 +291,10 @@ namespace My_Company.Repositories
                 .Include(p => p.Photos.Where(photo => photo.IsListPhoto))
                 .ToListAsync();
         }
+
+        public async Task<bool> CheckProductsActive(List<int> productsIds)
+        {
+            return !await FindByCondition(p => productsIds.Contains(p.Id) && p.Status != ProductStatus.Active).AnyAsync();
+        }
     }
 }

@@ -25,6 +25,11 @@ namespace My_Company.Repositories
             return await FindByCondition(w => w.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<Warehouse> GetWarehouse()
+        {
+            return await FindAll().FirstOrDefaultAsync();
+        }
+
         public async Task<Warehouse> GetWithPlanById(int id)
         {
             return await FindByCondition(w => w.Id == id).Include(w => w.Rows).ThenInclude(r => r.Sectors).FirstOrDefaultAsync();
