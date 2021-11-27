@@ -7,8 +7,11 @@ using My_Company.Areas.Shop.ViewModels.Login;
 using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.EnumTypes;
 using My_Company.Extensions;
+using My_Company.Filters;
+using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Services.PaymentService.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,18 +28,23 @@ namespace My_Company.Areas.Shop.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
+        private readonly IServiceProvider serviceProvider;
+        private readonly IConfig config;
 
-        public OrderController(IRepositoryWrapper repositoryWrapper, SignInManager<AppUser> signInManager, IMapper mapper, IOrdersService ordersService)
+        public OrderController(IRepositoryWrapper repositoryWrapper, SignInManager<AppUser> signInManager,
+            IMapper mapper, IOrdersService ordersService, IServiceProvider serviceProvider, IConfig config)
         {
             this.repositoryWrapper = repositoryWrapper;
             _signInManager = signInManager;
             this.mapper = mapper;
             this.ordersService = ordersService;
+            this.serviceProvider = serviceProvider;
+            this.config = config;
         }
 
         public async Task<IActionResult> New()
         {
-            if(!User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction(nameof(Login));
             }
@@ -58,8 +66,8 @@ namespace My_Company.Areas.Shop.Controllers
         public IActionResult Login()
         {
             return View();
-        }  
-        
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
@@ -92,7 +100,7 @@ namespace My_Company.Areas.Shop.Controllers
             {
                 return RedirectToAction("Cart", "Cart");
             }
-            if(!await repositoryWrapper.ProductRepository.CheckProductsActive(cart.Select(ci => ci.Id).ToList()))
+            if (!await repositoryWrapper.ProductRepository.CheckProductsActive(cart.Select(ci => ci.Id).ToList()))
             {
                 TempData["productNotActive"] = "Jeden z produktów z twojego koszyka jest niedostępny. Twój koszyk został wyczyszczony. Przepraszamy";
                 Response.Cookies.Delete(CART_COOKIE);
@@ -115,11 +123,11 @@ namespace My_Company.Areas.Shop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(NewOrderModel orderModel)
         {
-            if (orderModel == null )
+            if (orderModel == null)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return View(orderModel);
-            if(orderModel.DeliveryType == DeliveryType.PaczkomatyInPost && orderModel.PackLockerName == null)
+            if (orderModel.DeliveryType == DeliveryType.PaczkomatyInPost && orderModel.PackLockerName == null)
             {
                 ModelState.AddModelError("PackLockerName", "Wybierz paczkomat");
             }
@@ -141,12 +149,74 @@ namespace My_Company.Areas.Shop.Controllers
             if (User.Identity.IsAuthenticated)
                 userId = User.GetId();
 
-            if (!await ordersService.CreateOrder(orderModel,cart,userId))
+            using var tr = await repositoryWrapper.BeginTransaction();
+            var order = await ordersService.CreateOrder(orderModel, cart, userId);
+            if (order == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
 
-            Response.Cookies.Delete(CART_COOKIE);
+            var paymentService = order.PaymentMethod.GetService(serviceProvider);
+            var callback = await paymentService.GetLinkToPayment(order);
 
+            Response.Cookies.Delete(CART_COOKIE);
+            await tr.CommitAsync();
+
+            if (callback != null)
+            {
+                return Redirect(callback);
+            }
+            else
+            {
+                return RedirectToAction(nameof(PaymentConfirm), new { orderId = order.Id });
+            }
+        }
+
+        public async Task<IActionResult> PaymentConfirm(Guid orderId)
+        {
             return View();
+        }
+
+        [HttpPost]
+        [ServiceFilter(typeof(DotPayIpFilter))]
+        public async Task<IActionResult> PaymentStatus(DotPayURLCResponse dotpayResponse)
+        {
+            if (dotpayResponse == null)
+                return BadRequest();
+
+            var id = await config.GetValue(Constants.ConfigKeys.DotPayKeys.Id, repositoryWrapper.ConfigRepository);
+            if (dotpayResponse.Id != int.Parse(id))
+                return BadRequest("invalid shop Id");
+
+            if (dotpayResponse.Operation_currency != dotpayResponse.Operation_original_currency
+               && dotpayResponse.Operation_currency != "PLN")
+            {
+                return BadRequest("invalid currency");
+            }
+
+            var order = await ordersService.GetOrderWithPaymentById(dotpayResponse.Control);
+            if (order == null)
+                return NotFound();
+
+            var orderTotal = OrderHelpers.GetOrderAmmount(order);
+            if (orderTotal != decimal.Parse(dotpayResponse.Operation_amount.Replace('.',',')))
+                return BadRequest("invalid amount");
+
+            if (dotpayResponse.Operation_status == "completed")
+            {
+                order.Status = OrderStatus.Paid;
+                order.Payment.Status = EnumTypes.PaymentStatus.Completed;
+                order.Paid = true;
+            }
+            else if (dotpayResponse.Operation_status == "rejected")
+            {
+                order.Payment.Status = EnumTypes.PaymentStatus.Rejected;
+            }
+
+            order.ProductOrders = null;
+
+            repositoryWrapper.OrdersRepository.Update(order);
+            await repositoryWrapper.Save();
+
+            return Ok();
         }
     }
 }

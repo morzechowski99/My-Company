@@ -22,11 +22,15 @@ namespace My_Company.Models
         public bool Paid { get; set; }
         public int AddressId { get; set; }
         public DeliveryType DeliveryType { get; set; }
+        public PaymentMethodEnum PaymentMethod { get; set; }
+        public int PaymentPrice { get; set; }
+        public int DeliveryPrice { get; set; }
         public string Email { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual Picking Picking { get; set; }
         public virtual Address Address { get; set; }
         public virtual OrderDelivery Delivery { get; set; }
+        public virtual Payment Payment { get; set; }
     }
 }

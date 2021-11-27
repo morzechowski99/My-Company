@@ -10,12 +10,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using My_Company.Data;
+using My_Company.Filters;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Models.AppSettings;
 using My_Company.Repositories;
 using My_Company.Services;
 using My_Company.Services.DeliveryService;
+using My_Company.Services.PaymentService;
 using My_Company.Validation;
 using System;
 using System.Collections.Generic;
@@ -71,12 +74,16 @@ namespace My_Company
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IFilesService, LocalFilesService>();
+            services.AddScoped<DotPayIpFilter>();
 
             services.AddSingleton<IConfig>(new Services.Config());
             services.AddTransient<IParcelLockersService,ParcelLockersService>();
+
             services.AddTransient<IOrdersService,OrdersService>();
 
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
+
+            services.Configure<DotPayOptions>(Configuration.GetSection("DotPay"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

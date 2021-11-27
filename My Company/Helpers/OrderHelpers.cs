@@ -1,4 +1,5 @@
 ﻿using My_Company.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -62,6 +63,22 @@ namespace My_Company.Helpers
                     return false;
             }
             return true;
+        }
+
+        public static decimal GetOrderAmmount(Order order)
+        {
+            decimal total = 0.0M;
+            foreach(var product in order.ProductOrders)
+            {
+                var price = Math.Round(product.ProductPrice / 100.0M,2);
+                var vat = Math.Round(price * (product.ProductVatRate / 100.0M),2);
+                total += Math.Round(product.Count * (price + vat),2);
+            }
+
+            var picking = Math.Round(order.DeliveryPrice / 100.0M, 2);
+            var payment = Math.Round(order.PaymentPrice / 100.0M, 2);
+
+            return total + picking + payment;
         }
     }
 }

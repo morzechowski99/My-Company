@@ -137,5 +137,13 @@ namespace My_Company.Repositories
                 .Include(o => o.Address)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Order> GetOrderWithPayment(Guid id)
+        {
+            return await FindByCondition(o => o.Id == id)
+                  .Include(o => o.ProductOrders)
+                  .Include(o => o.Payment)
+                  .FirstOrDefaultAsync();
+        }
     }
 }

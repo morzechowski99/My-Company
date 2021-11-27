@@ -6,6 +6,7 @@ using My_Company.Extensions;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Services.DeliveryService;
+using My_Company.Services.PaymentService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,16 @@ namespace My_Company.Services
     {
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
+        private readonly IConfig config;
 
-        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IConfig config)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
+            this.config = config;
         }
 
-        public async Task<bool> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId)
+        public async Task<Order> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId)
         {
             try
             {
@@ -64,15 +67,37 @@ namespace My_Company.Services
                 }
                 #endregion
                 order.Delivery = GetDelivery(orderModel);
+                order.Payment = new Payment();
+                order.DeliveryPrice = await GetDeliveryPrice(order);
+                order.PaymentPrice = await GetPaymentPrice(order);
                 repositoryWrapper.OrdersRepository.Create(order);
                 await repositoryWrapper.Save();
-                return true;
+                return order;
             }
             catch
             {
-                return false;
+                return null;
             }
 
+        }
+
+        private async Task<int> GetDeliveryPrice(Order order)
+        {
+            var availableDeliveries = await config.GetAvailavlePickingMethods(repositoryWrapper.ConfigRepository);
+
+            return availableDeliveries.FirstOrDefault(x => x.Type == order.DeliveryType).Price;
+        }
+
+        private async Task<int> GetPaymentPrice(Order order)
+        {
+            var availablePayments = await config.GetAvailavlePaymentsMethods(repositoryWrapper.ConfigRepository);
+
+            return availablePayments.FirstOrDefault(x => x.Method == order.PaymentMethod).Price;
+        }
+
+        public async Task<Order> GetOrderWithPaymentById(Guid id)
+        {
+            return await repositoryWrapper.OrdersRepository.GetOrderWithPayment(id);
         }
 
         private OrderDelivery GetDelivery(NewOrderModel order)

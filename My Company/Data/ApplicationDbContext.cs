@@ -45,6 +45,7 @@ namespace My_Company.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Config> Config { get; set; }
         public DbSet<OrderDelivery> OrderDeliveries { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -130,8 +131,7 @@ namespace My_Company.Data
                 entity.HasDiscriminator(e => e.Type)
                     .HasValue<PersonalPickup>(DeliveryType.PersonalPickup)
                     .HasValue<InPostDelivery>(DeliveryType.PaczkomatyInPost);
-            }
-            );
+            });
         }
 
     }

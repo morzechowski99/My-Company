@@ -23,6 +23,7 @@ namespace My_Company.Helpers
         public const string CART_COOKIE = "cart";
         public const string AVAILABLE_PICKING_METHODS = "pickingMethods";
         public const string AVAILABLE_PAYMENT_METHODS = "paymentMethods";
+        public const string DOT_PAY_IPS = "dotPayIpAddresses";
 
         public static class ConfigKeys
         {
@@ -30,6 +31,13 @@ namespace My_Company.Helpers
             public const string Keywords = "keywords";
             public const string Title = "title";
             public const string CartSubtitle = "cartSubtitle";
+
+            public static class DotPayKeys
+            {
+                public const string Id = "dotPayId";
+                public const string Pin = "dotPayPIN";
+
+            }
         }
     }
 }

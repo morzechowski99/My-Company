@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using My_Company.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -29,5 +30,6 @@ namespace My_Company.Interfaces
         Task<IDbContextTransaction> BeginTransaction();
         bool EnsureCreated();
         void ClearTracked();
+        
     }
 }
