@@ -30,9 +30,10 @@ namespace My_Company.Areas.Shop.Controllers
         private readonly IOrdersService ordersService;
         private readonly IServiceProvider serviceProvider;
         private readonly IConfig config;
-
+        private readonly IEmailService emailService;
         public OrderController(IRepositoryWrapper repositoryWrapper, SignInManager<AppUser> signInManager,
-            IMapper mapper, IOrdersService ordersService, IServiceProvider serviceProvider, IConfig config)
+            IMapper mapper, IOrdersService ordersService, IServiceProvider serviceProvider, IConfig config,
+            IEmailService emailService)
         {
             this.repositoryWrapper = repositoryWrapper;
             _signInManager = signInManager;
@@ -40,6 +41,7 @@ namespace My_Company.Areas.Shop.Controllers
             this.ordersService = ordersService;
             this.serviceProvider = serviceProvider;
             this.config = config;
+            this.emailService = emailService;
         }
 
         public async Task<IActionResult> New()
@@ -160,6 +162,8 @@ namespace My_Company.Areas.Shop.Controllers
             Response.Cookies.Delete(CART_COOKIE);
             await tr.CommitAsync();
 
+            emailService.SendOrderEmail(EmailReason.NewOrder, order, User.Identity.IsAuthenticated ? User.GetEmail() : null);
+
             if (callback != null)
             {
                 return Redirect(callback);
@@ -203,7 +207,7 @@ namespace My_Company.Areas.Shop.Controllers
                 return BadRequest("invalid currency");
             }
 
-            var order = await ordersService.GetOrderWithPaymentById(dotpayResponse.Control);
+            var order = await ordersService.GetOrderWithPaymentAndUserById(dotpayResponse.Control);
             if (order == null)
                 return NotFound();
 
@@ -216,6 +220,7 @@ namespace My_Company.Areas.Shop.Controllers
                 order.Status = OrderStatus.Paid;
                 order.Payment.Status = EnumTypes.PaymentStatus.Completed;
                 order.Paid = true;
+                emailService.SendOrderEmail(EmailReason.ChangeOrderStatus, order, order.User?.Email );
             }
             else if (dotpayResponse.Operation_status == "rejected")
             {
@@ -226,6 +231,7 @@ namespace My_Company.Areas.Shop.Controllers
 
             repositoryWrapper.OrdersRepository.Update(order);
             await repositoryWrapper.Save();
+
 
             return Ok();
         }

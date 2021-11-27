@@ -19,7 +19,7 @@ namespace My_Company.Interfaces
         IQueryable<Order> GetOrdersByFilters(OrdersListFilters filters);
         Task<List<Guid>> GetNumbersByQuery(string query);
         Task<Order> GetOrderById(Guid? id);
-        Task<Order> GetOrderWithPayment(Guid id);
+        Task<Order> GetOrderWithPaymentAndUser(Guid id);
         Task<PaymentMethodEnum?> GetOrderPaymentTypeByOrderId(Guid orderId);
     }
 }

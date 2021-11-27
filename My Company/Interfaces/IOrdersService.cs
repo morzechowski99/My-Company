@@ -10,6 +10,6 @@ namespace My_Company.Interfaces
     public interface IOrdersService
     {
         Task<Order> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId);
-        Task<Order> GetOrderWithPaymentById(Guid id);
+        Task<Order> GetOrderWithPaymentAndUserById(Guid id);
     }
 }

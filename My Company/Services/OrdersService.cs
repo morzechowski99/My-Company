@@ -95,9 +95,9 @@ namespace My_Company.Services
             return availablePayments.FirstOrDefault(x => x.Method == order.PaymentMethod).Price;
         }
 
-        public async Task<Order> GetOrderWithPaymentById(Guid id)
+        public async Task<Order> GetOrderWithPaymentAndUserById(Guid id)
         {
-            return await repositoryWrapper.OrdersRepository.GetOrderWithPayment(id);
+            return await repositoryWrapper.OrdersRepository.GetOrderWithPaymentAndUser(id);
         }
 
         private OrderDelivery GetDelivery(NewOrderModel order)

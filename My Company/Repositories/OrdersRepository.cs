@@ -138,11 +138,12 @@ namespace My_Company.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Order> GetOrderWithPayment(Guid id)
+        public async Task<Order> GetOrderWithPaymentAndUser(Guid id)
         {
             return await FindByCondition(o => o.Id == id)
                   .Include(o => o.ProductOrders)
                   .Include(o => o.Payment)
+                  .Include(o => o.User)
                   .FirstOrDefaultAsync();
         }
 
