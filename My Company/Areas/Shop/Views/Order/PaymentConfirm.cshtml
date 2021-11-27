@@ -1,0 +1,42 @@
+﻿@model My_Company.EnumTypes.PaymentMethodEnum
+@using My_Company.EnumTypes;
+@using My_Company.Helpers;
+@inject My_Company.Interfaces.IConfig config;
+@inject My_Company.Interfaces.IRepositoryWrapper repo;
+
+@{
+    ViewData["Title"] = "Potwierdzenie złożenia zamówienia";
+}
+
+<ol class="breadcrumb bg-transparent justify-content-center">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Potwierdzenie zamówienia</li>
+</ol>
+<div class="text-center py-3">
+    <h6 class="display-4" id="header">Potwierdzenie zamówienia</h6>
+</div>
+<hr />
+<div class="container text-center">
+    <h4>Dziękujemy za złożenie zamówienia w naszym sklepie</h4>
+    <h3>Numer zamówienia: @ViewBag.OrderNr</h3>
+    <p class="text-muted font-italic">
+        @await config.GetValue(Constants.ConfigKeys.OrderConfirmText, repo.ConfigRepository)
+    </p>
+    @if (Model == PaymentMethodEnum.TraditionalTransfer)
+    {
+       <div class="text-center m-2">
+           @{ 
+               var dataToPayment = await config.GetDataToPayment(repo.ConfigRepository);
+           }
+           <h5>Dane do zapłaty:</h5>
+           <p class="p-0"><small class="text-muted">Nazwa firmy: </small>@dataToPayment.CompanyName</p>
+           <p class="p-0"><small class="text-muted">Bank: </small>@dataToPayment.BankName</p>
+           <p class="p-0"><small class="text-muted">Numer Konta: </small>@dataToPayment.AccountNumber</p>
+           <span class="text-muted font-italic">Prosimy o podanie numeru zamówienia w tytule przelewu</span>
+       </div>
+    }
+
+    <div class="d-flex justify-content-lg-start py-2">
+        <a class="btn btn-link btn-lg text-secondary" asp-action="Index" asp-controller="Home"><i class="bi bi-arrow-left"></i> Wróć do strony głównej</a>
+    </div>
+</div>

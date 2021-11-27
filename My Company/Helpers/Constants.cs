@@ -31,6 +31,8 @@ namespace My_Company.Helpers
             public const string Keywords = "keywords";
             public const string Title = "title";
             public const string CartSubtitle = "cartSubtitle";
+            public const string OrderConfirmText = "orderConfirmText";
+            public const string DataToPayment = "dataToPayment";
 
             public static class DotPayKeys
             {

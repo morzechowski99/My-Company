@@ -170,9 +170,20 @@ namespace My_Company.Areas.Shop.Controllers
             }
         }
 
-        public async Task<IActionResult> PaymentConfirm(Guid orderId)
+        public async Task<IActionResult> PaymentConfirm(Guid? orderId, Guid? control)
         {
-            return View();
+            if (orderId == null && control == null)
+                return BadRequest();
+
+            var id = orderId == null ? control.Value : orderId.Value;
+            var orderType = await repositoryWrapper.OrdersRepository.GetOrderPaymentTypeByOrderId(id);
+
+            if (orderType == null)
+                return NotFound();
+
+            ViewBag.OrderNr = id;
+
+            return View(orderType);
         }
 
         [HttpPost]

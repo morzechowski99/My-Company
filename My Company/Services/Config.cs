@@ -55,14 +55,25 @@ namespace My_Company.Services
         public async Task<int> GetShippingPrice(DeliveryType deliveryType, IConfigRepository configRepository)
         {
             var pickingMethods = await GetAvailavlePickingMethods(configRepository);
-            return pickingMethods.First(m => m.Type == deliveryType).Price;
-            
+            return pickingMethods.First(m => m.Type == deliveryType).Price;   
         }
 
         public async Task<int> GetPaymentPrice(PaymentMethodEnum paymentMethod, IConfigRepository configRepository)
         {
+
             var paymentsMethods = await GetAvailavlePaymentsMethods(configRepository);
             return paymentsMethods.First(m => m.Method == paymentMethod).Price;
+        }
+
+        public async Task<DataToPayment> GetDataToPayment(IConfigRepository configRepository)
+        {
+            return JsonSerializer.Deserialize<DataToPayment>
+                (await GetValue(ConfigKeys.DataToPayment, configRepository));
+        }
+
+        public async Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository)
+        {
+            await SetValue(ConfigKeys.DataToPayment, JsonSerializer.Serialize(dataToPayment),configRepository);
         }
     }
 }

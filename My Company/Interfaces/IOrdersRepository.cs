@@ -1,4 +1,5 @@
 ﻿using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.EnumTypes;
 using My_Company.Models;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace My_Company.Interfaces
         Task<List<Guid>> GetNumbersByQuery(string query);
         Task<Order> GetOrderById(Guid? id);
         Task<Order> GetOrderWithPayment(Guid id);
+        Task<PaymentMethodEnum?> GetOrderPaymentTypeByOrderId(Guid orderId);
     }
 }

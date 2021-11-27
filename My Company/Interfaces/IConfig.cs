@@ -13,5 +13,7 @@ namespace My_Company.Interfaces
         Task<List<PaymentMethod>> GetAvailavlePaymentsMethods(IConfigRepository configRepository);
         Task<int> GetShippingPrice(DeliveryType deliveryType, IConfigRepository configRepository);
         Task<int> GetPaymentPrice(PaymentMethodEnum paymentMethod, IConfigRepository configRepository);
+        Task<DataToPayment> GetDataToPayment(IConfigRepository configRepository);
+        Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository);
     }
 }

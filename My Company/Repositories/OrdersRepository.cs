@@ -145,5 +145,12 @@ namespace My_Company.Repositories
                   .Include(o => o.Payment)
                   .FirstOrDefaultAsync();
         }
+
+        public async Task<PaymentMethodEnum?> GetOrderPaymentTypeByOrderId(Guid orderId)
+        {
+            return await FindByCondition(o => o.Id == orderId)
+                .Select(o => o.PaymentMethod)
+                .FirstOrDefaultAsync();
+        }
     }
 }
