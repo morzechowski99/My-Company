@@ -1,0 +1,127 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Login.LoginRegisterModel
+
+@{
+    ViewData["Title"] = "Strefa klienta";
+}
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="container">
+    <ol class="breadcrumb bg-transparent justify-content-center">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Strefa klienta</li>
+    </ol>
+    <div class="text-center py-3">
+        <h6 class="display-4">Strefa klienta</h6>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 p-2">
+            <div class="p-2 bg-light">
+                <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Zaloguj się</h6>
+            </div>
+            <div class="p-3">
+                <form method="post">
+                    <h5>Masz już konto?</h5>
+                    <p class="text-muted">Zaloguj się!</p>
+                    <hr />
+                    <div class="text-danger">@ViewBag.LoginMessage</div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="text-muted text-uppercase"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="text-muted text-uppercase"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                        <a id="forgot-password" href="/Identity/Account/ForgotPassword">Zapomnialeś hasła?</a>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="RememberMe" class="text-muted text-uppercase">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-outline-dark text-uppercase" style="border-radius:1px">
+                        <i class="bi bi-box-arrow-in-right"></i>&nbsp;
+                        Zaloguj się
+                    </button>
+                    <div class="my-3">
+                        <a id="resend-confirmation" href="/Identity/Account/ResendEmailConfirmation">Wyślij ponownie link aktywacyjny</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 p-2">
+            <div class="p-2 bg-light">
+                <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Nowe konto</h6>
+            </div>
+            <div class="p-3">
+                <form method="post" asp-action="Register">
+                    <h5>Nie masz jeszcze konta?</h5>
+                    <p class="text-muted">Zarejestruj się!</p>
+                    <hr />
+                    <div class="text-danger">
+                        @if (ViewBag.RegisterMessage != null)
+                        {
+
+                            @foreach (var error in ViewBag.RegisterMessage as List<string>)
+                            {
+                                <p class="p-0">@error</p>
+                            }
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmailRegister" class="text-muted text-uppercase"></label>
+                        <input asp-for="EmailRegister" class="form-control" />
+                        <span asp-validation-for="EmailRegister" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="text-muted text-uppercase"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Surname" class="text-muted text-uppercase"></label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PasswordRegister" class="text-muted text-uppercase"></label>
+                        <input asp-for="PasswordRegister" class="form-control" />
+                        <div><span asp-validation-for="PasswordRegister" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="text-muted text-uppercase"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <div><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-outline-dark text-uppercase" style="border-radius:1px">
+                        <i class="bi bi-person"></i>&nbsp;
+                        Załóż konto
+                    </button>
+
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

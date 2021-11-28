@@ -2,9 +2,7 @@
 using My_Company.Interfaces;
 using My_Company.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Encodings.Web;
 
 namespace My_Company.Services
 {
@@ -17,7 +15,7 @@ namespace My_Company.Services
             this.emailQueue = emailQueue;
         }
 
-        public void SendOrderEmail(EmailReason reason, Order order, string email = null)
+        public void SendOrderEmail(OrderEmailReason reason, Order order, string email = null)
         {
             if (order.Email == null && email == null)
                 throw new ArgumentNullException("email", "order email is null and email is null");
@@ -27,6 +25,17 @@ namespace My_Company.Services
                 Content = reason.GetEmailContent(order),
                 Title = reason.GetEmailTitle(order),
                 To = email == null ? order.Email : email
+            });
+        }
+
+        public void SendRegistrationEmail(string email, string url)
+        {
+            emailQueue.AddEmailToQueue(new EmailQueueItem
+            {
+                Content = $"Dziękujemy za rejestrację w naszym sklepie" +
+                $"Potwierdź swoje konto klikając w <a href='{HtmlEncoder.Default.Encode(url)}'>link</a>.",
+                Title = "Potwierdzenie rejestracji",
+                To = email
             });
         }
     }

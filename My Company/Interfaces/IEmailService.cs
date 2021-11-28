@@ -5,6 +5,7 @@ namespace My_Company.Interfaces
 {
     public interface IEmailService
     {
-        void SendOrderEmail(EmailReason reason, Order order, string email = null);
+        void SendOrderEmail(OrderEmailReason reason, Order order, string email = null);
+        void SendRegistrationEmail(string email, string url);
     }
 }

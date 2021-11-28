@@ -1,0 +1,43 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Profile.ChangePersonalDataModel
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<form id="changePersonalDataForm">
+    <div class="p-2 ">
+        <div class="p-2 bg-light">
+            <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Dane osobowe</h6>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="pl-3">   
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Name" class="text-muted text-uppercase"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Surname" class="text-muted text-uppercase"></label>
+                    <input asp-for="Surname" class="form-control" />
+                    <span asp-validation-for="Surname" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="m-3 p-3 d-flex justify-content-center align-items-center">
+            <button type="submit" class="btn btn-lg btn-outline-dark text-uppercase" style="border-radius:1px">
+                <i class="bi bi-save"></i></i>&nbsp;
+                Zapisz zmiany
+            </button>
+        </div>
+    </div>
+</form>

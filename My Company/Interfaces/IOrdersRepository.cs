@@ -21,5 +21,6 @@ namespace My_Company.Interfaces
         Task<Order> GetOrderById(Guid? id);
         Task<Order> GetOrderWithPaymentAndUser(Guid id);
         Task<PaymentMethodEnum?> GetOrderPaymentTypeByOrderId(Guid orderId);
+        Task<List<Order>> GetOrdersByUserId(string userId);
     }
 }

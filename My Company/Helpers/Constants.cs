@@ -17,6 +17,7 @@ namespace My_Company.Helpers
         public static class AuthorizationPolicies
         {
             public const string WarehousePolicy = "WarehousePolicy";
+            public const string ShopAccountPolicy = "ShopAccountPolicy";
         }
 
         public const string ImagePlaceholder = "/img/photoPlaceholder.png";

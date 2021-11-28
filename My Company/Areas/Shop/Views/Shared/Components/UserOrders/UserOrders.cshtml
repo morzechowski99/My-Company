@@ -1,0 +1,42 @@
+﻿@model IEnumerable<My_Company.Areas.Shop.ViewModels.Profile.UserOrderListItemViewModel>
+
+<div class="table-responsive-md">
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-light">
+                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Id)</th>
+                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.OrderDate)</th>
+                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Total)</th>
+                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Status)</th>           
+                <th class="text-uppercase "></th>           
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th class="align-middle">
+                   
+                            @Html.DisplayFor(m => item.Id)
+
+                    </th>
+                    <td class="align-middle">
+                        @Html.DisplayFor(m => item.OrderDate)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(m => item.Total)
+                    </td> 
+                    <td class="align-middle">
+                        @Html.DisplayFor(m => item.Status)
+                    </td> 
+                    <td class="align-middle">
+                        <a class="btn btn-outline-dark" style="border-radius:1px" asp-action="OrderDetails"
+                           asp-controller="Order" asp-route-id="@item.Id">Szczegóły</a>
+                    </td>
+
+                </tr>
+            }
+           
+        </tbody>
+    </table>
+</div>

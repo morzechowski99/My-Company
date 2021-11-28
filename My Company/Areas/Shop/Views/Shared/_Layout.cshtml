@@ -26,9 +26,17 @@
                         <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index">@await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository)</a>
                         <div class="d-flex">
                             @await Component.InvokeAsync("Cart")
-                            <partial name="_LoginPartial" />
+                            <div class="pt-1" id="cartIcon">
+                                <a class="text-dark  btn-lg" asp-controller="MyAccount" asp-action="Index"><i class="bi bi-person-circle"></i></a>
+                            </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="pt-1" >
+                                    <a class="text-dark  btn-lg" asp-controller="MyAccount" asp-action="Logout" asp-route-returnUrl="@Context.Request.Path"><i class="bi bi-box-arrow-right"></i></a>
+                                </div>
+                            }
                         </div>
-                    </div>
+                        </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

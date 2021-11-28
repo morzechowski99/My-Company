@@ -162,7 +162,7 @@ namespace My_Company.Areas.Shop.Controllers
             Response.Cookies.Delete(CART_COOKIE);
             await tr.CommitAsync();
 
-            emailService.SendOrderEmail(EmailReason.NewOrder, order, User.Identity.IsAuthenticated ? User.GetEmail() : null);
+            emailService.SendOrderEmail(OrderEmailReason.NewOrder, order, User.Identity.IsAuthenticated ? User.GetEmail() : null);
 
             if (callback != null)
             {
@@ -220,7 +220,7 @@ namespace My_Company.Areas.Shop.Controllers
                 order.Status = OrderStatus.Paid;
                 order.Payment.Status = EnumTypes.PaymentStatus.Completed;
                 order.Paid = true;
-                emailService.SendOrderEmail(EmailReason.ChangeOrderStatus, order, order.User?.Email );
+                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, order.User?.Email );
             }
             else if (dotpayResponse.Operation_status == "rejected")
             {

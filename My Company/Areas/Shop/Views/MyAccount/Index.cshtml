@@ -1,0 +1,75 @@
+﻿@model My_Company.Areas.Shop.ViewModels.Profile.UserViewModel
+
+@{
+    ViewData["Title"] = "Twoje konto";
+}
+
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<ol class="breadcrumb bg-transparent justify-content-center">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Twoje konto</li>
+</ol>
+<div class="text-center py-3">
+    <h6 class="display-4">Twoje konto</h6>
+</div>
+<div class="row">
+    <div class="col-12 col-md-9">
+
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
+                @await Component.InvokeAsync("UserOrders")
+            </div>
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <div id="changePasswordDiv">
+                    @await Component.InvokeAsync("ChangePasswordForm")
+                </div>
+                <div id="changePersonalDataDiv">
+                    @await Component.InvokeAsync("ChangePersonalDataForm", new My_Company.Areas.Shop.ViewModels.Profile.ChangePersonalDataModel { Name = Model.Name, Surname = Model.Surname })
+                </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-addresses" role="tabpanel" aria-labelledby="v-pills-addresses-tab">
+                @await Component.InvokeAsync("UserAddressesModify")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+        <div class="m-2">
+            <div class="m-0 p-3 bg-light text-center">
+                <h4 class="font-weight-bolder">@Model.Name @Model.Surname</h4>
+                <h6 class="text-muted">@Model.Email</h6>
+            </div>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-orders" role="tab" aria-controls="v-pills-orders" aria-selected="true"><i class="bi bi-bag"></i> Zamówienia</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><i class="bi bi-person-circle"></i> Profil</a>
+                <a class="nav-link" id="v-pills-addresses-tab" data-toggle="pill" href="#v-pills-addresses" role="tab" aria-controls="v-pills-addresses" aria-selected="false"><i class="bi bi-geo-alt"></i> Adresy</a>
+                <a class="nav-link" asp-action="Logout" asp-controller="MyAccount"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spinner spinner-border spinnerHidden text-secondary"></div>
+<style>
+    .nav-pills > .nav-link {
+        color: var(--dark);
+        border-radius: 1px !important;
+    }
+
+        .nav-pills > .nav-link.active {
+            background-color: var(--secondary) !important;
+        }
+</style>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Shop/MyAccount/Index/Index.js"></script>
+}

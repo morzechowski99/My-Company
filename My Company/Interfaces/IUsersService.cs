@@ -1,6 +1,8 @@
-﻿using My_Company.Areas.Warehouse.ViewModels;
+﻿using Microsoft.AspNetCore.Identity;
+using My_Company.Areas.Shop.ViewModels.Login;
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Models;
-using System;
+using My_Company.Models.AccountModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +19,12 @@ namespace My_Company.Interfaces
         Task LockUser(AppUser user);
         Task UnlockUser(AppUser user);
         Task<AppUser> GetUserWithRolesById(string id);
-        Task EditUser(AppUser editedUser, string role,string prevName, string prevSurname);
+        Task EditUser(AppUser editedUser, string role, string prevName, string prevSurname);
         Task<bool> CheckEmail(string email);
+        Task<IdentityResult> CreateShopUser(RegisterModel user);
+        Task<VerifyUserData> GenerateEmailConfirmationData(string emailRegister);
+        Task<bool> ConfirmEmail(string userId, string code);
+        Task<IdentityResult> ChangePassword(AppUser user, string oldPassword, string newPassword);
+        Task UpdateUser(AppUser user);
     }
 }

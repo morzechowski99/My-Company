@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using My_Company.Areas.Shop.ViewModels.Cart;
+using My_Company.Areas.Shop.ViewModels.Login;
 using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.Areas.Shop.ViewModels.Products;
+using My_Company.Areas.Shop.ViewModels.Profile;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
 using My_Company.Extensions;
@@ -216,7 +218,18 @@ namespace My_Company.AutoMapper
             CreateMap<NewOrderModel, Order>()
                 .ForMember(x => x.Address, opt => opt.MapFrom(y => y.ShippingAddress));
 
-            CreateMap<AddressModel, Address>();
+            CreateMap<AddressModel, Address>()
+                .ReverseMap();
+
+            //login register
+            CreateMap<LoginModel, LoginRegisterModel>();
+            CreateMap<RegisterModel, LoginRegisterModel>();
+
+            //profile
+            CreateMap<AppUser, UserViewModel>();
+            CreateMap<Order, UserOrderListItemViewModel>()
+                .ForMember(x => x.Status, opt => opt.MapFrom(y => Dictionaries.OrderStatusesDictionary.Dictionary[y.Status]))
+                .ForMember(x => x.Total, opt => opt.MapFrom(y => Helpers.OrderHelpers.GetOrderAmmount(y)));
 
         }
     }

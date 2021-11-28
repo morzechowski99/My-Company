@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using My_Company.Areas.Shop.ViewModels.Login;
+using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Models.AccountModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using My_Company.Areas.Warehouse.EnumTypes;
 
 namespace My_Company.Services
 {
@@ -129,23 +132,23 @@ namespace My_Company.Services
             switch (filters.SortOrder)
             {
                 case EmployeeListSortOrderEnum.NameAndSurnameASC:
-                    employees = employees.OrderBy(emp => emp.Surname).ThenBy(emp => emp.Name);
-                    break;
+                employees = employees.OrderBy(emp => emp.Surname).ThenBy(emp => emp.Name);
+                break;
                 case EmployeeListSortOrderEnum.NameAndSurnameDESC:
-                    employees = employees.OrderByDescending(emp => emp.Surname).ThenBy(emp => emp.Name);
-                    break;
+                employees = employees.OrderByDescending(emp => emp.Surname).ThenBy(emp => emp.Name);
+                break;
                 case EmployeeListSortOrderEnum.EmailASC:
-                    employees = employees.OrderBy(emp => emp.Email);
-                    break;
+                employees = employees.OrderBy(emp => emp.Email);
+                break;
                 case EmployeeListSortOrderEnum.EmailDESC:
-                    employees = employees.OrderByDescending(emp => emp.Email);
-                    break;
+                employees = employees.OrderByDescending(emp => emp.Email);
+                break;
                 case EmployeeListSortOrderEnum.UserNameASC:
-                    employees = employees.OrderBy(emp => emp.UserName);
-                    break;
+                employees = employees.OrderBy(emp => emp.UserName);
+                break;
                 case EmployeeListSortOrderEnum.UserNameDESC:
-                    employees = employees.OrderByDescending(emp => emp.UserName);
-                    break;
+                employees = employees.OrderByDescending(emp => emp.UserName);
+                break;
 
             }
 
@@ -169,7 +172,7 @@ namespace My_Company.Services
         {
             await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(1000));
         }
-        
+
         public async Task UnlockUser(AppUser user)
         {
             await _userManager.SetLockoutEndDateAsync(user, null);
@@ -188,7 +191,7 @@ namespace My_Company.Services
             editedUser.Name = editedUser.Name.Trim();
             editedUser.Surname = editedUser.Surname.Trim();
 
-            if(editedUser.Name != prevName || editedUser.Surname != prevName)
+            if (editedUser.Name != prevName || editedUser.Surname != prevName)
                 editedUser.UserName = await getUserName(editedUser);
 
             IdentityResult checkUser = await _userManager.UpdateAsync(editedUser);
@@ -208,6 +211,53 @@ namespace My_Company.Services
         public async Task<bool> CheckEmail(string email)
         {
             return await _userManager.Users.AnyAsync(user => user.Email == email);
+        }
+
+        public async Task<IdentityResult> CreateShopUser(RegisterModel user)
+        {
+
+            var newUser = new AppUser
+            {
+                UserName = user.EmailRegister,
+                Email = user.EmailRegister,
+                Name = user.Name,
+                Surname = user.Surname
+            };
+            var result = await _userManager.CreateAsync(newUser, user.PasswordRegister);
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(newUser, Constants.Roles.ShopUser);
+            return result;
+        }
+
+        public async Task<VerifyUserData> GenerateEmailConfirmationData(string emailRegister)
+        {
+            var user = await _userManager.FindByEmailAsync(emailRegister);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            return new VerifyUserData(user.Id, code);
+        }
+
+        public async Task<bool> ConfirmEmail(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return result.Succeeded ? true : false;
+        }
+
+        public async Task<IdentityResult> ChangePassword(AppUser user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
+        public async Task UpdateUser(AppUser user)
+        {
+            _repositoryWrapper.UserRepository.Update(user);
+            await _repositoryWrapper.Save();
         }
     }
 }

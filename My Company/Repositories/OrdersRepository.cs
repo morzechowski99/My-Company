@@ -153,5 +153,13 @@ namespace My_Company.Repositories
                 .Select(o => o.PaymentMethod)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<List<Order>> GetOrdersByUserId(string userId)
+        {
+            if (userId == null)
+                return null;
+
+            return await FindByCondition(o => o.UserId == userId).ToListAsync();
+        }
     }
 }

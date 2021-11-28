@@ -3,6 +3,7 @@ using Hangfire.Dashboard;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,10 +51,13 @@ namespace My_Company
             })
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddAuthorization(opt =>
             {
                 opt.AddPolicy(Constants.AuthorizationPolicies.WarehousePolicy,
                     o => o.RequireRole(new string[] { Constants.Roles.MainAdministrator, Constants.Roles.WarehouseEmployee }));
+                opt.AddPolicy(Constants.AuthorizationPolicies.ShopAccountPolicy,
+                    o => o.RequireRole(new string[] { Constants.Roles.MainAdministrator, Constants.Roles.ShopUser }));
             });
 
             services.AddScoped<IEmailSender, EmailSender>();
@@ -126,6 +130,10 @@ namespace My_Company
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
