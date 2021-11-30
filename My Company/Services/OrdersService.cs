@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Shop.ViewModels.Cart;
 using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.EnumTypes;
@@ -6,7 +7,6 @@ using My_Company.Extensions;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.Services.DeliveryService;
-using My_Company.Services.PaymentService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +19,14 @@ namespace My_Company.Services
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
         private readonly IConfig config;
+        private readonly IParcelLockersService parcelLockersService;
 
-        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IConfig config)
+        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IConfig config,IParcelLockersService parcelLockersService)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
             this.config = config;
+            this.parcelLockersService = parcelLockersService;
         }
 
         public async Task<Order> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId)
@@ -45,7 +47,10 @@ namespace My_Company.Services
                         repositoryWrapper.AddressesRepository.Update(order.Address);
                         order.Address = null;
                     }
-                    else order.Address.UserId = userId;
+                    else
+                    {
+                        order.Address.UserId = userId;
+                    }
                 }
                 #endregion
                 order.OrderDate = DateTime.Now;
@@ -105,6 +110,31 @@ namespace My_Company.Services
             IDeliveryService deliveryService = order.DeliveryType.GetService();
 
             return deliveryService.GetDelivery(order);
+        }
+
+        public async Task<OrderDefailsViewModel> GetOrderByIdAndUser(Guid orderId, string userId)
+        {
+            var order = await repositoryWrapper.OrdersRepository
+                .FindByCondition(o => o.Id == orderId && o.UserId == userId)
+                .Include(o => o.ProductOrders)
+                .ThenInclude(o => o.Product)
+                .ThenInclude(p => p.Photos.Where(ph => ph.IsListPhoto))
+                .Include(o => o.Delivery)
+                .Include(o => o.Payment)
+                .Include(o => o.Address)
+                .FirstOrDefaultAsync();
+
+            if (order == null)
+                return null;
+
+            var orderModel = mapper.Map<OrderDefailsViewModel>(order);
+            orderModel.Products.ForEach(p => p.Price = p.OneItemPrice * p.Quantity);
+            if(order.DeliveryType == DeliveryType.PaczkomatyInPost)
+            {
+                orderModel.Delivery.ParcelLockerInfo = await parcelLockersService.GetParcelLockerInfo((order.Delivery as InPostDelivery).PackLockerName);
+            }
+
+            return orderModel;
         }
     }
 }

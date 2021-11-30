@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class=" row">
                     <div class="col-12 d-flex justify-content-between">
-                        <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index">@await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository)</a>
+                        <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index"><img height="30" src="~/Content/staticContent/logo.png" alt="logo"/></a>
                         <div class="d-flex">
                             @await Component.InvokeAsync("Cart")
                             <div class="pt-1" id="cartIcon">

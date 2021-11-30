@@ -231,6 +231,27 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Status, opt => opt.MapFrom(y => Dictionaries.OrderStatusesDictionary.Dictionary[y.Status]))
                 .ForMember(x => x.Total, opt => opt.MapFrom(y => Helpers.OrderHelpers.GetOrderAmmount(y)));
 
+            //orderderails
+            CreateMap<Order, OrderDefailsViewModel>()
+                .ForMember(x => x.Status, opt => opt.MapFrom(y => Dictionaries.OrderStatusesDictionary.Dictionary[y.Status]))
+                .ForMember(x => x.Total, opt => opt.MapFrom(y => Helpers.OrderHelpers.GetOrderAmmount(y)))
+                .ForMember(x => x.DeliveryTypeString, opt => opt.MapFrom(y => Dictionaries.DeliveryTypesDictionary.Dictionary[y.DeliveryType]))
+                .ForMember(x => x.PaymentMethodString, opt => opt.MapFrom(y => Dictionaries.PaymentMethodDictionary.PaymentDictionary[y.PaymentMethod]))
+                .ForMember(x => x.PaymentPrice, opt => opt.MapFrom(y => Math.Round(y.PaymentPrice / 100.0M, 2)))
+                .ForMember(x => x.DeliveryPrice, opt => opt.MapFrom(y => Math.Round(y.DeliveryPrice / 100.0M, 2)))
+                .ForMember(x => x.Products, opt => opt.MapFrom(y =>y.ProductOrders));
+
+            CreateMap<ProductOrder, OrderItem>()
+                .ForMember(x => x.OneItemPrice, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.ProductPrice, y.ProductVatRate)))
+                .ForMember(x => x.Photo, opt => opt.MapFrom(y => y.Product.Photos.FirstOrDefault()))
+                .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Product.Name))
+                .ForMember(x => x.Quantity, opt => opt.MapFrom(y => y.Count));
+
+            CreateMap<OrderDelivery, OrderDeliveryViewModel>()
+                .IncludeAllDerived();
+            CreateMap<PersonalPickup, OrderDeliveryViewModel>();
+            CreateMap<InPostDelivery, OrderDeliveryViewModel>();
+
         }
     }
 }

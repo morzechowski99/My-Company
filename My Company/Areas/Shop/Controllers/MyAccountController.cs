@@ -11,9 +11,7 @@ using My_Company.Interfaces;
 using My_Company.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace My_Company.Areas.Shop.Controllers
@@ -27,14 +25,17 @@ namespace My_Company.Areas.Shop.Controllers
         private readonly IMapper mapper;
         private readonly IEmailService emailService;
         private readonly IRepositoryWrapper repositoryWrapper;
+        private readonly IOrdersService ordersService;
 
-        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService, IRepositoryWrapper repositoryWrapper)
+        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService,
+            IRepositoryWrapper repositoryWrapper, IOrdersService ordersService)
         {
             _signInManager = signInManager;
             this.usersService = usersService;
             this.mapper = mapper;
             this.emailService = emailService;
             this.repositoryWrapper = repositoryWrapper;
+            this.ordersService = ordersService;
         }
 
         public async Task<IActionResult> Index()
@@ -89,7 +90,7 @@ namespace My_Company.Areas.Shop.Controllers
                     var callbackUrl = Url.Action(
                         "ConfirmEmail",
                         "MyAccount",
-                        values: new { area = "Shop", userId = verifyData.UserId, code = code},
+                        values: new { area = "Shop", userId = verifyData.UserId, code = code },
                         protocol: Request.Scheme);
 
                     emailService.SendRegistrationEmail(registerModel.EmailRegister, callbackUrl);
@@ -105,13 +106,13 @@ namespace My_Company.Areas.Shop.Controllers
                     {
                         (ViewBag.RegisterMessage as List<string>).Add(error.Description);
                     }
-                    return View("Login",mapper.Map<LoginRegisterModel>(registerModel));
+                    return View("Login", mapper.Map<LoginRegisterModel>(registerModel));
                 }
-               
+
             }
-            return View("Login",mapper.Map<LoginRegisterModel>(registerModel));
+            return View("Login", mapper.Map<LoginRegisterModel>(registerModel));
         }
-        
+
         public async Task<IActionResult> Logout(string returnUrl)
         {
             await _signInManager.SignOutAsync();
@@ -139,9 +140,9 @@ namespace My_Company.Areas.Shop.Controllers
             else
             {
                 TempData["message"] = "Podczas potwierdzenia maila wystąpił błąd";
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
-            
+
         }
 
         [HttpPost]
@@ -170,7 +171,7 @@ namespace My_Company.Areas.Shop.Controllers
             TempData["message"] = "Hasło zmienione pomyślnie";
             return ViewComponent("ChangePasswordForm", new ChangePasswordModel());
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> ChangePersonalData(ChangePersonalDataModel model)
         {
@@ -187,11 +188,11 @@ namespace My_Company.Areas.Shop.Controllers
             user.Surname = model.Surname;
 
             await usersService.UpdateUser(user);
-       
+
             TempData["message"] = "Zapisano pomyślnie";
             return ViewComponent("ChangePersonalDataForm", model);
         }
-        
+
         [HttpDelete]
         public async Task<IActionResult> DeleteAddress(int? id)
         {
@@ -208,6 +209,15 @@ namespace My_Company.Areas.Shop.Controllers
             return Ok();
         }
 
+        public async Task<IActionResult> OrderDetails(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var orderModel = await ordersService.GetOrderByIdAndUser(id.Value,User.GetId());
+
+            return View(orderModel);
+        }
 
     }
 }
