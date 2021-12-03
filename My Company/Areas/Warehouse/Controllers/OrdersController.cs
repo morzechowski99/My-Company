@@ -8,6 +8,7 @@ using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Services.DocumentGeneratorService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,14 @@ namespace My_Company.Areas.Warehouse.Controllers
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
         private readonly IEmailService emailService;
+        private readonly IDocumentGenerator documentGenerator;
 
-        public OrdersController(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmailService emailService)
+        public OrdersController(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmailService emailService, IDocumentGenerator documentGenerator)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
             this.emailService = emailService;
+            this.documentGenerator = documentGenerator;
         }
 
         public async Task<IActionResult> Index()
@@ -404,6 +407,19 @@ namespace My_Company.Areas.Warehouse.Controllers
             TempData["success"] = $"Zamówienie {id.Value} spakowane pomyślnie";
             await SendEmail(order);
             return RedirectToAction(nameof(OrdersToPacking));
+        }
+
+
+        [HttpGet]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
+        public async Task<IActionResult> GetPdf(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToInvoiceById(id);
+
+            return File(await documentGenerator.GetInvoice(order), "application/pdf", "faktura.pdf");
         }
     }
 

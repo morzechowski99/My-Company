@@ -10,6 +10,7 @@ using My_Company.Extensions;
 using My_Company.Helpers;
 using My_Company.Models;
 using My_Company.Models.DBViews;
+using My_Company.Services.DocumentGeneratorService.Models;
 using My_Company.ViewModels;
 using System;
 using System.Linq;
@@ -260,6 +261,11 @@ namespace My_Company.AutoMapper
                 .IncludeAllDerived();
             CreateMap<PersonalPickup, OrderDeliveryViewModel>();
             CreateMap<InPostDelivery, OrderDeliveryViewModel>();
+            CreateMap<Address, AddressData>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(y => $"{y.FirstName} {y.LastName}"))
+                .ForMember(x => x.NIP, opt => opt.MapFrom(y => ""))
+                .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
+                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.ZipCode} {y.City}"));
 
         }
     }

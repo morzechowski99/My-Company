@@ -19,6 +19,7 @@ using My_Company.Models;
 using My_Company.Models.AppSettings;
 using My_Company.Repositories;
 using My_Company.Services;
+using My_Company.Services.DocumentGeneratorService;
 using My_Company.Validation;
 using System;
 
@@ -86,6 +87,8 @@ namespace My_Company
             services.AddTransient<IEmailSenderJob, EmailSenderJob>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IDocumentGenerator, DocumentGenerator>();
+            services.AddTransient<IDocumentBuilder, DocumentBuilder>();
 
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
 

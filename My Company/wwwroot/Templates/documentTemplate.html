@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+</head>
+<body>
+    <div style="display:flex; align-items:center;margin-top:50px">
+        <div style="flex-grow: 1; text-align: center; margin: 20px;">
+            <h2>{CompanyName}</h2>
+        </div>
+        <div style="flex-grow:1; margin:20px;">
+            <div class="header">Miejsce wystawienia</div>
+            <div class="content">{PlaceOfCreation}</div>
+            <div class="header">Data wystawienia</div>
+            <div class="content">{DateOfCreation}</div>
+        </div>
+    </div>
+    <div style="display:flex; align-items:center;margin-top:50px">
+        <div style="flex-grow:1; margin:20px;">
+            <div class="header">Sprzedawca</div>
+            <div>{SellerData}</div>
+        </div>
+        <div style="flex-grow:1; margin:20px;">
+            <div class="header">Nabywca</div>
+            <div>{BuyerData}</div>
+        </div>
+    </div>
+    <div style="text-align:center;margin:15px">
+        <h1>{DocumentNumber}</h1>
+    </div>
+    <div>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    {tableHeader}
+                </tr>
+            </thead>
+            <tbody>
+                {tableRows}
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top: 30px; display: flex; align-items: start">
+        <div style="flex-grow:1; margin:20px;">
+            {AdditionalInfo}
+        </div>
+        <div style="flex-grow:1; margin:20px;">
+            {Summary}
+        </div>
+    </div>
+    <div style="margin-top: 50px; display: flex; align-items: start">
+        <div style="flex-grow:1; margin:20px; text-align:center">
+            <span style="font-size:10px; font-style:italic">Wystawiający</span>
+        </div>
+        <div style="flex-grow:1; margin:20px; text-align:center">
+            <span style="font-size:10px; font-style:italic">Odbierający</span>
+        </div>
+        
+    </div>
+
+    <style>
+        .header {
+            background-color: darkgray;
+            border-top: 2px solid black;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .content {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .m0 {
+            margin: 0!important;
+        }
+
+        .p0 {
+            padding: 0 !important;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding:5px;
+            text-align:center
+        }
+    </style>
+</body>
+
+</html>

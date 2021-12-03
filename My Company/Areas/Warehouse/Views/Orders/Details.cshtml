@@ -87,7 +87,11 @@
     </div>
 </div>
 
-<a class="btn btn-outline-primary" asp-action="OrdersList">Powrót</a>
+<div class="d-flex justify-content-between">
+    <a class="btn btn-outline-primary" asp-action="OrdersList">Powrót</a>
+    <a class="btn btn-outline-success" asp-action="GetPdf" target="_blank" asp-route-id="@Model.Id">Pobierz fakturę</a>
+</div>
+
 
 <style>
     .carousel-control-prev-icon {

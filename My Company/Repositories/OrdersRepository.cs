@@ -137,6 +137,15 @@ namespace My_Company.Repositories
                 .Include(o => o.Address)
                 .FirstOrDefaultAsync();
         }
+        
+        public async Task<Order> GetOrderToInvoiceById(Guid? id)
+        {
+            return await FindByCondition(o => o.Id == id)
+                .Include(o => o.ProductOrders)
+                .ThenInclude(o => o.Product)
+                .Include(o => o.Address)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<Order> GetOrderWithPaymentAndUser(Guid id)
         {
@@ -188,6 +197,14 @@ namespace My_Company.Repositories
                .ThenInclude(pr => pr.Photos.Where(ph => ph.IsListPhoto))
                .Include(o => o.Packing)
                .FirstOrDefaultAsync();
+        }
+
+        public async Task<string> GetOrderNumber()
+        {
+            var now = DateTime.Now;
+            var count = await FindByCondition(o => o.OrderDate.Year == now.Year && o.OrderDate.Month == now.Month).CountAsync();
+            string number = ("0000" + (count + 1))[^4..];
+            return $"FV {number}/{now.Month}/{now.Year}";
         }
     }
 }
