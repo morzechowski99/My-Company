@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
+using static My_Company.Helpers.Constants;
 
 namespace My_Company.Services
 {
@@ -19,6 +20,14 @@ namespace My_Company.Services
         {
             baseUrl = Path.Combine(environment.WebRootPath, "Content");
             rootUrl = environment.WebRootPath;
+        }
+
+        public async Task<string> ChangeShopLogo(IFormFile logo)
+        {
+            string filePath = Path.Join(baseUrl, @$"\staticContent\{logo.FileName}");
+            using FileStream stream = new FileStream(filePath, FileMode.Create);
+            await logo.CopyToAsync(stream);
+            return $@"\Content\staticContent\{logo.FileName}";
         }
 
         public void DeletePhoto(string path)

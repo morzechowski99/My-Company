@@ -16,5 +16,6 @@ namespace My_Company.Areas.Warehouse.ViewModels
         public bool? PickingStarted { get; set; }
         [Display(Name ="Status")]
         public string Status { get; set; }
+        public bool? PackingStarted { get; set; }
     }
 }

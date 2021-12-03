@@ -1,6 +1,7 @@
 ﻿using My_Company.EnumTypes;
 using My_Company.Interfaces;
 using My_Company.Models.Configuration;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -42,14 +43,14 @@ namespace My_Company.Services
         {
             if (configDictionary == null)
                 await Setup(configRepository);
-            return JsonSerializer.Deserialize<List<PickingMethod>>(configDictionary[AVAILABLE_PICKING_METHODS]);
+            return JsonConvert.DeserializeObject<List<PickingMethod>>(configDictionary[AVAILABLE_PICKING_METHODS]);
         }
 
         public async Task<List<PaymentMethod>> GetAvailavlePaymentsMethods(IConfigRepository configRepository)
         {
             if (configDictionary == null)
                 await Setup(configRepository);
-            return JsonSerializer.Deserialize<List<PaymentMethod>>(configDictionary[AVAILABLE_PAYMENT_METHODS]);
+            return JsonConvert.DeserializeObject<List<PaymentMethod>>(configDictionary[AVAILABLE_PAYMENT_METHODS]);
         }
 
         public async Task<int> GetShippingPrice(DeliveryType deliveryType, IConfigRepository configRepository)
@@ -67,13 +68,45 @@ namespace My_Company.Services
 
         public async Task<DataToPayment> GetDataToPayment(IConfigRepository configRepository)
         {
-            return JsonSerializer.Deserialize<DataToPayment>
+            return JsonConvert.DeserializeObject<DataToPayment>
                 (await GetValue(ConfigKeys.DataToPayment, configRepository));
         }
 
         public async Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository)
         {
-            await SetValue(ConfigKeys.DataToPayment, JsonSerializer.Serialize(dataToPayment),configRepository);
+            await SetValue(ConfigKeys.DataToPayment, JsonConvert.SerializeObject(dataToPayment),configRepository);
+        }
+
+        public async Task<bool> IsShopEnabled(IConfigRepository configRepository)
+        {
+            return JsonConvert.DeserializeObject<bool>
+                (await GetValue(ConfigKeys.IsShopEnabled, configRepository));
+        }
+
+        public async Task SetIsShopEnabled(bool enabled, IConfigRepository configRepository)
+        {
+            await SetValue(ConfigKeys.IsShopEnabled, JsonConvert.SerializeObject(enabled), configRepository);
+        }
+
+        public async Task SetPaymentsMethods(List<PaymentMethod> newPaymentsMethods, IConfigRepository configRepository)
+        {
+            await SetValue(AVAILABLE_PAYMENT_METHODS, JsonConvert.SerializeObject(newPaymentsMethods), configRepository);
+        }
+
+        public async Task SetPersonalPickupAddress(PersonalPickupAddress addess, IConfigRepository configRepository)
+        {
+            await SetValue(ConfigKeys.PersonalPickupAddress, JsonConvert.SerializeObject(addess), configRepository);
+        }
+
+        public async Task<PersonalPickupAddress> GetPersonalPickupAddress(IConfigRepository configRepository)
+        {
+            return JsonConvert.DeserializeObject<PersonalPickupAddress>
+                (await GetValue(ConfigKeys.PersonalPickupAddress, configRepository));
+        }
+
+        public async Task SetPickingMethods(List<PickingMethod> newPickingMethods, IConfigRepository configRepository)
+        {
+            await SetValue(AVAILABLE_PICKING_METHODS, JsonConvert.SerializeObject(newPickingMethods), configRepository);
         }
     }
 }

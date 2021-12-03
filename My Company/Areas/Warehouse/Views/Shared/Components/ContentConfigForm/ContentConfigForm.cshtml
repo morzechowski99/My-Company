@@ -1,0 +1,20 @@
+﻿@model List<My_Company.Areas.Warehouse.ViewModels.ConfigValue>
+@using static My_Company.Dictionaries.ConfigKeysDictrionary;
+<form id="contentForm">
+    <div class="row my-2">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model[i].Key" />
+                    <label class="control-label">@ConfigDictionary[Model[i].Key]</label>
+                    <textarea rows="5" class="form-control w-75" asp-for="@Model[i].Value" ></textarea>
+                    <span asp-validation-for="@Model[i].Value" class="text-danger"></span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="justify-content-end d-flex">
+        <button class="btn btn-success" type="submit">Zapisz</button>
+    </div>
+</form>

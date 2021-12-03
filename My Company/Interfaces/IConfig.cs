@@ -15,5 +15,11 @@ namespace My_Company.Interfaces
         Task<int> GetPaymentPrice(PaymentMethodEnum paymentMethod, IConfigRepository configRepository);
         Task<DataToPayment> GetDataToPayment(IConfigRepository configRepository);
         Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository);
+        Task<bool> IsShopEnabled(IConfigRepository configRepository);
+        Task SetIsShopEnabled(bool enabled,IConfigRepository configRepository);
+        Task SetPaymentsMethods(List<PaymentMethod> newPaymentsMethods, IConfigRepository configRepository); 
+        Task SetPersonalPickupAddress(PersonalPickupAddress addess,IConfigRepository configRepository);
+        Task<PersonalPickupAddress> GetPersonalPickupAddress(IConfigRepository configRepository);
+        Task SetPickingMethods(List<PickingMethod> newPickingMethods, IConfigRepository configRepository);
     }
 }

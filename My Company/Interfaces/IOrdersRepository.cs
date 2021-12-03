@@ -22,5 +22,8 @@ namespace My_Company.Interfaces
         Task<Order> GetOrderWithPaymentAndUser(Guid id);
         Task<PaymentMethodEnum?> GetOrderPaymentTypeByOrderId(Guid orderId);
         Task<List<Order>> GetOrdersByUserId(string userId);
+        Task<Order> CheckUserHasNotEndedPacking(string userId);
+        Task<List<Order>> GetOrdersToPacking();
+        Task<Order> GetOrderToPackingById(Guid value);
     }
 }

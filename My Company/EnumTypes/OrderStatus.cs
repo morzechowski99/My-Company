@@ -5,6 +5,7 @@
         New,
         Paid,
         Completed,
-        Send
+        Send,
+        Ready
     }
 }

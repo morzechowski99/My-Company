@@ -159,7 +159,35 @@ namespace My_Company.Repositories
             if (userId == null)
                 return null;
 
-            return await FindByCondition(o => o.UserId == userId).ToListAsync();
+            return await FindByCondition(o => o.UserId == userId).Include(o => o.ProductOrders).ToListAsync();
+        }
+
+        public async Task<Order> CheckUserHasNotEndedPacking(string userId)
+        {
+            return await FindByCondition(o => o.Status == OrderStatus.Completed
+           && o.Packing != null
+           && o.Packing.UserId == userId
+           && o.Packing.PackingEnd == null)
+           .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Order>> GetOrdersToPacking()
+        {
+            return await FindByCondition(o => o.Status == OrderStatus.Completed && o.Packing == null)
+                .OrderBy(o => o.OrderDate)
+                .Take(50)
+                .ToListAsync();
+        }
+
+        public async Task<Order> GetOrderToPackingById(Guid id)
+        {
+            return await FindByCondition(o => o.Id == id
+               && o.Status == OrderStatus.Completed)
+               .Include(o => o.ProductOrders)
+               .ThenInclude(po => po.Product)
+               .ThenInclude(pr => pr.Photos.Where(ph => ph.IsListPhoto))
+               .Include(o => o.Packing)
+               .FirstOrDefaultAsync();
         }
     }
 }

@@ -1,0 +1,74 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.PaymentMethods.PaymentMethodsFormViewModel
+@using static My_Company.Dictionaries.PaymentMethodDictionary
+@using My_Company.EnumTypes
+
+<div id="payments">
+    <form id="paymentsMethodsForm" asp-action="ChangePaymentsMethods" method="post">
+        <div class="row my-2">
+            <div class="col-md-6">
+                @{
+                    bool tradidtionalEnabled = Model.Methods.Any(m => m.Method == PaymentMethodEnum.TraditionalTransfer && m.Enabled);
+                }
+                <div class="form-check my-2">
+                    <input type="hidden" asp-for="@Model.Methods[0].Method" value="@PaymentMethodEnum.TraditionalTransfer" />
+                    <input type="checkbox" id="traditionalCheck" class="form-check-input" asp-for="Methods[0].Enabled" >
+                    <label class="form-check-label">@PaymentDictionary[PaymentMethodEnum.TraditionalTransfer]</label>
+                </div>
+                <div id="traditional-transfer-data" style="display:@(tradidtionalEnabled ? "block" : "none")">
+                    <div class="form-group">
+                        <label asp-for="@Model.Methods[0].Price"></label>
+                        <input asp-for="@Model.Methods[0].Price" class="form-control" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="traditionalCheck" />
+                        <span class="text-danger" asp-validation-for="@Model.Methods[0].Price"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DataToPayment.CompanyName"></label>
+                        <input asp-for="DataToPayment.CompanyName" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="traditionalCheck"/>
+                        <span class="text-danger" asp-validation-for="DataToPayment.CompanyName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DataToPayment.AccountNumber"></label>
+                        <input asp-for="DataToPayment.AccountNumber" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="traditionalCheck"/>
+                        <span class="text-danger" asp-validation-for="DataToPayment.AccountNumber"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DataToPayment.BankName"></label>
+                        <input asp-for="DataToPayment.BankName" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="traditionalCheck"/>
+                        <span class="text-danger" asp-validation-for="DataToPayment.BankName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @{
+                    bool dotPayEnabled = Model.Methods.Any(m => m.Method == PaymentMethodEnum.DotPay && m.Enabled);
+                }
+                <div class="form-check my-2">
+                    <input type="hidden" asp-for="@Model.Methods[1].Method" value="@PaymentMethodEnum.DotPay" />
+                    <input type="checkbox" id="dotPayCheck" class="form-check-input" asp-for="Methods[1].Enabled">
+                    <label class="form-check-label">@PaymentDictionary[PaymentMethodEnum.DotPay]</label>
+                </div>
+                <div id="dotPay-data" style="display:@(dotPayEnabled ? "block" : "none")">
+                    <div class="form-group">
+                        <label asp-for="@Model.Methods[1].Price"></label>
+                        <input asp-for="@Model.Methods[1].Price" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="dotPayCheck"/>
+                        <span class="text-danger" asp-validation-for="@Model.Methods[1].Price"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DotPayId"></label>
+                        <input asp-for="DotPayId" class="form-control" data-val-requiredifchecked="Pole wymagane" data-val="true" data-val-requiredifchecked-otherpropertyname="dotPayCheck" />
+                        <span class="text-danger" asp-validation-for="DotPayId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DotPayPin"></label>
+                        <input asp-for="DotPayPin" class="form-control" data-val-requiredifchecked="Pole wymagane" data-val="true" data-val-requiredifchecked-otherpropertyname="dotPayCheck"/>
+                        <span class="text-danger" asp-validation-for="DotPayPin"></span>
+                    </div>
+                    <p class="text-muted font-italic">W celu poprawnego działania należy wyłączyć blokowanie zewnętrznych urlc w opcjach DotPay</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="justify-content-end d-flex">
+            <button class="btn btn-success" type="submit">Zapisz</button>
+        </div>
+    </form>
+</div>

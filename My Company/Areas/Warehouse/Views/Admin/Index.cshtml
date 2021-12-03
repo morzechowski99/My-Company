@@ -1,5 +1,117 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@inject My_Company.Interfaces.IRepositoryWrapper repo;
+@inject My_Company.Interfaces.IConfig config;
+@using static My_Company.Helpers.Constants
+
 @{
+    ViewData["Title"] = "Konfiguracja";
+}
+
+@if (TempData["warning"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @TempData["warning"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="spinner spinner-border spinnerHidden text-primary"></div>
+<div>
+    <h1 class="display-4">Konfiguracja aplikacji</h1>
+
+    <ul class="nav nav-pills justify-content-center my-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Ogólne</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="content-tab" data-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="false">Zawartość</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="paymentMethods-tab" data-toggle="tab" href="#paymentMethods" role="tab" aria-controls="paymentMethods" aria-selected="false">Metody płatności</a>
+        </li>
+        <li class="nav-item" role="presentation">
+                <a class="nav-link" id="deliveryMethods-tab" data-toggle="tab" href="#deliveryMethods" role="tab" aria-controls="deliveryMethods" aria-selected="false">Sposoby dostawy</a>
+            </li>
+    </ul>
+
+
+    <div class="tab-content mb-md-5">
+        <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
+            <div>
+                <h3>Podstawowa konfiguracja</h3>
+                @await Component.InvokeAsync("BasicInfoConfigForm")
+                <hr />
+                <h4>Status sklepu</h4>
+                <div class="d-flex align-items-center">
+                    @{
+                        var shopEnabled = await config.IsShopEnabled(repo.ConfigRepository);
+                    }
+                    <div class="m3">
+                        @if (shopEnabled)
+                        {
+                            <span class=" text-success">
+                                Sklep jest włączaony
+                            </span>
+                        }
+                        else
+                        {
+                            <span class=" text-danger">
+                                Sklep jest wyłączony
+                            </span>
+                        }
+                    </div>
+                    <a class="btn m-3 @(shopEnabled ? "btn-outline-danger" : "btn-outline-success")" asp-action="ChangeShopActive" asp-area="Warehouse"
+                       asp-controller="Admin">@(shopEnabled ? "Wyłącz sklep" : "Włącz sklep")</a>
+                </div>
+                <hr />
+                <h4>Logo sklepu</h4>
+                <form id="changeLogoForm" method="post" asp-action="ChangeLogo" enctype="multipart/form-data">
+                    <div class="d-flex">
+                        <img height="50" src="@Url.Content(await config.GetValue(ConfigKeys.LogoPath,repo.ConfigRepository))" class="m-3" />
+                        <img height="50" style="display:none" id="newPhoto" class="m-3" />
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="form-group col-md-6">
+                            <input type="file" class="form-control-file" id="photoInput" data-val="true"
+                                   data-val-filesize="Maksymalny rozmiar pliku to 5 MB" data-val-filesize-size="5000000"
+                                   data-val-required="Wybierz plik" accept="image/*" name="logo" />
+                            <span class="text-danger" data-valmsg-for="logo" data-valmsg-replace="true"></span>
+                        </div>
+                        <button class="m-2 btn btn-success" type="submit">Zmień logo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="content" role="tabpanel" aria-labelledby="content-tab">
+            <div>
+                @await Component.InvokeAsync("ContentConfigForm")
+            </div>
+        </div>
+        <div class="tab-pane fade" id="paymentMethods" role="tabpanel" aria-labelledby="paymentMethods-tab">
+            <div>
+                @await Component.InvokeAsync("PaymentMethodsForm")
+            </div>
+        </div> 
+        <div class="tab-pane fade" id="deliveryMethods" role="tabpanel" aria-labelledby="deliveryMethods-tab">
+            <div>
+                @await Component.InvokeAsync("DeliveryMethodsForm")
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    img {
+        object-fit: scale-down;
+        max-width: 100%;
+    }
+</style>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/shared/Validation.js"></script>
+    <script src="~/js/Warehouse/Admin/Index/Index.js"></script>
 }

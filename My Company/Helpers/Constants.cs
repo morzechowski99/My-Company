@@ -34,6 +34,9 @@ namespace My_Company.Helpers
             public const string CartSubtitle = "cartSubtitle";
             public const string OrderConfirmText = "orderConfirmText";
             public const string DataToPayment = "dataToPayment";
+            public const string IsShopEnabled = "shopEnabled";
+            public const string LogoPath = "logoPath";
+            public const string PersonalPickupAddress = "personalPickupAddress";
 
             public static class DotPayKeys
             {

@@ -13,6 +13,7 @@ namespace My_Company.Dictionaries
             { OrderStatus.Paid, "Opłacone" },
             { OrderStatus.Completed, "Skompletowane" },
             { OrderStatus.Send, "Wysłane" },         
+            { OrderStatus.Ready, "Gotowe do odbioru" },         
         };
 
         public static Dictionary<OrderStatus, string> Dictionary { get { return orderStatusesDictionary; } }

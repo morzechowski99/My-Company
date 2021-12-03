@@ -29,7 +29,8 @@
                                     Administracja
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="administrationDropdown">
-                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twoje magazyny</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Admin" asp-action="Index">Konfiguracja</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Warehouses" asp-action="Index">Twój magazyn</a>
                                     <a class="dropdown-item" asp-area="Warehouse" asp-controller="Products" asp-action="Index">Produkty</a>
                                     <a class="dropdown-item" asp-area="Warehouse" asp-controller="Employee" asp-action="Index">Pracownicy</a>
                                     <a class="dropdown-item" asp-area="Warehouse" asp-controller="Categories" asp-action="Index">Kategorie</a>
@@ -59,6 +60,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="deliveriesDropdown">
                                     <a class="dropdown-item" asp-area="Warehouse" asp-controller="Orders" asp-action="Index">Kompletuj</a>
+                                    <a class="dropdown-item" asp-area="Warehouse" asp-controller="Orders" asp-action="OrdersToPacking">Pakowanie</a>
                                     @if (User.IsInRole(Constants.Roles.MainAdministrator))
                                     {
                                         <div class="dropdown-divider" ></div>

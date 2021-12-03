@@ -14,5 +14,6 @@ namespace My_Company.Interfaces
         Task<string> UploadFile(IFormFile file);
         string UploadFile(Bitmap image);
         void DeletePhoto(string path);
+        Task<string> ChangeShopLogo(IFormFile logo);
     }
 }

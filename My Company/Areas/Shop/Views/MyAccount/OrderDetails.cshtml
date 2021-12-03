@@ -106,6 +106,14 @@
                         <p class="p-0 m-0">@Html.DisplayFor(m => m.Delivery.ParcelLockerInfo.Address.Line1)</p>
                         <p class="p-0 m-0">@Html.DisplayFor(m => m.Delivery.ParcelLockerInfo.Address.Line2)</p>
                     }
+                    else if (Model.DeliveryType == My_Company.EnumTypes.DeliveryType.PersonalPickup)
+                    {
+                        var address = await config.GetPersonalPickupAddress(repo.ConfigRepository);
+                        <h5>Miejsce odbioru :</h5>
+                        <p class="p-0 m-0">@address.Street</p>
+                        <p class="p-0 m-0">@address.ZipCode @address.City</p>
+                        <p class="p-0 m-0">tel. @address.PhoneNumber</p>
+                    }
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">

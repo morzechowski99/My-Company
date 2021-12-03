@@ -14,6 +14,7 @@ using My_Company.Filters;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Jobs.EmialSenderJob;
+using My_Company.Middlewares;
 using My_Company.Models;
 using My_Company.Models.AppSettings;
 using My_Company.Repositories;
@@ -133,7 +134,7 @@ namespace My_Company
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseMiddleware<ShopEnabledMiddleware>();
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {

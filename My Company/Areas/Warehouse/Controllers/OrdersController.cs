@@ -22,11 +22,13 @@ namespace My_Company.Areas.Warehouse.Controllers
     {
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
+        private readonly IEmailService emailService;
 
-        public OrdersController(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public OrdersController(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmailService emailService)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
+            this.emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
@@ -257,12 +259,21 @@ namespace My_Company.Areas.Warehouse.Controllers
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
                 TempData["success"] = $"Zamówienie {orderId} skompletowane pomyślnie";
+                await SendEmail(order);
                 return Ok();
             }
             catch 
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error processing request");
             }
+        }
+
+        private async Task SendEmail(Order order)
+        {
+            string email = null;
+            if (order.UserId != null)
+                email = (await repositoryWrapper.UserRepository.GetOne(u => u.Id == order.UserId)).Email;
+            emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, email);
         }
 
         [HttpGet]
@@ -303,6 +314,96 @@ namespace My_Company.Areas.Warehouse.Controllers
             var order = await repositoryWrapper.OrdersRepository.GetOrderById(id);
 
             return View(mapper.Map<OrderDetailsViewModel>(order));
+        }
+
+        public async Task<IActionResult> OrdersToPacking()
+        {
+            var orderWithPackingInProgress = await repositoryWrapper.OrdersRepository.CheckUserHasNotEndedPacking(GetUserId());
+            if (orderWithPackingInProgress != null)
+            {
+                var list = new List<OrderListItemViewModel>() { new OrderListItemViewModel
+                {
+                    Id = orderWithPackingInProgress.Id,
+                    OrderDate=orderWithPackingInProgress.OrderDate,
+                    PackingStarted = true
+                }};
+                return View(list);
+            }
+
+            var ordersToPack = await repositoryWrapper.OrdersRepository.GetOrdersToPacking();
+            var dtos = mapper.Map<List<OrderListItemViewModel>>(ordersToPack);
+            return View(dtos);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Pack(Guid? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var userId = GetUserId();
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToPackingById(id.Value);
+            if (order == null)
+            {
+                TempData["Error"] = "Zamówienie nie istnieje, lub nie zostało jeszcze skompletowane";
+                return RedirectToAction(nameof(Index));
+            }
+            else if (order.Packing != null && order.Packing.UserId != GetUserId())
+            {
+                TempData["Error"] = "Ktoś inny pakuje już to zamówienie";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if(order.Packing == null)
+            {
+                repositoryWrapper.OrderPackingRepository.Create(new Packing { PackingStart = DateTime.Now, UserId = GetUserId(), OrderId = order.Id });
+                await repositoryWrapper.Save();
+            }
+            var orderView = mapper.Map<OrderPackingViewModel>(order);
+
+            return View(orderView);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> PackComplete(Guid? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var userId = GetUserId();
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToPackingById(id.Value);
+            if (order == null)
+            {
+                TempData["Error"] = "Zamówienie nie istnieje, lub nie zostało jeszcze skompletowane";
+                return RedirectToAction(nameof(Index));
+            }
+            else if (order.Packing != null && order.Packing.UserId != GetUserId())
+            {
+                TempData["Error"] = "Ktoś inny pakuje już to zamówienie";
+                return RedirectToAction(nameof(Index));
+            }
+            else if(order.Packing == null)
+            {
+                TempData["Error"] = "Pakowanie zamówienia nie zostało rozpoczęte";
+                return RedirectToAction(nameof(Index));
+            }
+
+            order.Packing.PackingEnd = DateTime.Now;
+            order.ProductOrders = null;
+            if (order.DeliveryType == DeliveryType.PersonalPickup)
+                order.Status = OrderStatus.Ready;
+            else
+                order.Status = OrderStatus.Send;
+
+            repositoryWrapper.OrdersRepository.Update(order);
+            await repositoryWrapper.Save();
+            TempData["success"] = $"Zamówienie {id.Value} spakowane pomyślnie";
+            await SendEmail(order);
+            return RedirectToAction(nameof(OrdersToPacking));
         }
     }
 

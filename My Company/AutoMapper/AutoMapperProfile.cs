@@ -7,6 +7,7 @@ using My_Company.Areas.Shop.ViewModels.Profile;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Dictionaries;
 using My_Company.Extensions;
+using My_Company.Helpers;
 using My_Company.Models;
 using My_Company.Models.DBViews;
 using My_Company.ViewModels;
@@ -156,6 +157,14 @@ namespace My_Company.AutoMapper
 
             //orders
             CreateMap<OrdersToComplete, OrderListItemViewModel>();
+            CreateMap<Order, OrderListItemViewModel>();
+            CreateMap<Order, OrderPackingViewModel>();
+            CreateMap<ProductOrder, ProductListItemViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(y => y.Product.Id))
+                .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Product.Name))
+                .ForMember(x => x.EANCode, opt => opt.MapFrom(y => y.Product.EANCode))
+                .ForMember(x => x.PhotoUrl, opt => opt.MapFrom(y => y.Product.Photos.Count == 0 ? Constants.ImagePlaceholder : y.Product.Photos.FirstOrDefault().Path));
+                
 
             CreateMap<Order, OrderPickingViewModel>()
                 .ForMember(x => x.Items, opt => opt.MapFrom(y => y.ProductOrders))

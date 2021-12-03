@@ -2,6 +2,8 @@
 @using static My_Company.Helpers.Constants;
 @using static My_Company.Dictionaries.DeliveryTypesDictionary;
 @using static My_Company.Dictionaries.PaymentMethodDictionary;
+@inject My_Company.Interfaces.IConfig config
+@inject My_Company.Interfaces.IRepositoryWrapper repo
 
 <div class="container">
     <h4>@Html.DisplayNameFor(m => m.Cart.Items)</h4>
@@ -96,6 +98,14 @@
                     <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Name)</p>
                     <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Address.Line1)</p>
                     <p class="p-0 m-0">@Html.DisplayFor(m => m.ParcelLocker.Address.Line2)</p>
+                }
+                else if (Model.Order.DeliveryType == My_Company.EnumTypes.DeliveryType.PersonalPickup)
+                {
+                    var address = await config.GetPersonalPickupAddress(repo.ConfigRepository);
+                    <h5 class="text-muted">Miejsce odbioru :</h5>
+                    <p class="p-0 m-0">@address.Street</p>
+                    <p class="p-0 m-0">@address.ZipCode @address.City</p>
+                    <p class="p-0 m-0">tel. @address.PhoneNumber</p>
                 }
             </div>
         </div>

@@ -32,5 +32,6 @@ namespace My_Company.Models
         public virtual Address Address { get; set; }
         public virtual OrderDelivery Delivery { get; set; }
         public virtual Payment Payment { get; set; }
+        public virtual Packing Packing { get; set; }
     }
 }

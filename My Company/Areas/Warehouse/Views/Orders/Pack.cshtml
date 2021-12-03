@@ -1,0 +1,57 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.OrderPackingViewModel
+
+@{
+    ViewData["Title"] = "Pakuj zamówienie";
+}
+
+<h6 class="display-4">Pakowanie zamówienia</h6>
+<hr />
+<div class="row my-2">
+    <div class="col-md-6 ">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    <span><small class="text-muted">@Html.DisplayNameFor(m => m.Id)</small></span>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(m => m.Id)</span>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+<hr />
+<h4>Sprawdź, czy zamówienie zawiera poniższe produkty</h4>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+            @foreach (var item in Model.ProductOrders)
+            {
+                <li class="list-group-item list-group-item-light">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-start">
+                            <img class="imageCart" src="@item.PhotoUrl"
+                                 alt="@item.Name" />
+                            <div class="pl-3">
+                                <h6>@Html.DisplayFor(m => item.Name)</h6>
+                                <h6>@Html.DisplayNameFor(m => item.EANCode): @Html.DisplayFor(m => item.EANCode)</h6>
+                                <h6 class="text-muted font-weight-lighter">@Html.DisplayNameFor(m => item.Count): @Html.DisplayFor(m => item.Count)</h6>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<div class="my-3 d-flex justify-content-end">
+    <a class="btn btn-outline-success" asp-action="PackComplete" asp-area="Warehouse" asp-controller="Orders" asp-route-id="@Model.Id">Gotowe!</a>
+</div>
+
+<style>
+    .imageCart {
+        width: 10vw;
+        height: 10vh;
+        object-fit: scale-down
+    }
+</style>

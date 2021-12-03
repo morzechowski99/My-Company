@@ -26,6 +26,7 @@ namespace My_Company.Interfaces
         IPickingItemsRepository PickingItemsRepository { get; }
         IConfigRepository ConfigRepository { get; }
         IAddressesRepository AddressesRepository { get; }
+        IOrderPackingRepository OrderPackingRepository { get; }
         Task Save();
         Task<IDbContextTransaction> BeginTransaction();
         bool EnsureCreated();

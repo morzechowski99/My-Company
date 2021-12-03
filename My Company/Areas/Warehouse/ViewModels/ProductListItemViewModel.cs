@@ -17,5 +17,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         public string SupplierData { get; set; }
         [Display(Name ="EAN")]
         public string EANCode { get; set; }
+        [Display(Name ="Ilość")]
+        public int Count { get; set; }
     }
 }

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<My_Company.Areas.Warehouse.ViewModels.OrderListItemViewModel>
+
+@{
+    ViewData["Title"] = "Zamówienia do spakowania";
+}
+
+<h1 class="display-4 mb-5">Wybierz zamówienie do spakowania</h1>
+<h6 class="text-danger">@TempData["Error"]</h6>
+<h6 class="text-success">@TempData["success"]</h6>
+<div class="table-responsive-md">
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @if (item.PackingStarted != null && item.PackingStarted.Value == true)
+                        {
+                            <a asp-action="Pack" asp-route-id="@item.Id">Kontynuuj pakowanie</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Pack" asp-route-id="@item.Id">Pakuj</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
