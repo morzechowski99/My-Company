@@ -6,22 +6,22 @@
 </head>
 <body>
     <div style="display:flex; align-items:center;margin-top:50px">
-        <div style="flex-grow: 1; text-align: center; margin: 20px;">
+        <div style="flex-grow: 1; flex-basis: 0; text-align: center; margin: 20px;">
             <h2>{CompanyName}</h2>
         </div>
-        <div style="flex-grow:1; margin:20px;">
+        <div style="flex-grow: 1; flex-basis: 0; margin:20px;">
             <div class="header">Miejsce wystawienia</div>
             <div class="content">{PlaceOfCreation}</div>
             <div class="header">Data wystawienia</div>
             <div class="content">{DateOfCreation}</div>
         </div>
     </div>
-    <div style="display:flex; align-items:center;margin-top:50px">
-        <div style="flex-grow:1; margin:20px;">
+    <div style="display:flex; align-items:center;margin-top:10px">
+        <div style="flex-grow: 1; flex-basis: 0; margin:20px;">
             <div class="header">Sprzedawca</div>
             <div>{SellerData}</div>
         </div>
-        <div style="flex-grow:1; margin:20px;">
+        <div style="flex-grow: 1; flex-basis: 0; margin:20px;">
             <div class="header">Nabywca</div>
             <div>{BuyerData}</div>
         </div>
@@ -30,7 +30,7 @@
         <h1>{DocumentNumber}</h1>
     </div>
     <div>
-        <table style="width: 100%;">
+        <table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
                     {tableHeader}
@@ -38,14 +38,15 @@
             </thead>
             <tbody>
                 {tableRows}
+                {tableRowsSummary}
             </tbody>
         </table>
     </div>
     <div style="margin-top: 30px; display: flex; align-items: start">
-        <div style="flex-grow:1; margin:20px;">
+        <div style="flex-grow:1; margin:20px; flex-basis:0">
             {AdditionalInfo}
         </div>
-        <div style="flex-grow:1; margin:20px;">
+        <div style="flex-grow: 1; margin: 20px; flex-basis: 0">        
             {Summary}
         </div>
     </div>
@@ -82,14 +83,19 @@
             padding: 0 !important;
         }
 
-        table, th, td {
+        th, td {
             border: 1px solid black;
-            border-collapse: collapse;
+      /*      border-collapse: collapse;*/
         }
 
         th, td {
             padding:5px;
             text-align:center
+        }
+
+
+        .borderNone {
+            border: none !important;
         }
     </style>
 </body>

@@ -82,7 +82,8 @@ $(function () {
             { id: 0, name: "Nowe" },
             { id: 1, name: "Opłacone" },
             { id: 2, name: "Skompletowane" },
-            { id: 3, name: "Wysłane" }
+            { id: 3, name: "Wysłane" },
+            { id: 4, name: "Do odbioru" }
         ],
         placeholder: "Status",
         create: false,

@@ -138,7 +138,7 @@ namespace My_Company.Repositories
                 .FirstOrDefaultAsync();
         }
         
-        public async Task<Order> GetOrderToInvoiceById(Guid? id)
+        public async Task<Order> GetOrderToDocumentsById(Guid? id)
         {
             return await FindByCondition(o => o.Id == id)
                 .Include(o => o.ProductOrders)
@@ -199,12 +199,20 @@ namespace My_Company.Repositories
                .FirstOrDefaultAsync();
         }
 
-        public async Task<string> GetOrderNumber()
+        public async Task<string> GetInvoiceNumber()
         {
             var now = DateTime.Now;
             var count = await FindByCondition(o => o.OrderDate.Year == now.Year && o.OrderDate.Month == now.Month).CountAsync();
             string number = ("0000" + (count + 1))[^4..];
             return $"FV {number}/{now.Month}/{now.Year}";
+        }
+
+        public async Task<string> GetWZNumber()
+        {
+            var now = DateTime.Now;
+            var count = await FindByCondition(o => o.Packing.PackingEnd.Value.Year == now.Year && o.Packing.PackingEnd.Value.Month == now.Month && o.WZNumber != null).CountAsync();
+            string number = ("0000" + (count + 1))[^4..];
+            return $"WZ {number}/{now.Month}/{now.Year}";
         }
     }
 }

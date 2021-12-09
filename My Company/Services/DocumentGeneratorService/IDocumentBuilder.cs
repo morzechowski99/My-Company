@@ -5,15 +5,18 @@ namespace My_Company.Services.DocumentGeneratorService
 {
     public interface IDocumentBuilder
     {
-        void CreateDocument();
-        void BuildCompanyName(string companyName);
-        void BuildPlaceOfCreation(string placeOfCreation);
-        void BuildDateOfCreation(string dateOfCreation);
-        void BuildSellerData(AddressData sellerData);
-        void BuildBuyerData(AddressData buyerData);
-        void BuildDocumentNumber(string documentNumber);
-        void BuildTableHeader(string[] header);
-        void BuildTableBody(List<string[]> rows);
+        IDocumentBuilder CreateDocument();
+        IDocumentBuilder BuildCompanyName(string companyName);
+        IDocumentBuilder BuildPlaceOfCreation(string placeOfCreation);
+        IDocumentBuilder BuildDateOfCreation(string dateOfCreation);
+        IDocumentBuilder BuildSellerData(AddressData sellerData);
+        IDocumentBuilder BuildBuyerData(AddressData buyerData);
+        IDocumentBuilder BuildDocumentNumber(string documentNumber);
+        IDocumentBuilder BuildTableHeader(params string[] header);
+        IDocumentBuilder BuildTableBody(List<string[]> rows);
+        IDocumentBuilder BuildAdditionalInfo (List<string> lines);
+        IDocumentBuilder BuildTableBodySummary(List<string[]> rows);
+        IDocumentBuilder BuildSummary (List<string> lines, bool empty = false);
         string GetDocument();
     }
 }

@@ -402,6 +402,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             else
                 order.Status = OrderStatus.Send;
 
+            order.WZNumber = await repositoryWrapper.OrdersRepository.GetWZNumber();
             repositoryWrapper.OrdersRepository.Update(order);
             await repositoryWrapper.Save();
             TempData["success"] = $"Zamówienie {id.Value} spakowane pomyślnie";
@@ -412,14 +413,26 @@ namespace My_Company.Areas.Warehouse.Controllers
 
         [HttpGet]
         [Authorize(Roles = Constants.Roles.MainAdministrator)]
-        public async Task<IActionResult> GetPdf(Guid? id)
+        public async Task<IActionResult> GetInvoicePdf(Guid? id)
         {
             if (id == null)
                 return BadRequest();
 
-            var order = await repositoryWrapper.OrdersRepository.GetOrderToInvoiceById(id);
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToDocumentsById(id);
 
-            return File(await documentGenerator.GetInvoice(order), "application/pdf", "faktura.pdf");
+            return File(await documentGenerator.GetInvoice(order), "application/pdf", $"faktura nr {order.InvoiceNumber}.pdf");
+        } 
+        
+        [HttpGet]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
+        public async Task<IActionResult> GetWZPdf(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToDocumentsById(id);
+
+            return File(await documentGenerator.GetWZDocument(order), "application/pdf", $"WZ nr {order.WZNumber}.pdf");
         }
     }
 

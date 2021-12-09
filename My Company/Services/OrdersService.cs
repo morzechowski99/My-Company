@@ -75,7 +75,7 @@ namespace My_Company.Services
                 order.Payment = new Payment();
                 order.DeliveryPrice = await GetDeliveryPrice(order);
                 order.PaymentPrice = await GetPaymentPrice(order);
-                order.InvoiceNumber = await repositoryWrapper.OrdersRepository.GetOrderNumber();
+                order.InvoiceNumber = await repositoryWrapper.OrdersRepository.GetInvoiceNumber();
                 repositoryWrapper.OrdersRepository.Create(order);
                 await repositoryWrapper.Save();
                 return order;

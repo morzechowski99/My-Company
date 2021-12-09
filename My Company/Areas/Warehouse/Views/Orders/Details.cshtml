@@ -33,6 +33,17 @@
                     <span>@Html.DisplayFor(m => m.Comment)</span>
                 </div>
             </div>
+            @if (Model.WZNumber != null)
+            {
+                <div class="col-12">
+                    <div>
+                        <span><small class="text-muted">@Html.DisplayNameFor(m => m.WZNumber)</small></span>
+                    </div>
+                    <div>
+                        <span>@Html.DisplayFor(m => m.WZNumber)</span> <a id="getWz" href="#" data-id="@Model.Id">Pobierz</a>
+                    </div>
+                </div>
+            }
         </div>
     </div>
     <div class="col-md-6">
@@ -44,7 +55,7 @@
                 <div>
                     <span>@Html.DisplayFor(m => m.Status)</span>
                 </div>
-            </div>  
+            </div>
             <div class="col-12">
                 <div>
                     <span><small class="text-muted">@Html.DisplayNameFor(m => m.Address)</small></span>
@@ -89,7 +100,7 @@
 
 <div class="d-flex justify-content-between">
     <a class="btn btn-outline-primary" asp-action="OrdersList">Powrót</a>
-    <a class="btn btn-outline-success" asp-action="GetPdf" target="_blank" asp-route-id="@Model.Id">Pobierz fakturę</a>
+    <a class="btn btn-outline-success" id="getInvoice" href="#" data-id="@Model.Id">Pobierz fakturę</a>
 </div>
 
 
@@ -102,3 +113,6 @@
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
     }
 </style>
+@section Scripts {
+    <script src="~/js/Warehouse/Orders/Details/Details.js"></script>
+}

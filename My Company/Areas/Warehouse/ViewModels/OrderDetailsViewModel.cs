@@ -22,6 +22,8 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Kompletował")]
         public string PickingUser { get; set; }
         [Display(Name = "Adres wysyłki")]
-        public string Address { get; set; }
+        public string Address { get; set; } 
+        [Display(Name = "Numer WZ")]
+        public string WZNumber { get; set; }
     }
 }

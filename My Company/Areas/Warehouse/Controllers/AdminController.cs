@@ -8,6 +8,7 @@ using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models.Configuration;
+using My_Company.Services.DocumentGeneratorService.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -154,6 +155,18 @@ namespace My_Company.Areas.Warehouse.Controllers
             await config.SetPickingMethods(newPickingMethods, repositoryWrapper.ConfigRepository);
 
             return RedirectToAction(nameof(Index));
+
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ChangeDocumentAddressData(AddressData newAddress)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            await config.SetDocumentAddress(newAddress, repositoryWrapper.ConfigRepository);
+
+            return Ok();
 
         }
 

@@ -49,6 +49,23 @@ $(function () {
             })
     })
 
+    $('#addressForm').submit(function (e) {
+        e.preventDefault()
+        if (!$("#addressForm").validate().form()) return;
+        $('.spinner').removeClass("spinnerHidden")
+
+        $.post('/Warehouse/Admin/ChangeDocumentAddressData', $(this).serialize())
+            .done(function (data) {
+                showAlert(successAlert)
+            })
+            .fail(function () {
+                showAlert(failAlert)
+            })
+            .always(function () {
+                $('.spinner').addClass("spinnerHidden")
+            })
+    })
+
     $('#photoInput').change(function (e) {
         e.stopImmediatePropagation();
         const [file] = this.files

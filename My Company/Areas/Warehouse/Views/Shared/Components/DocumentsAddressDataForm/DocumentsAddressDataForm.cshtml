@@ -1,0 +1,45 @@
+﻿@model My_Company.Services.DocumentGeneratorService.Models.AddressData
+
+<form id="addressForm">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" asp-for="Name"></label>
+                <input class="form-control w-75" asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" asp-for="Address1"></label>
+                <input class="form-control w-75" asp-for="Address1" />
+                <span asp-validation-for="Address1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" asp-for="Address2"></label>
+                <input class="form-control w-75" asp-for="Address2" />
+                <span asp-validation-for="Address2" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" asp-for="NIP"></label>
+                <input class="form-control w-75" asp-for="NIP" />
+                <span asp-validation-for="NIP" class="text-danger"></span>
+            </div>
+        </div>  
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" asp-for="DocumentPlace"></label>
+                <input class="form-control w-75" asp-for="DocumentPlace" />
+                <span asp-validation-for="DocumentPlace" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="justify-content-end d-flex">
+        <button class="btn btn-success" type="submit">Zapisz</button>
+    </div>
+</form>

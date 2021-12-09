@@ -18,7 +18,15 @@ namespace My_Company.Services.DocumentGeneratorService
             this.environment = environment;
         }
 
-        public void BuildBuyerData(AddressData buyerData)
+        public IDocumentBuilder BuildAdditionalInfo(List<string> lines)
+        {
+            var html = "<hr/>";
+            lines.ForEach(line => html += $"{line} <hr/>");
+            body = body.Replace("{AdditionalInfo}", html);
+            return this;
+        }
+
+        public IDocumentBuilder BuildBuyerData(AddressData buyerData)
         {
             var nip = buyerData.NIP != null ? "NIP: " + buyerData.NIP : "";
             var buyerDataString = $@"<div class=""p0 m0"">{buyerData.Name}</div>
@@ -26,29 +34,34 @@ namespace My_Company.Services.DocumentGeneratorService
             <div class=""p0 m0"">{buyerData.Address1}</div>
             <div class=""p0 m0"">{buyerData.Address2}</div>";
             body = body.Replace("{BuyerData}", buyerDataString);
+            return this;
         }
 
-        public void BuildCompanyName(string companyName)
+        public IDocumentBuilder BuildCompanyName(string companyName)
         {
             body = body.Replace("{CompanyName}", companyName);
+            return this;
         }
 
-        public void BuildDateOfCreation(string dateOfCreation)
+        public IDocumentBuilder BuildDateOfCreation(string dateOfCreation)
         {
             body = body.Replace("{DateOfCreation}", dateOfCreation);
+            return this;
         }
 
-        public void BuildDocumentNumber(string documentNumber)
+        public IDocumentBuilder BuildDocumentNumber(string documentNumber)
         {
             body = body.Replace("{DocumentNumber}", documentNumber);
+            return this;
         }
 
-        public void BuildPlaceOfCreation(string placeOfCreation)
+        public IDocumentBuilder BuildPlaceOfCreation(string placeOfCreation)
         {
             body = body.Replace("{PlaceOfCreation}", placeOfCreation);
+            return this;
         }
 
-        public void BuildSellerData(AddressData sellerData)
+        public IDocumentBuilder BuildSellerData(AddressData sellerData)
         {
             var nip = sellerData.NIP != null ? "NIP: " + sellerData.NIP : "";
             var sellerDataString = $@"<div class=""p0 m0"">{sellerData.Name}</div>
@@ -56,9 +69,18 @@ namespace My_Company.Services.DocumentGeneratorService
             <div class=""p0 m0"">{sellerData.Address1}</div>
             <div class=""p0 m0"">{sellerData.Address2}</div>";
             body = body.Replace("{SellerData}", sellerDataString);
+            return this;
         }
 
-        public void BuildTableBody(List<string[]> rows)
+        public IDocumentBuilder BuildSummary(List<string> lines, bool empty = false)
+        {
+            var html = "<hr/>";
+            lines.ForEach(line => html += $"{line} <hr/>");
+            body = body.Replace("{Summary}", empty ? "" : html);
+            return this;
+        }
+
+        public IDocumentBuilder BuildTableBody(List<string[]> rows)
         {
             var rowsString = "";
             foreach (var row in rows)
@@ -72,9 +94,30 @@ namespace My_Company.Services.DocumentGeneratorService
                 rowsString += rowString;
             }
             body = body.Replace("{tableRows}", rowsString);
+            return this;
+        } 
+        
+        public IDocumentBuilder BuildTableBodySummary(List<string[]> rows)
+        {
+            var rowsString = "";
+            foreach (var row in rows)
+            {
+                var rowString = @"<tr class=""borderNone"">";
+                foreach(var data in row)
+                {
+                    if(data != "")
+                    rowsString +=  $@"<td>{data}</td>";
+                    else
+                        rowsString += $@"<td class=""borderNone""></td>";
+                }
+                rowsString += "</tr>";
+                rowsString += rowString;
+            }
+            body = body.Replace("{tableRowsSummary}", rowsString);
+            return this;
         }
 
-        public void BuildTableHeader(string[] header)
+        public IDocumentBuilder BuildTableHeader(params string[] header)
         {
             var headers = "";
             foreach (var h in header)
@@ -82,11 +125,13 @@ namespace My_Company.Services.DocumentGeneratorService
                 headers += $@"<th style=""background-color:darkgray;"">{h}</th>";
             }
             body = body.Replace("{tableHeader}", headers);
+            return this;
         }
 
-        public void CreateDocument()
+        public IDocumentBuilder CreateDocument()
         {
             body = File.ReadAllText(Path.Join(environment.WebRootPath, @"\Templates\documentTemplate.html"));
+            return this;
         }
 
         public string GetDocument()

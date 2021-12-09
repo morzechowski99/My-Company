@@ -37,6 +37,7 @@ namespace My_Company.Helpers
             public const string IsShopEnabled = "shopEnabled";
             public const string LogoPath = "logoPath";
             public const string PersonalPickupAddress = "personalPickupAddress";
+            public const string DocumentAddress = "documentAddress";
 
             public static class DotPayKeys
             {

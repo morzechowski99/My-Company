@@ -25,7 +25,8 @@ namespace My_Company.Interfaces
         Task<Order> CheckUserHasNotEndedPacking(string userId);
         Task<List<Order>> GetOrdersToPacking();
         Task<Order> GetOrderToPackingById(Guid value);
-        Task<Order> GetOrderToInvoiceById(Guid? id);
-        Task<string> GetOrderNumber();
+        Task<Order> GetOrderToDocumentsById(Guid? id);
+        Task<string> GetInvoiceNumber();
+        Task<string> GetWZNumber();
     }
 }

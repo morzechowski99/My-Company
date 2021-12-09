@@ -1,6 +1,7 @@
 ﻿using My_Company.EnumTypes;
 using My_Company.Interfaces;
 using My_Company.Models.Configuration;
+using My_Company.Services.DocumentGeneratorService.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +108,17 @@ namespace My_Company.Services
         public async Task SetPickingMethods(List<PickingMethod> newPickingMethods, IConfigRepository configRepository)
         {
             await SetValue(AVAILABLE_PICKING_METHODS, JsonConvert.SerializeObject(newPickingMethods), configRepository);
+        }
+
+        public async Task<AddressData> GetDocumentAddress(IConfigRepository configRepository)
+        {
+            return JsonConvert.DeserializeObject<AddressData>
+               (await GetValue(ConfigKeys.DocumentAddress, configRepository));
+        }
+
+        public async Task SetDocumentAddress(AddressData newAddress, IConfigRepository configRepository)
+        {
+            await SetValue(ConfigKeys.DocumentAddress, JsonConvert.SerializeObject(newAddress), configRepository);
         }
     }
 }

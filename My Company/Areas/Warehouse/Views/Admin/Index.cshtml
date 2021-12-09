@@ -42,6 +42,9 @@
                 <h3>Podstawowa konfiguracja</h3>
                 @await Component.InvokeAsync("BasicInfoConfigForm")
                 <hr />
+                <h4>Adres do dokumentów</h4>
+                @await Component.InvokeAsync("DocumentsAddressDataForm")
+                <hr />
                 <h4>Status sklepu</h4>
                 <div class="d-flex align-items-center">
                     @{

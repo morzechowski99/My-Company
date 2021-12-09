@@ -27,6 +27,7 @@ namespace My_Company.Models
         public int DeliveryPrice { get; set; }
         public string Email { get; set; }
         public string InvoiceNumber { get; set; }
+        public string WZNumber { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
         public virtual Picking Picking { get; set; }
