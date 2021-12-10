@@ -7,5 +7,6 @@ namespace My_Company.Interfaces
     {
         void SendOrderEmail(OrderEmailReason reason, Order order, string email = null);
         void SendRegistrationEmail(string email, string url);
+        void SendEmail(string email, string title, string content);
     }
 }

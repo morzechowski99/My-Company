@@ -23,7 +23,7 @@ namespace My_Company.Areas.Identity.Pages.Account
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            if (returnUrl != null && returnUrl.StartsWith("/Warehouse"))
+            if (returnUrl != null && returnUrl.ToLower().StartsWith("/warehouse"))
             {
                 return RedirectToAction("Login", "Home", new { area = "Warehouse" });
             }

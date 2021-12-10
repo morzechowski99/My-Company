@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using My_Company.Interfaces;
 using My_Company.Models;
 
 namespace My_Company.Areas.Identity.Pages.Account
@@ -18,12 +19,12 @@ namespace My_Company.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailService;
 
-        public ResendEmailConfirmationModel(UserManager<AppUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<AppUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            _emailService = emailService;
         }
 
         [BindProperty]
@@ -57,15 +58,13 @@ namespace My_Company.Areas.Identity.Pages.Account
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            var callbackUrl = Url.Action(
+                        "ConfirmEmail",
+                        "MyAccount",
+                        values: new { area = "Shop", userId = userId, code = code },
+                        protocol: Request.Scheme);
+
+            _emailService.SendRegistrationEmail(Input.Email, callbackUrl);
 
             ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
             return Page();

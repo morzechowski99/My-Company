@@ -15,6 +15,16 @@ namespace My_Company.Services
             this.emailQueue = emailQueue;
         }
 
+        public void SendEmail(string email, string title, string content)
+        {
+            emailQueue.AddEmailToQueue(new EmailQueueItem
+            {
+                Content = content,
+                Title = title,
+                To = email
+            });
+        }
+
         public void SendOrderEmail(OrderEmailReason reason, Order order, string email = null)
         {
             if (order.Email == null && email == null)

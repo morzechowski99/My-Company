@@ -49,6 +49,18 @@ namespace My_Company.Areas.Warehouse.Controllers
             {
                 var newUser = _mapper.Map<AppUser>(userViewModel);
 
+                if (await _usersService.CheckEmail(userViewModel.Email))
+                {
+                    ModelState.AddModelError("Email", "Podany adres e-mail jest zajęty");
+                    var rolesList = getRolesList();
+                    ViewData["Roles"] = new SelectList(
+                        rolesList,
+                        "Role",
+                        "RolePL",
+                        userViewModel.Role
+                    );
+                    return View(userViewModel);
+                }
                 await _usersService.CreateUser(newUser, userViewModel.Role);
 
                 return RedirectToAction(nameof(Index));

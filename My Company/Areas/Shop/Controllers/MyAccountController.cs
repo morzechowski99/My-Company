@@ -9,6 +9,7 @@ using My_Company.Extensions;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Services.DocumentGeneratorService;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,9 +27,10 @@ namespace My_Company.Areas.Shop.Controllers
         private readonly IEmailService emailService;
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IOrdersService ordersService;
+        private readonly IDocumentGenerator documentGenerator;
 
-        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService,
-            IRepositoryWrapper repositoryWrapper, IOrdersService ordersService)
+        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService, 
+                                    IRepositoryWrapper repositoryWrapper, IOrdersService ordersService, IDocumentGenerator documentGenerator)
         {
             _signInManager = signInManager;
             this.usersService = usersService;
@@ -36,6 +38,7 @@ namespace My_Company.Areas.Shop.Controllers
             this.emailService = emailService;
             this.repositoryWrapper = repositoryWrapper;
             this.ordersService = ordersService;
+            this.documentGenerator = documentGenerator;
         }
 
         public async Task<IActionResult> Index()
@@ -217,6 +220,16 @@ namespace My_Company.Areas.Shop.Controllers
             var orderModel = await ordersService.GetOrderByIdAndUser(id.Value,User.GetId());
 
             return View(orderModel);
+        }
+        
+        public async Task<IActionResult> GetInvoice(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var order = await repositoryWrapper.OrdersRepository.GetOrderToDocumentsById(id);
+
+            return File(await documentGenerator.GetInvoice(order), "application/pdf", $"faktura nr {order.InvoiceNumber}.pdf");
         }
 
     }

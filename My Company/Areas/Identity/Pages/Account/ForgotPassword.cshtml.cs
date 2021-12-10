@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using My_Company.Models;
+using My_Company.Interfaces;
 
 namespace My_Company.Areas.Identity.Pages.Account
 {
@@ -18,12 +19,12 @@ namespace My_Company.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailService;
 
-        public ForgotPasswordModel(UserManager<AppUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<AppUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            _emailService = emailService;
         }
 
         [BindProperty]
@@ -57,10 +58,10 @@ namespace My_Company.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
+                _emailService.SendEmail(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Zresetuj hasło",
+                    $"Aby zresetować hasło prosimy <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknąć tutaj</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

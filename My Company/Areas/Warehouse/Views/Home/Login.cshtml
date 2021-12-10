@@ -1,0 +1,39 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.Account.LoginModel
+
+<div class="row">
+    <div class="col-12 col-lg-6 p-2">
+
+        <div class="p-3">
+            <h2>Zaloguj się</h2>
+            <form method="post">
+
+                <hr />
+                <div class="text-danger">@ViewBag.LoginMessage</div>
+                <div class="form-group">
+                    <label asp-for="Username" ></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" ></label>
+                    <input asp-for="Password" class="form-control" />
+                    <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                    <a id="forgot-password" href="/Identity/Account/ForgotPassword">Zapomnialeś hasła?</a>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe" >
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-outline-primary ">
+                    <i class="bi bi-box-arrow-in-right"></i>&nbsp;
+                    Zaloguj się
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
