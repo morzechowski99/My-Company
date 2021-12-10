@@ -18,11 +18,11 @@ namespace My_Company.Services.DocumentGeneratorService
             this.environment = environment;
         }
 
-        public IDocumentBuilder BuildAdditionalInfo(List<string> lines)
+        public IDocumentBuilder BuildAdditionalInfo(List<string> lines, bool empty = false)
         {
             var html = "<hr/>";
             lines.ForEach(line => html += $"{line} <hr/>");
-            body = body.Replace("{AdditionalInfo}", html);
+            body = body.Replace("{AdditionalInfo}", empty ? "" : html);
             return this;
         }
 
@@ -58,6 +58,34 @@ namespace My_Company.Services.DocumentGeneratorService
         public IDocumentBuilder BuildPlaceOfCreation(string placeOfCreation)
         {
             body = body.Replace("{PlaceOfCreation}", placeOfCreation);
+            return this;
+        }
+
+        public IDocumentBuilder BuildSecondTableBody(List<string[]> rows)
+        {
+            var rowsString = "";
+            foreach (var row in rows)
+            {
+                var rowString = "<tr>";
+                foreach (var data in row)
+                {
+                    rowsString += $@"<td>{data}</td>";
+                }
+                rowsString += "</tr>";
+                rowsString += rowString;
+            }
+            body = body.Replace("{tableRows2}", rowsString);
+            return this;
+        }
+
+        public IDocumentBuilder BuildSecondTableHeader(params string[] header)
+        {
+            var headers = "";
+            foreach (var h in header)
+            {
+                headers += $@"<th style=""background-color:darkgray;"">{h}</th>";
+            }
+            body = body.Replace("{tableHeader2}", headers);
             return this;
         }
 
@@ -128,6 +156,13 @@ namespace My_Company.Services.DocumentGeneratorService
             return this;
         }
 
+        public IDocumentBuilder BuildTablesDesciptions(string description1, string description2)
+        {
+            body = body.Replace("{tableDescription1}", description1);
+            body = body.Replace("{tableDescription2}", description2);
+            return this;
+        }
+
         public IDocumentBuilder CreateDocument()
         {
             body = File.ReadAllText(Path.Join(environment.WebRootPath, @"\Templates\documentTemplate.html"));
@@ -136,6 +171,11 @@ namespace My_Company.Services.DocumentGeneratorService
 
         public string GetDocument()
         {
+            body = body.Replace("{tableDescription1}", "");
+            body = body.Replace("{tableDescription2}", "");
+            body = body.Replace("{tableHeader2}", "");
+            body = body.Replace("{tableRows2}", "");
+            body = body.Replace("{tableRowsSummary2}", "");
             return body;
         }
     }

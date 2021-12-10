@@ -14,5 +14,7 @@ namespace My_Company.Interfaces
         Task<Delivery> GetDeliveryById(int id);
         Task<string> CreateKPZNumber();
         Task<Delivery> GetDeliveryCorrectedDeliveryById(int id);
+        Task<Delivery> GetDeliveryToDocumentById(int id);
+        Task<Delivery> GetOrginalDeliveryToDocumentCorrectingById(int id);
     }
 }

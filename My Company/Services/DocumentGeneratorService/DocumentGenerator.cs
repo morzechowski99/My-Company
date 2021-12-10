@@ -238,21 +238,21 @@ namespace My_Company.Services.DocumentGeneratorService
             var html = builder.CreateDocument()
                 .BuildCompanyName(await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository))
                 .BuildPlaceOfCreation(address.DocumentPlace)
-                .BuildDateOfCreation(order.OrderDate.ToString("dd.MM.yyyy"))
+                .BuildDateOfCreation(order.Packing.PackingEnd.Value.ToString("dd.MM.yyyy"))
                 .BuildSellerData(address)
                 .BuildBuyerData(mapper.Map<AddressData>(order.Address))
                 .BuildDocumentNumber($"WZ nr {order.WZNumber}")
                 .BuildTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Uwagi")
-                .BuildTableBody(GetWZBody(order))
+                .BuildTableBody(GetWZTableBody(order))
                 .BuildTableBodySummary(new List<string[]>())
                 .BuildAdditionalInfo(await GetInvoiceAddtionalInfo(order))
-                .BuildSummary(new List<string>(),true)
+                .BuildSummary(new List<string>() { $@"<div class=""p0 m0""><b>Powiązany dokument:</b> {order.InvoiceNumber}</div>" })
                 .GetDocument();
 
             return await GetDocument(html);
         }
 
-        private List<string[]> GetWZBody(Order order)
+        private List<string[]> GetWZTableBody(Order order)
         {
             var list = new List<string[]>();
             for (int i = 0; i < order.ProductOrders.Count; i++)
@@ -266,6 +266,68 @@ namespace My_Company.Services.DocumentGeneratorService
                     "szt.",
                     pr.Count.ToString(),
                     ""
+                });
+            }
+            return list;
+        }
+
+        public async Task<Stream> GetDeliveryDocument(Delivery delivery)
+        {
+            var address = await config.GetDocumentAddress(repositoryWrapper.ConfigRepository);
+            var html = builder.CreateDocument()
+                .BuildCompanyName(await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository))
+                .BuildPlaceOfCreation(address.DocumentPlace)
+                .BuildDateOfCreation(delivery.DeliveryDate.ToString("dd.MM.yyyy"))
+                .BuildBuyerData(address)
+                .BuildSellerData(mapper.Map<AddressData>(delivery.Supplier))
+                .BuildDocumentNumber($"Dostawa {delivery.PZNumber}")
+                .BuildTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Sektor")
+                .BuildTableBody(GetDeliveryTableBody(delivery))
+                .BuildTableBodySummary(new List<string[]>())
+                .BuildAdditionalInfo(new List<string>(), true)
+                .BuildSummary(new List<string>(),true )
+                .GetDocument();
+
+            return await GetDocument(html);
+        }
+        
+        public async Task<Stream> GetDeliveryCorrecingDocument(Delivery correcting, Delivery corrected)
+        {
+            var address = await config.GetDocumentAddress(repositoryWrapper.ConfigRepository);
+            var html = builder.CreateDocument()
+                .BuildCompanyName(await config.GetValue(ConfigKeys.Title, repositoryWrapper.ConfigRepository))
+                .BuildPlaceOfCreation(address.DocumentPlace)
+                .BuildDateOfCreation(correcting.DeliveryDate.ToString("dd.MM.yyyy"))
+                .BuildBuyerData(address)
+                .BuildSellerData(mapper.Map<AddressData>(correcting.Supplier))
+                .BuildDocumentNumber($"Dostawa {correcting.PZNumber}")
+                .BuildTablesDesciptions("Przed korektą","Po korekcie")
+                .BuildTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Sektor")
+                .BuildSecondTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Sektor")
+                .BuildTableBody(GetDeliveryTableBody(corrected))
+                .BuildSecondTableBody(GetDeliveryTableBody(correcting))
+                .BuildTableBodySummary(new List<string[]>())
+                .BuildAdditionalInfo(new List<string>() { $@"<div class=""p0 m0""><b>Powiązany dokument:</b> {corrected.PZNumber}</div>" })
+                .BuildSummary(new List<string>(),true )
+                .GetDocument();
+
+            return await GetDocument(html);
+        }
+
+        private List<string[]> GetDeliveryTableBody(Delivery delivery)
+        {
+            var list = new List<string[]>();
+            for (int i = 0; i < delivery.ProductDeliveries.Count; i++)
+            {
+                var pr = delivery.ProductDeliveries.ElementAt(i);
+                var idx = i + 1;
+                list.Add(new string[]
+                {
+                    idx.ToString(),
+                    $"{pr.Product.Name} ({pr.Product.EANCode})",
+                    "szt.",
+                    pr.Count.ToString(),
+                    $"{pr.Sector.Row.RowName}{pr.Sector.Order}"
                 });
             }
             return list;

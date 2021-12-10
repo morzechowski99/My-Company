@@ -144,6 +144,7 @@ namespace My_Company.Repositories
                 .Include(o => o.ProductOrders)
                 .ThenInclude(o => o.Product)
                 .Include(o => o.Address)
+                .Include(o => o.Packing)
                 .FirstOrDefaultAsync();
         }
 

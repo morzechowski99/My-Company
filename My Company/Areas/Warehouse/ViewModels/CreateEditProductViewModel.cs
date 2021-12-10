@@ -40,7 +40,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Cena (netto,zł)")]
         [Required]
         [DataType(DataType.Currency)]
-        [RegularExpression(@"^(\d*\,\d{1,2}|\d+)$")]
+        [RegularExpression(@"^0\,(0)([1-9])$|^0\,(([1-9])(\d)?)$|^([1-9])((\,\d{1,2})?)$|^((?!0)(\d){1,5})((\,\d{1,2})?)$|^(1(\d{5})(,\d{1,2})?)$|^(200000(,[0]{1,2})?)$")]
         public string NettoPrice { get; set; }
         [Display(Name="Status")]
         public ProductStatus Status { get; set; }

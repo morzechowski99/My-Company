@@ -9,5 +9,7 @@ namespace My_Company.Services.DocumentGeneratorService
     {
         Task<Stream> GetInvoice(Order order);
         Task<Stream> GetWZDocument(Order order);
+        Task<Stream> GetDeliveryDocument(Delivery delivery);
+        Task<Stream> GetDeliveryCorrecingDocument(Delivery correcting, Delivery corrected);
     }
 }

@@ -265,7 +265,11 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Name, opt => opt.MapFrom(y => $"{y.FirstName} {y.LastName}"))
                 .ForMember(x => x.NIP, opt => opt.MapFrom(y => ""))
                 .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
-                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.ZipCode} {y.City}"));
+                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.ZipCode} {y.City}")); 
+            
+            CreateMap<Supplier, AddressData>()
+                .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
+                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.PostalCode} {y.City}"));
 
         }
     }

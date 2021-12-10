@@ -78,6 +78,17 @@ namespace My_Company.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Delivery> GetDeliveryToDocumentById(int id)
+        {
+            return await FindByCondition(d => d.Id == id)
+                .Include(d => d.Supplier)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Product)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Sector.Row)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Delivery> GetDeliveryCorrectedDeliveryById(int id)
         {
             return await FindByCondition(d => d.CorrectingId == id)
@@ -103,6 +114,16 @@ namespace My_Company.Repositories
                 i++;
             }
             return copy;
+        }
+
+        public async Task<Delivery> GetOrginalDeliveryToDocumentCorrectingById(int id)
+        {
+            return await FindByCondition(d => d.CorrectingId == id)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Product)
+                .Include(d => d.ProductDeliveries)
+                .ThenInclude(pd => pd.Sector.Row)
+                .FirstOrDefaultAsync();
         }
     }
 }

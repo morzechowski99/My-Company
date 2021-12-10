@@ -9,6 +9,7 @@ using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
+using My_Company.Services.DocumentGeneratorService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,13 @@ namespace My_Company.Areas.Warehouse.Controllers
     {
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IMapper mapper;
+        private readonly IDocumentGenerator documentGenerator;
 
-        public DeliveriesController(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public DeliveriesController(IRepositoryWrapper repositoryWrapper, IMapper mapper, IDocumentGenerator documentGenerator)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
+            this.documentGenerator = documentGenerator;
         }
 
         public async Task<IActionResult> Index()
@@ -308,6 +311,32 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
             deliveryDto = mapDelivery(deliveryDto, deliveryDb);
             return View(deliveryDto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPdf(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            try
+            {
+                var delivery = await repositoryWrapper.DeliveriesRepository.GetDeliveryToDocumentById(id.Value);
+                if (delivery == null)
+                    return BadRequest();
+
+                if (!delivery.IsCorrecting)
+                    return File(await documentGenerator.GetDeliveryDocument(delivery), "application/pdf", $"Dostawa nr {delivery.PZNumber}.pdf");
+                else
+                {
+                    var orginal = await repositoryWrapper.DeliveriesRepository.GetOrginalDeliveryToDocumentCorrectingById(id.Value);
+                    return File(await documentGenerator.GetDeliveryCorrecingDocument(delivery, orginal), "application/pdf", $"Dostawa nr {delivery.PZNumber}.pdf");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         private DeliveryEditViewModel mapDelivery(DeliveryEditViewModel deliveryDto, Delivery deliveryDb)
