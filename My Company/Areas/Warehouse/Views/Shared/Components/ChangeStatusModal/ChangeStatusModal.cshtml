@@ -1,0 +1,38 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.OrderDetailsViewModel
+
+<div class="modal" tabindex="-1" role="dialog" id="changeStatusModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Zmień status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changeStatusForm">
+                    <input type="hidden" asp-for="Id"/>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-2">
+                                <div class="form-group">
+                                    <label asp-for="Paid" class="control-label"></label>
+                                    <select class="form-control" id="paidSelect" asp-for="Paid">
+                                        <option value="true">TAK</option>
+                                        <option value="false">NIE</option>
+                                    </select>
+                                    <span asp-validation-for="Paid" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" >Zmień status</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -135,6 +135,7 @@ namespace My_Company.Repositories
                 .Include(o => o.User)
                 .Include(o => o.Picking.User)
                 .Include(o => o.Address)
+                .Include(o => o.Delivery)
                 .FirstOrDefaultAsync();
         }
         

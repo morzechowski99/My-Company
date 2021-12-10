@@ -25,14 +25,14 @@ namespace My_Company.Services
             });
         }
 
-        public void SendOrderEmail(OrderEmailReason reason, Order order, string email = null)
+        public void SendOrderEmail(OrderEmailReason reason, Order order, string url, string email = null)
         {
             if (order.Email == null && email == null)
                 throw new ArgumentNullException("email", "order email is null and email is null");
 
             emailQueue.AddEmailToQueue(new EmailQueueItem
             {
-                Content = reason.GetEmailContent(order),
+                Content = reason.GetEmailContent(order,url),
                 Title = reason.GetEmailTitle(order),
                 To = email == null ? order.Email : email
             });

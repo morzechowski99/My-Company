@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using My_Company.Dictionaries;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
@@ -208,24 +209,24 @@ namespace My_Company.Areas.Warehouse.Controllers
                 ViewBag.Completed = OrderHelpers.CheckOrderCompleted(order);
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
-                return View("CompleteDetailsPartial",order.Id);
+                return View("CompleteDetailsPartial", order.Id);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error processing request");
             }
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> DeletePickingItem(int? pickingItemId)
         {
-            if (pickingItemId ==null )
+            if (pickingItemId == null)
                 return BadRequest();
 
             try
             {
                 var pickingItem = await repositoryWrapper.PickingItemsRepository.GetItemById(pickingItemId.Value);
-                if(pickingItem == null)
+                if (pickingItem == null)
                     return BadRequest();
 
                 repositoryWrapper.PickingItemsRepository.Delete(pickingItem);
@@ -234,9 +235,9 @@ namespace My_Company.Areas.Warehouse.Controllers
                 productSector.Count += pickingItem.Count;
 
                 repositoryWrapper.ProductSectorRepository.Update(productSector);
-                
+
                 await repositoryWrapper.Save();
-                return View("CompleteDetailsPartial",pickingItem.PickingId);
+                return View("CompleteDetailsPartial", pickingItem.PickingId);
             }
             catch
             {
@@ -262,42 +263,48 @@ namespace My_Company.Areas.Warehouse.Controllers
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
                 TempData["success"] = $"Zamówienie {orderId} skompletowane pomyślnie";
-                await SendEmail(order);
+                await SendEmail(order,OrderEmailReason.ChangeOrderStatus);
+                await SendEmail(order,OrderEmailReason.InvoiceReady);
                 return Ok();
             }
-            catch 
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error processing request");
             }
         }
 
-        private async Task SendEmail(Order order)
+        private async Task SendEmail(Order order,OrderEmailReason reason)
         {
             string email = null;
             if (order.UserId != null)
                 email = (await repositoryWrapper.UserRepository.GetOne(u => u.Id == order.UserId)).Email;
-            emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, email);
+            emailService.SendOrderEmail(reason, order,GetOrderDetailsUrl(order), email);
+        }
+
+        private string GetOrderDetailsUrl(Order order)
+        {
+            return Url.Action("OrderDetails", "MyAccount", values: new { area = "Shop", id = order.Id }, protocol: Request.Scheme);
         }
 
         [HttpGet]
-        [Authorize(Roles =Constants.Roles.MainAdministrator)]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
         public IActionResult OrdersList()
         {
             return View();
-        }  
-        
+        }
+
         [HttpPost]
-        [Authorize(Roles =Constants.Roles.MainAdministrator)]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
         public IActionResult GetList(OrdersListFilters filters)
         {
             if (filters == null)
                 return BadRequest();
 
             return ViewComponent("OrdersList", filters);
-        } 
-        
+        }
+
         [HttpGet]
-        [Authorize(Roles =Constants.Roles.MainAdministrator)]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
         public async Task<IActionResult> GetNumbers(string query)
         {
             if (query == null)
@@ -319,6 +326,42 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(mapper.Map<OrderDetailsViewModel>(order));
         }
 
+        [HttpPut]
+        [Authorize(Roles = Constants.Roles.MainAdministrator)]
+        public async Task<IActionResult> ChangePaymentStatus(Guid? id, bool? Paid)
+        {
+            if (id == null || Paid == null)
+                return BadRequest();
+            try
+            {
+                var order = await repositoryWrapper.OrdersRepository.GetOne(o => o.Id == id);
+                if (order == null)
+                    return NotFound();
+                if (order.Status > OrderStatus.Paid)
+                    return BadRequest();
+                order.Paid = Paid.Value;
+                if (order.Paid)
+                    order.Status = OrderStatus.Paid;
+                else
+                    order.Status = OrderStatus.New;
+                repositoryWrapper.OrdersRepository.Update(order);
+                await repositoryWrapper.Save();
+                string email = null;
+                if(order.Email == null)
+                {
+                    var user = await repositoryWrapper.UserRepository.GetOne(u => u.Id == order.UserId);
+                    email = user.Email;
+                }
+                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order,GetOrderDetailsUrl(order), email);
+                return Ok(OrderStatusesDictionary.Dictionary[order.Status]);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+        }
+
         public async Task<IActionResult> OrdersToPacking()
         {
             var orderWithPackingInProgress = await repositoryWrapper.OrdersRepository.CheckUserHasNotEndedPacking(GetUserId());
@@ -337,7 +380,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             var dtos = mapper.Map<List<OrderListItemViewModel>>(ordersToPack);
             return View(dtos);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Pack(Guid? id)
         {
@@ -359,7 +402,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if(order.Packing == null)
+            if (order.Packing == null)
             {
                 repositoryWrapper.OrderPackingRepository.Create(new Packing { PackingStart = DateTime.Now, UserId = GetUserId(), OrderId = order.Id });
                 await repositoryWrapper.Save();
@@ -368,7 +411,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             return View(orderView);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> PackComplete(Guid? id)
         {
@@ -389,7 +432,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 TempData["Error"] = "Ktoś inny pakuje już to zamówienie";
                 return RedirectToAction(nameof(Index));
             }
-            else if(order.Packing == null)
+            else if (order.Packing == null)
             {
                 TempData["Error"] = "Pakowanie zamówienia nie zostało rozpoczęte";
                 return RedirectToAction(nameof(Index));
@@ -406,7 +449,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             repositoryWrapper.OrdersRepository.Update(order);
             await repositoryWrapper.Save();
             TempData["success"] = $"Zamówienie {id.Value} spakowane pomyślnie";
-            await SendEmail(order);
+            await SendEmail(order, OrderEmailReason.ChangeOrderStatus);
             return RedirectToAction(nameof(OrdersToPacking));
         }
 
@@ -421,8 +464,8 @@ namespace My_Company.Areas.Warehouse.Controllers
             var order = await repositoryWrapper.OrdersRepository.GetOrderToDocumentsById(id);
 
             return File(await documentGenerator.GetInvoice(order), "application/pdf", $"faktura nr {order.InvoiceNumber}.pdf");
-        } 
-        
+        }
+
         [HttpGet]
         [Authorize(Roles = Constants.Roles.MainAdministrator)]
         public async Task<IActionResult> GetWZPdf(Guid? id)

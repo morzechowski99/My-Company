@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using My_Company.Areas.Shop.ViewModels.Login;
+using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.Areas.Shop.ViewModels.Profile;
 using My_Company.Extensions;
 using My_Company.Helpers;
@@ -29,7 +30,7 @@ namespace My_Company.Areas.Shop.Controllers
         private readonly IOrdersService ordersService;
         private readonly IDocumentGenerator documentGenerator;
 
-        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService, 
+        public MyAccountController(SignInManager<AppUser> signInManager, IUsersService usersService, IMapper mapper, IEmailService emailService,
                                     IRepositoryWrapper repositoryWrapper, IOrdersService ordersService, IDocumentGenerator documentGenerator)
         {
             _signInManager = signInManager;
@@ -56,7 +57,7 @@ namespace My_Company.Areas.Shop.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel loginModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,8 @@ namespace My_Company.Areas.Shop.Controllers
                     .PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    if (returnUrl != null)
+                        return LocalRedirect(returnUrl);
                     return RedirectToAction(nameof(Index));
                 }
                 if (result.IsLockedOut)
@@ -212,16 +215,56 @@ namespace My_Company.Areas.Shop.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> OrderDetails(Guid? id)
         {
             if (id == null)
                 return BadRequest();
 
-            var orderModel = await ordersService.GetOrderByIdAndUser(id.Value,User.GetId());
+            OrderDefailsViewModel orderModel = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                orderModel = await ordersService.GetOrderByIdAndUser(id.Value, User.GetId());
+                if (orderModel == null)
+                    return NotFound();
 
-            return View(orderModel);
+                return View(orderModel);
+            }
+            else return RedirectToAction("AuthorizeOrderDetails", new { id = id });
         }
-        
+
+        [AllowAnonymous]
+        public IActionResult AuthorizeOrderDetails(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AuthorizeOrderDetails(Guid? id, string email)
+        {
+            if (id == null || email == null)
+                return BadRequest();
+
+            var orderModel = await ordersService.GetOrderByIdAndEmail(id.Value, email);
+            if (orderModel == null)
+            {
+                ViewBag.Message = "Podano zły adres e-mail";
+                return View();
+            }
+            else
+            {
+                return View("OrderDetails",orderModel);
+            }
+
+           
+        }
+
+        [AllowAnonymous]
         public async Task<IActionResult> GetInvoice(Guid? id)
         {
             if (id == null)

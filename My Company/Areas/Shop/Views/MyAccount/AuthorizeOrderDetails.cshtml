@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Podaj adres email";
+}
+
+<div class="container">
+    <ol class="breadcrumb bg-transparent justify-content-center">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Strona Główna</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="MyAccount">Strefa klienta</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Szczegóły zamówienia</li>
+    </ol>
+    <div class="row">
+        <div class="col-12 col-lg-6 p-2">
+            <div class="p-2 bg-light">
+                <h6 class="text-uppercase pt-2 font-weight-bolder pl-2">Sprawdź zamówienie</h6>
+            </div>
+            <div class="p-3">
+                <form method="post">
+                    <p class="text-muted">Wpisz adres e-mail przypisany do zamówienia</p>
+                    <hr />
+                    <div class="text-danger">@ViewBag.Message</div>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase">Email</label>
+                        <input name="Email" type="email" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-outline-dark text-uppercase" style="border-radius:1px">
+                        Potwierdź
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

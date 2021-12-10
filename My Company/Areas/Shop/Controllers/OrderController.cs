@@ -161,8 +161,8 @@ namespace My_Company.Areas.Shop.Controllers
 
             Response.Cookies.Delete(CART_COOKIE);
             await tr.CommitAsync();
-
-            emailService.SendOrderEmail(OrderEmailReason.NewOrder, order, User.Identity.IsAuthenticated ? User.GetEmail() : null);
+            string url = GetOrderDetailsUrl(order);
+            emailService.SendOrderEmail(OrderEmailReason.NewOrder, order, url, User.Identity.IsAuthenticated ? User.GetEmail() : null);
 
             if (callback != null)
             {
@@ -172,6 +172,11 @@ namespace My_Company.Areas.Shop.Controllers
             {
                 return RedirectToAction(nameof(PaymentConfirm), new { orderId = order.Id });
             }
+        }
+
+        private string GetOrderDetailsUrl(Order order)
+        {
+            return Url.Action("OrderDetails", "MyAccount", values: new { area = "Shop", id = order.Id }, protocol: Request.Scheme);
         }
 
         public async Task<IActionResult> PaymentConfirm(Guid? orderId, Guid? control)
@@ -220,7 +225,7 @@ namespace My_Company.Areas.Shop.Controllers
                 order.Status = OrderStatus.Paid;
                 order.Payment.Status = EnumTypes.PaymentStatus.Completed;
                 order.Paid = true;
-                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, order.User?.Email );
+                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order,GetOrderDetailsUrl(order), order.User?.Email );
             }
             else if (dotpayResponse.Operation_status == "rejected")
             {
@@ -231,7 +236,6 @@ namespace My_Company.Areas.Shop.Controllers
 
             repositoryWrapper.OrdersRepository.Update(order);
             await repositoryWrapper.Save();
-
 
             return Ok();
         }

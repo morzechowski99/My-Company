@@ -192,6 +192,10 @@ namespace My_Company.AutoMapper
 
             CreateMap<Order, OrderDetailsViewModel>()
                 .ForMember(x => x.Status, opt => opt.MapFrom(y => OrderStatusesDictionary.Dictionary[y.Status]))
+                .ForMember(x => x.OrderStatus, opt => opt.MapFrom(y => y.Status))
+                .ForMember(x => x.PaymentMethod, opt => opt.MapFrom(y => PaymentMethodDictionary.PaymentDictionary[y.PaymentMethod]))         
+                .ForMember(x => x.DeliveryMethod, opt => opt.MapFrom(y => DeliveryTypesDictionary.Dictionary[y.DeliveryType]))         
+                .ForMember(x => x.ParcelLockerInfo, opt => opt.MapFrom(y => y.Delivery is InPostDelivery ? (y.Delivery as InPostDelivery).PackLockerName : null))         
                 .ForMember(x => x.PickingUser, opt => opt.MapFrom(y => $"{y.Picking.User.Name} {y.Picking.User.Surname} ({y.User.UserName})"))
                 .ForMember(x => x.Address, opt => opt.MapFrom(y => y.Address.ToString()));
 

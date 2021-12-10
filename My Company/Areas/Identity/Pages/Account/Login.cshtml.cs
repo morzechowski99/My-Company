@@ -28,7 +28,7 @@ namespace My_Company.Areas.Identity.Pages.Account
                 return RedirectToAction("Login", "Home", new { area = "Warehouse" });
             }
 
-            return RedirectToAction("Login", "MyAccount", new { area = "Shop" });
+            return RedirectToAction("Login", "MyAccount", new { area = "Shop", returnUrl = returnUrl });
         }
     }
 }

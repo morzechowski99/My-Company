@@ -11,6 +11,7 @@ namespace My_Company.Interfaces
     {
         Task<Order> CreateOrder(NewOrderModel orderModel, List<CartCookieItem> cart, string userId);
         Task<Order> GetOrderWithPaymentAndUserById(Guid id);
-        Task<OrderDefailsViewModel> GetOrderByIdAndUser(Guid value, string userId);
+        Task<OrderDefailsViewModel> GetOrderByIdAndUser(Guid orderId, string userId);
+        Task<OrderDefailsViewModel> GetOrderByIdAndEmail(Guid orderId, string email);
     }
 }

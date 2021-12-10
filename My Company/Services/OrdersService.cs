@@ -137,5 +137,31 @@ namespace My_Company.Services
 
             return orderModel;
         }
+
+        public async Task<OrderDefailsViewModel> GetOrderByIdAndEmail(Guid orderId, string email)
+        {
+            var order = await repositoryWrapper.OrdersRepository
+                  .FindByCondition(o => o.Id == orderId && (o.Email == email || o.User.Email == email))
+                  .Include(o => o.ProductOrders)
+                  .ThenInclude(o => o.Product)
+                  .ThenInclude(p => p.Photos.Where(ph => ph.IsListPhoto))
+                  .Include(o => o.Delivery)
+                  .Include(o => o.Payment)
+                  .Include(o => o.Address)
+                  .FirstOrDefaultAsync();
+
+            if (order == null)
+                return null;
+
+            var orderModel = mapper.Map<OrderDefailsViewModel>(order);
+            orderModel.Products.ForEach(p => p.Price = p.OneItemPrice * p.Quantity);
+            if (order.DeliveryType == DeliveryType.PaczkomatyInPost)
+            {
+                orderModel.Delivery.ParcelLockerInfo = await parcelLockersService.GetParcelLockerInfo((order.Delivery as InPostDelivery).PackLockerName);
+            }
+
+            return orderModel;
+
+        }
     }
 }
