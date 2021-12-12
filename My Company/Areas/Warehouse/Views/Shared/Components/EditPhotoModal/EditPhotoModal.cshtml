@@ -1,0 +1,39 @@
+﻿@model My_Company.Areas.Warehouse.ViewModels.EditMainPagePhotoViewModel
+
+<div class="modal" tabindex="-1" role="dialog" id="editMainPageItemPhotoModal@(Model.Order)">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edytuj zdjęcie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="spinner spinner-border spinnerHidden text-secondary"></div>
+                <form class="editMainPageItemPhotoForm" enctype="multipart/form-data">
+                    <div class="container-fluid">
+                        <input type="hidden" asp-for="Order"/>
+                        <div class="row">
+                            <div class="col p-2">
+                                <div class="form-group">
+                                    <label class="control-label">Zdjęcie</label>
+                                    <input type="file" class="form-control-file "
+                                           data-val-filesize="Maksymalny rozmiar pliku to 10 MB" data-val="true" data-val-filesize-size="10000000"
+                                           accept="image/*" asp-for="Photo" />
+                                    <span class="text-danger" asp-validation-for="Photo"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success ">Edytuj</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

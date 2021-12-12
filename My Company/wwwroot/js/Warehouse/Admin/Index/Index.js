@@ -32,9 +32,11 @@ $(function () {
             })
     })
 
+    registerMainPageForm()
+
     $('#contentForm').submit(function (e) {
         e.preventDefault()
-        if (!$("#baseInfoForm").validate().form()) return;
+        if (!$("#contentForm").validate().form()) return;
         $('.spinner').removeClass("spinnerHidden")
 
         $.post('/Warehouse/Admin/ChangeContentValues', $(this).serialize())
@@ -120,9 +122,184 @@ const successAlert = `<div class="alert alert-success alert-dismissible fade sho
     <h6 class="alert-content">Zapisano pomyślnie</h5>
 </div>`
 
+const successAlertDelete = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <h6 class="alert-content">Usunięto pomyślnie</h5>
+</div>`
+
 const showAlert = function (alert) {
     $('body').append(alert)
     setTimeout(function () {
         $('.alert').alert('close')
     }, 5000)
+}
+
+const registerMainPageForm = function () {
+    resetForm('#addMainPageItemForm')
+    $('#addMainPageItemForm').submit(function (e) {
+        e.preventDefault()
+
+        if (!$("#addMainPageItemForm").validate().form()) return;
+        $('.spinner').removeClass("spinnerHidden")
+        const data = new FormData(this);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Warehouse/Admin/AddMainPageItem',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+        })
+            .done(function (data) {
+                showAlert(successAlert)
+                $('.modal').modal('hide')
+                $('#mainPage').html(data)
+                registerMainPageForm()
+
+            })
+            .fail(function () {
+                showAlert(failAlert)
+                $('.modal').modal('hide')
+            })
+            .always(function () {
+                $('.spinner').addClass("spinnerHidden")
+
+            })
+    })
+
+    $('.editMainPageItemPhotoForm').submit(function (e) {
+        e.preventDefault()
+        
+        if (!$(this).validate().form()) return;
+        $('.spinner').removeClass("spinnerHidden")
+        const data = new FormData(this);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/Warehouse/Admin/EditMainPageItemPhoto',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+        })
+            .done(function (data) {
+                showAlert(successAlert)
+                $('.modal').modal('hide')
+                $('#mainPage').html(data)
+                registerMainPageForm()
+
+            })
+            .fail(function () {
+                showAlert(failAlert)
+                $('.modal').modal('hide')
+            })
+            .always(function () {
+                $('.spinner').addClass("spinnerHidden")
+
+            })
+    })
+
+    $('.editMainPageItemForm').submit(function (e) {
+        e.preventDefault()
+  
+        if (!$(this).validate().form()) return;
+        $('.spinner').removeClass("spinnerHidden")
+        const data = new FormData(this);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/Warehouse/Admin/EditMainPageItem',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+        })
+            .done(function (data) {
+                showAlert(successAlert)
+                $('.modal').modal('hide')
+                $('#mainPage').html(data)
+                registerMainPageForm()
+            })
+            .fail(function () {
+                showAlert(failAlert)
+                $('.modal').modal('hide')
+            })
+            .always(function () {
+                $('.spinner').addClass("spinnerHidden")
+
+            })
+    })
+
+    $('.deleteMainPageItem').click(function (e) {
+        e.stopPropagation()
+
+        $('.spinner').removeClass("spinnerHidden")
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/Warehouse/Admin/DeleteMainPageItem?order=' + $(this).data('order'),
+        })
+            .done(function (data) {
+                showAlert(successAlert)
+                $('#mainPage').html(data)
+                registerMainPageForm()
+
+            })
+            .fail(function () {
+                showAlert(failAlert)
+                $('.modal').modal('hide')
+            })
+            .always(function () {
+                $('.spinner').addClass("spinnerHidden")
+
+            })
+    })
+
+    $('.moveDown').click(function (e) {
+        e.stopPropagation()
+        $('.spinner').removeClass("spinnerHidden")
+        moveItemAjax($(this).data('order'),1)
+    })
+
+    $('.moveUp').click(function (e) {
+        e.stopPropagation()
+        $('.spinner').removeClass("spinnerHidden")
+        moveItemAjax($(this).data('order'),-1)
+    })
+}
+
+const resetForm = function (form) {
+    $(form).find('input').val('')
+    $(form).find('textarea').text('')
+    $(form).find('select').val('-1')
+    //Remove current form validation information
+    $(form)
+        .removeData("validator")
+        .removeData("unobtrusiveValidation");
+
+    //Parse the form again
+    $.validator
+        .unobtrusive
+        .parse(form);
+}
+
+const moveItemAjax = function (order, direction) {
+    $.ajax({
+        type: 'PUT',
+        url: '/Warehouse/Admin/MoveMainPageItem?order=' + order + '&direction=' + direction,
+    })
+        .done(function (data) {
+            showAlert(successAlert)
+            $('#mainPage').html(data)
+            registerMainPageForm()
+        })
+        .fail(function () {
+            showAlert(failAlert)
+        })
+        .always(function () {
+            $('.spinner').addClass("spinnerHidden")
+        })
 }

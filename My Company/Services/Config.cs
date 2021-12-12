@@ -120,5 +120,16 @@ namespace My_Company.Services
         {
             await SetValue(ConfigKeys.DocumentAddress, JsonConvert.SerializeObject(newAddress), configRepository);
         }
+
+        public async Task<List<MainPageItem>> GetMainPageContent(IConfigRepository configRepo)
+        {
+            return JsonConvert.DeserializeObject<List<MainPageItem>>
+               (await GetValue(ConfigKeys.MainPageContent, configRepo));
+        } 
+        
+        public async Task SetMainPageContent(List<MainPageItem> mainPageContent,IConfigRepository configRepo)
+        {
+            await SetValue(ConfigKeys.MainPageContent, JsonConvert.SerializeObject(mainPageContent), configRepo);
+        }
     }
 }

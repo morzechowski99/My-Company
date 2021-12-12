@@ -9,6 +9,7 @@ using My_Company.Dictionaries;
 using My_Company.Extensions;
 using My_Company.Helpers;
 using My_Company.Models;
+using My_Company.Models.Configuration;
 using My_Company.Models.DBViews;
 using My_Company.Services.DocumentGeneratorService.Models;
 using My_Company.ViewModels;
@@ -206,7 +207,7 @@ namespace My_Company.AutoMapper
             CreateMap<Product, ListItemViewModel>()
                 .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(y => y.ProductCategories.First().Category.CategoryName));
-
+            
 
             CreateMap<Product, ProductDetailsPageViewModel>()
                 .ForMember(x => x.State, opt => opt.MapFrom(y => Helpers.ViewHelpers.GetProductStockStatus(y)))
@@ -274,6 +275,10 @@ namespace My_Company.AutoMapper
             CreateMap<Supplier, AddressData>()
                 .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
                 .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.PostalCode} {y.City}"));
+
+            CreateMap<MainPageItem, MainPageItemViewModel>();
+            CreateMap<MainPageItemViewModel, EditMainPageItemViewModel>();
+            CreateMap<EditMainPageItemViewModel, MainPageItem>();
 
         }
     }

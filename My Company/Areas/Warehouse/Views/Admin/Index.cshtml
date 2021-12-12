@@ -31,8 +31,11 @@
             <a class="nav-link" id="paymentMethods-tab" data-toggle="tab" href="#paymentMethods" role="tab" aria-controls="paymentMethods" aria-selected="false">Metody płatności</a>
         </li>
         <li class="nav-item" role="presentation">
-                <a class="nav-link" id="deliveryMethods-tab" data-toggle="tab" href="#deliveryMethods" role="tab" aria-controls="deliveryMethods" aria-selected="false">Sposoby dostawy</a>
-            </li>
+            <a class="nav-link" id="deliveryMethods-tab" data-toggle="tab" href="#deliveryMethods" role="tab" aria-controls="deliveryMethods" aria-selected="false">Sposoby dostawy</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="mainPage-tab" data-toggle="tab" href="#mainPage" role="tab" aria-controls="mainPage" aria-selected="false">Strona Główna</a>
+        </li>
     </ul>
 
 
@@ -96,10 +99,15 @@
             <div>
                 @await Component.InvokeAsync("PaymentMethodsForm")
             </div>
-        </div> 
+        </div>
         <div class="tab-pane fade" id="deliveryMethods" role="tabpanel" aria-labelledby="deliveryMethods-tab">
             <div>
                 @await Component.InvokeAsync("DeliveryMethodsForm")
+            </div>
+        </div>
+        <div class="tab-pane fade" id="mainPage" role="tabpanel" aria-labelledby="mainPage-tab">
+            <div id="mainPage">
+                @await Component.InvokeAsync("MainPageForm")
             </div>
         </div>
 

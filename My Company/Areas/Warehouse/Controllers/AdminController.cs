@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Warehouse.ViewModels;
@@ -22,12 +23,14 @@ namespace My_Company.Areas.Warehouse.Controllers
         private readonly IConfig config;
         private readonly IRepositoryWrapper repositoryWrapper;
         private readonly IFilesService filesService;
+        private readonly IMapper mapper;
 
-        public AdminController(IConfig config, IRepositoryWrapper repositoryWrapper, IFilesService filesService)
+        public AdminController(IConfig config, IRepositoryWrapper repositoryWrapper, IFilesService filesService, IMapper mapper)
         {
             this.config = config;
             this.repositoryWrapper = repositoryWrapper;
             this.filesService = filesService;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -135,7 +138,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> ChangePickingMethods(PickingMethodsFormViewModel pickingMethodsDto)
         {
@@ -143,7 +146,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 return BadRequest();
 
             if (pickingMethodsDto.Methods.Any(m => m.Enabled == true && m.Type == DeliveryType.PersonalPickup))
-                await config.SetPersonalPickupAddress(pickingMethodsDto.Addres,repositoryWrapper.ConfigRepository);
+                await config.SetPersonalPickupAddress(pickingMethodsDto.Addres, repositoryWrapper.ConfigRepository);
             else
                 await config.SetPersonalPickupAddress(new PersonalPickupAddress(), repositoryWrapper.ConfigRepository);
             var newPickingMethods = pickingMethodsDto.Methods.Where(m => m.Enabled).Select(m => new PickingMethod { Type = m.Type, Price = (int)(decimal.Parse(m.Price) * 100) }).ToList();
@@ -157,7 +160,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> ChangeDocumentAddressData(AddressData newAddress)
         {
@@ -169,6 +172,141 @@ namespace My_Company.Areas.Warehouse.Controllers
             return Ok();
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMainPageItem(MainPageItem newItem, IFormFile photo)
+        {
+            if (newItem == null || photo == null || !ModelState.IsValid)
+                return BadRequest();
+
+            var configRepository = repositoryWrapper.ConfigRepository;
+            var mainpageItems = await config.GetMainPageContent(configRepository);
+            if (mainpageItems == null)
+                mainpageItems = new List<MainPageItem>();
+
+            newItem.PhotoUrl = await filesService.UploadFile(photo);
+            newItem.Order = mainpageItems.Count + 1;
+            newItem.CategoryId = newItem.CategoryId == -1 ? null : newItem.CategoryId;
+            mainpageItems.Add(newItem);
+            await config.SetMainPageContent(mainpageItems, configRepository);
+
+            return ViewComponent("MainPageForm");
+
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMainPageItem(int? order)
+        {
+            if (order == null)
+                return BadRequest();
+
+            var configRepository = repositoryWrapper.ConfigRepository;
+            var mainpageItems = await config.GetMainPageContent(configRepository);
+            if (mainpageItems == null)
+                return NotFound();
+
+            var deletedItem = mainpageItems.FirstOrDefault(i => i.Order == order);
+            if (deletedItem == null)
+                return BadRequest();
+            if (deletedItem.PhotoUrl != Constants.ImagePlaceholder)
+                filesService.DeletePhoto(deletedItem.PhotoUrl);
+            mainpageItems = mainpageItems.Where(i => i.Order != order).OrderBy(i => i.Order).ToList();
+            for (int i = 0; i < mainpageItems.Count; i++)
+            {
+                mainpageItems[i].Order = i + 1;
+            }
+            await config.SetMainPageContent(mainpageItems, configRepository);
+
+            return ViewComponent("MainPageForm");
+
+        } 
+        
+        [HttpPut]
+        public async Task<IActionResult> MoveMainPageItem(int? order, MoveDirection? direction)
+        {
+
+            if (order == null || direction == null)
+                return BadRequest();
+
+            var configRepository = repositoryWrapper.ConfigRepository;
+            var mainpageItems = await config.GetMainPageContent(configRepository);
+            if (mainpageItems == null)
+                return NotFound();
+
+            var movingItem = mainpageItems.FirstOrDefault(i => i.Order == order);
+            var secondItem = mainpageItems.FirstOrDefault(i => i.Order == order + (int)direction.Value);
+            if (movingItem == null || secondItem == null)
+                return BadRequest();
+            var tempOrder = movingItem.Order;
+            movingItem.Order = secondItem.Order;
+            secondItem.Order = tempOrder;
+            await config.SetMainPageContent(mainpageItems, configRepository);
+
+            return ViewComponent("MainPageForm");
+
+        }
+
+        public enum MoveDirection
+        {
+            Up = -1,
+            Down = 1
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> EditMainPageItemPhoto(EditMainPagePhotoViewModel photoViewModel)
+        {
+
+            if (photoViewModel == null || !ModelState.IsValid)
+                return BadRequest();
+
+            var configRepository = repositoryWrapper.ConfigRepository;
+            var mainpageItems = await config.GetMainPageContent(configRepository);
+            if (mainpageItems == null)
+                return NotFound();
+
+            var editingItem = mainpageItems.FirstOrDefault(i => i.Order == photoViewModel.Order);
+            if (editingItem == null)
+                return NotFound();
+            try
+            {
+                filesService.DeletePhoto(editingItem.PhotoUrl);
+            }
+            catch
+            {
+
+            }
+            var path = await filesService.UploadFile(photoViewModel.Photo);
+            editingItem.PhotoUrl = path;
+            await config.SetMainPageContent(mainpageItems, configRepository);
+
+            return ViewComponent("MainPageForm");
+        }
+        
+        [HttpPut]
+        public async Task<IActionResult> EditMainPageItem(EditMainPageItemViewModel editMainPage)
+        {
+
+            if (editMainPage == null || !ModelState.IsValid)
+                return BadRequest();
+
+            var configRepository = repositoryWrapper.ConfigRepository;
+            var mainpageItems = await config.GetMainPageContent(configRepository);
+            if (mainpageItems == null)
+                return NotFound();
+
+            var editingItem = mainpageItems.FirstOrDefault(i => i.Order == editMainPage.Order);
+            if (editingItem == null)
+                return NotFound();
+
+            mainpageItems.Remove(editingItem);
+            editingItem = mapper.Map(editMainPage, editingItem);
+            mainpageItems.Add(editingItem);
+            await config.SetMainPageContent(mainpageItems, configRepository);
+
+            return ViewComponent("MainPageForm");
+        }
+        
+
 
     }
 

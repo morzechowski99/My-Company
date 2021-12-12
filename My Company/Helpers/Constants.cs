@@ -38,6 +38,7 @@ namespace My_Company.Helpers
             public const string LogoPath = "logoPath";
             public const string PersonalPickupAddress = "personalPickupAddress";
             public const string DocumentAddress = "documentAddress";
+            public const string MainPageContent = "mainPageContent";
 
             public static class DotPayKeys
             {

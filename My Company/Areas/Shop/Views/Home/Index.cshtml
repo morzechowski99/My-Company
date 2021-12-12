@@ -1,4 +1,5 @@
-﻿
+﻿@model List<My_Company.Models.Configuration.MainPageItem>
+
 @if (TempData["message"] != null)
 {
     <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -8,3 +9,69 @@
         </button>
     </div>
 }
+@if (Model.Count > 0)
+{
+    <div class="card border-0 m-0">
+        <img src="@Url.Content(Model[0].PhotoUrl)" class="card-img" alt="@Model[0].Title">
+        <div class="card-img-overlay w-50 d-flex align-items-center">
+            <div>
+                <h5 class="card-title">@Html.DisplayFor(m => m[0].Title)</h5>
+                <p class="card-text">@Html.DisplayFor(m => m[0].Descritpion)</p>
+                <a class="btn btn-outline-dark btn-lg" asp-action="Search" asp-controller="Products" asp-route-id="@Model[0].CategoryId"
+                   style="border-radius:1px">@Html.DisplayFor(m => m[0].ButtonText)</a>
+            </div>
+        </div>
+    </div>
+
+}
+@for (int i = 1; i < Model.Count; i++)
+{
+    <div class="card mb-3 border-0">
+        <div class="row no-gutters">
+            @if (i % 2 == 0)
+            {
+                <div class="col-md-4">
+                    <img src="@Url.Content(Model[i].PhotoUrl)" class="card-img" alt="@Model[i].Title">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(m => m[i].Title)</h5>
+                        <p class="card-text">@Html.DisplayFor(m => m[i].Descritpion)</p>
+                        <a class="btn btn-outline-dark" asp-action="Search" asp-controller="Products" asp-route-id="@Model[i].CategoryId"
+                           style="border-radius:1px">@Html.DisplayFor(m => m[i].ButtonText)</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(m => m[i].Title)</h5>
+                        <p class="card-text">@Html.DisplayFor(m => m[i].Descritpion)</p>
+                        <a class="btn btn-outline-dark" asp-action="Search" asp-controller="Products" asp-route-id="@Model[i].CategoryId"
+                           style="border-radius:1px">@Html.DisplayFor(m => m[i].ButtonText)</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="@Url.Content(Model[i].PhotoUrl)" class="card-img" alt="@Model[i].Title">
+                </div>
+            }
+        </div>
+    </div>
+
+}
+
+<style>
+    .card-img {
+        max-height: 400px;
+        width: 100%;
+        object-fit: scale-down;
+    }
+
+    @@media (max-width: 768px) {
+        .card-img-overlay {
+            background-color: rgba(255, 255, 255, 0.5);
+            width: 100% !important;
+        }
+    }
+</style>

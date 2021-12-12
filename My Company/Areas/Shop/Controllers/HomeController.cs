@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using My_Company.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,19 @@ namespace My_Company.Areas.Shop.Controllers
     [Area("Shop")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IConfig config;
+        private readonly IRepositoryWrapper repositoryWrapper;
+
+        public HomeController(IConfig config, IRepositoryWrapper repositoryWrapper)
         {
-            return View();
+            this.config = config;
+            this.repositoryWrapper = repositoryWrapper;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var items = await config.GetMainPageContent(repositoryWrapper.ConfigRepository);
+            return View(items.OrderBy(i => i.Order).ToList());
         }
     }
 }

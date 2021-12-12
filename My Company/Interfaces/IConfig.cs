@@ -14,6 +14,7 @@ namespace My_Company.Interfaces
         Task<List<PaymentMethod>> GetAvailavlePaymentsMethods(IConfigRepository configRepository);
         Task<int> GetShippingPrice(DeliveryType deliveryType, IConfigRepository configRepository);
         Task<int> GetPaymentPrice(PaymentMethodEnum paymentMethod, IConfigRepository configRepository);
+        Task<List<MainPageItem>> GetMainPageContent(IConfigRepository configRepo);
         Task<DataToPayment> GetDataToPayment(IConfigRepository configRepository);
         Task<AddressData> GetDocumentAddress(IConfigRepository configRepo);
         Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository);
@@ -24,5 +25,6 @@ namespace My_Company.Interfaces
         Task<PersonalPickupAddress> GetPersonalPickupAddress(IConfigRepository configRepository);
         Task SetPickingMethods(List<PickingMethod> newPickingMethods, IConfigRepository configRepository);
         Task SetDocumentAddress(AddressData newAddress, IConfigRepository configRepository);
+        Task SetMainPageContent(List<MainPageItem> mainPageContent, IConfigRepository configRepo);
     }
 }

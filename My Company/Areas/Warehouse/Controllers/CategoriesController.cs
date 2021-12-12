@@ -31,7 +31,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             _mapper = mapper;
         }
 
-        // GET: Warehouse/Categories
+
         public IActionResult Index()
         {
             return View();
@@ -57,7 +57,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(categoryViewModel);
         }
 
-        // GET: Warehouse/Categories/Create
+
         public async Task<IActionResult> Create()
         {
             ViewData["ParentCategoryId"] = new SelectList(await _repositoryWrapper.CategoriesRepository.GetCategoriesTree(), "Id", "Tree");
