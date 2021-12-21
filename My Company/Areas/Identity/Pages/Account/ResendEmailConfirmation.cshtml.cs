@@ -51,7 +51,7 @@ namespace My_Company.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "Nie ma konta przypisanego do podanego adresu e-mail");
                 return Page();
             }
 
@@ -66,7 +66,7 @@ namespace My_Company.Areas.Identity.Pages.Account
 
             _emailService.SendRegistrationEmail(Input.Email, callbackUrl);
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, "Email został wysłany. Sprawdź swoją skrzynkę pocztową.");
             return Page();
         }
     }

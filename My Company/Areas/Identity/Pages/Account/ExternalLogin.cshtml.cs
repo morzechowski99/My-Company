@@ -9,7 +9,7 @@ namespace My_Company.Areas.Identity.Pages.Account
     {
         public IActionResult OnGetAsync()
         {
-            return RedirectToPage("./Login");
+            return NotFound();
         }
     }
 }

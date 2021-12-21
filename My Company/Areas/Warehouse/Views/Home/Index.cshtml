@@ -1,5 +1,33 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model string
+<div class="text-center">
+    <h6 class="display-4">Witaj @Model!</h6>
+    <hr />
+    <div class="row mt-5">
+        <div class="col-6 col-lg-3">
+            <a class="btn btn-block btn-primary menuItem m-2 d-flex align-items-center justify-content-center" asp-area="Warehouse" asp-controller="Deliveries">
+                <h3 class="font-weight-light">Dostawy</h3>
+            </a>
+        </div>
+        <div class="col-6 col-lg-3">
+            <a class="btn btn-block btn-primary menuItem m-2 d-flex align-items-center justify-content-center" asp-area="Warehouse" asp-controller="Deliveries" asp-action="New">
+                <h3 class="font-weight-light">Nowa dostawa</h3>
+            </a>
+        </div>
+        <div class="col-6 col-lg-3">
+            <a class="btn btn-block btn-primary menuItem m-2 d-flex align-items-center justify-content-center" asp-area="Warehouse" asp-controller="Orders">
+                <h3 class="font-weight-light">Kompletowanie</h3>
+            </a>
+        </div>
+        <div class="col-6 col-lg-3">
+            <a class="btn btn-block btn-primary menuItem m-2 d-flex align-items-center justify-content-center" asp-area="Warehouse" asp-controller="Orders" asp-action="OrdersToPacking">
+                <h3 class="font-weight-light">Pakowanie</h3>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .menuItem {
+        min-height: 180px;
+    }
+</style>

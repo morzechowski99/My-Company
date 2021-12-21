@@ -27,7 +27,12 @@ namespace My_Company.Areas.Warehouse.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (User.IsInRole(Roles.WarehouseEmployee))
+                return View("Index",User.Identity.Name);
+            if (User.IsInRole(Roles.MainAdministrator))
+                return View("AdminDashboard");
+            else
+                return Unauthorized();
         }
 
         [AllowAnonymous]
