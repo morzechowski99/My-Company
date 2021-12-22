@@ -145,7 +145,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 "Role",
                 "RolePL",
                 rolesList.Find(role => role.Role == user.UserRoles.First().Role.Name).Role
-            ); 
+            );
 
             return View(userDto);
         }
@@ -167,6 +167,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                     return NotFound();
 
                 if (user.Email != editEmployeeDto.Email)
+                {
                     if (await _usersService.CheckEmail(editEmployeeDto.Email))
                     {
                         ModelState.AddModelError("Email", "Podany adres e-mail jest zajęty");
@@ -179,6 +180,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                         );
                         return View(editEmployeeDto);
                     }
+                }
 
                 string prevName = user.Name;
                 string prevSurname = user.Surname;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.Dictionaries;
 using My_Company.EnumTypes;
 using My_Company.Helpers;
 using My_Company.Interfaces;
@@ -14,7 +15,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using My_Company.Dictionaries;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
@@ -263,8 +263,8 @@ namespace My_Company.Areas.Warehouse.Controllers
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
                 TempData["success"] = $"Zamówienie {orderId} skompletowane pomyślnie";
-                await SendEmail(order,OrderEmailReason.ChangeOrderStatus);
-                await SendEmail(order,OrderEmailReason.InvoiceReady);
+                await SendEmail(order, OrderEmailReason.ChangeOrderStatus);
+                await SendEmail(order, OrderEmailReason.InvoiceReady);
                 return Ok();
             }
             catch
@@ -273,12 +273,12 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
         }
 
-        private async Task SendEmail(Order order,OrderEmailReason reason)
+        private async Task SendEmail(Order order, OrderEmailReason reason)
         {
             string email = null;
             if (order.UserId != null)
                 email = (await repositoryWrapper.UserRepository.GetOne(u => u.Id == order.UserId)).Email;
-            emailService.SendOrderEmail(reason, order,GetOrderDetailsUrl(order), email);
+            emailService.SendOrderEmail(reason, order, GetOrderDetailsUrl(order), email);
         }
 
         private string GetOrderDetailsUrl(Order order)
@@ -347,12 +347,12 @@ namespace My_Company.Areas.Warehouse.Controllers
                 repositoryWrapper.OrdersRepository.Update(order);
                 await repositoryWrapper.Save();
                 string email = null;
-                if(order.Email == null)
+                if (order.Email == null)
                 {
                     var user = await repositoryWrapper.UserRepository.GetOne(u => u.Id == order.UserId);
                     email = user.Email;
                 }
-                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order,GetOrderDetailsUrl(order), email);
+                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, GetOrderDetailsUrl(order), email);
                 return Ok(OrderStatusesDictionary.Dictionary[order.Status]);
             }
             catch

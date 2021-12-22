@@ -1,6 +1,4 @@
-﻿
-
-$(function () {
+﻿$(function () {
     $('#cart').popover({
         html: true,
         content: function () {

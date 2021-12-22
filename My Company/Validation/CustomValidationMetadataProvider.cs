@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
-using System.Threading.Tasks;
 
 namespace My_Company.Validation
 {
     public class CustomValidationMetadataProvider : IValidationMetadataProvider
     {
-        private ResourceManager resourceManager; private Type resourceType;
+        private ResourceManager resourceManager;
+        private Type resourceType;
         public CustomValidationMetadataProvider(string baseName, Type type)
         {
             resourceType = type;
@@ -24,12 +23,15 @@ namespace My_Company.Validation
             if (context.Key.ModelType.GetTypeInfo().IsValueType &&
                 context.ValidationMetadata.ValidatorMetadata
                     .Where(m => m.GetType() == typeof(RequiredAttribute)).Count() == 0)
+            {
                 context.ValidationMetadata.ValidatorMetadata.
                     Add(new RequiredAttribute());
+            }
+
             foreach (var attribute in context.ValidationMetadata.ValidatorMetadata)
             {
                 ValidationAttribute tAttr = attribute as ValidationAttribute;
-                if (tAttr != null 
+                if (tAttr != null
                         && tAttr.ErrorMessageResourceName == null)
                 {
                     var name = tAttr.GetType().Name;

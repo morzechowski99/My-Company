@@ -2,7 +2,6 @@
 using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,11 +19,11 @@ namespace My_Company.Repositories
         {
             var attribute = await GetAttributeById(attributeId);
             attribute.AttributeDictionaryValues = new List<AttributeDictionaryValues>();
-            foreach(var value in values)
+            foreach (var value in values)
             {
                 attribute.AttributeDictionaryValues.Add(new AttributeDictionaryValues()
                 {
-                    Value= value
+                    Value = value
                 });
             }
 

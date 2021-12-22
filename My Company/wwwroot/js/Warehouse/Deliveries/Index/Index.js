@@ -9,7 +9,6 @@
 $(function () {
     let filtersVisible = true
 
-
     let supplierSelect = $("#supplierSelect").selectize({
         valueField: "id",
         labelField: "description",
@@ -47,13 +46,9 @@ $(function () {
         if (filtersVisible) {
             $('.filter').show('fast')
             $(this).text("Ukryj filtry")
-            //$('.filtersContainer').addClass('justify-content-between')
-            //$('.filtersContainer').removeClass('justify-content-end')
         } else {
             $('.filter').hide('fast')
             $(this).text("Pokaż filtry")
-            //$('.filtersContainer').addClass('justify-content-end')
-            //$('.filtersContainer').removeClass('justify-content-between')
         }
 
     })
@@ -138,7 +133,6 @@ const loadData = function () {
 
     $.get('/Warehouse/Deliveries/GetList',
         {
-
             pageSize: pageSize,
             page: currentPage,
             ...filters

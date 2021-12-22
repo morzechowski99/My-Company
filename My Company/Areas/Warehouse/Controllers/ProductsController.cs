@@ -93,7 +93,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(productViewModel);
         }
 
-        // GET: Warehouse/Products/Create
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(repositoryWrapper.CategoriesRepository.ChildCategoriesById(null), "Id", "CategoryName");
@@ -500,7 +499,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-
         }
     }
 }

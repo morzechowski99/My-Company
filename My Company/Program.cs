@@ -25,9 +25,6 @@ namespace My_Company
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                   // webBuilder.UseUrls("https://192.168.8.103:44397");
-
-
                 });
 
         private async static Task CreateDbIfNotExists(IHost host)

@@ -5,7 +5,6 @@ using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
 using My_Company.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,18 +33,18 @@ namespace My_Company.Repositories
             var category = categories.FirstOrDefault(c => c.Id == categoryId);
             if (category == null)
                 return null;
-            List<Models.Attribute> attributes  = new();
-            while(category != null)
+            List<Models.Attribute> attributes = new();
+            while (category != null)
             {
-                if(category.Attributes != null)
+                if (category.Attributes != null)
                     attributes.AddRange(category.Attributes);
 
                 category = categories.FirstOrDefault(c => c.Id == category.ParentCategoryId);
             }
 
             return attributes;
-        }  
-        
+        }
+
         public async Task<IEnumerable<Models.Attribute>> GetAllAttributesByCategoryIdWithDictionaryValues(int? categoryId)
         {
             var categories = await FindAll()
@@ -56,10 +55,10 @@ namespace My_Company.Repositories
             var category = categories.FirstOrDefault(c => c.Id == categoryId);
             if (category == null)
                 return null;
-            List<Models.Attribute> attributes  = new();
-            while(category != null)
+            List<Models.Attribute> attributes = new();
+            while (category != null)
             {
-                if(category.Attributes != null)
+                if (category.Attributes != null)
                     attributes.AddRange(category.Attributes);
 
                 category = categories.FirstOrDefault(c => c.Id == category.ParentCategoryId);
@@ -83,7 +82,7 @@ namespace My_Company.Repositories
                     {
                         var parentCategory = categories.FirstOrDefault(c => c.Id == parent.Value);
                         tree = parentCategory.CategoryName + "/\n" + tree;
-                        parent = parentCategory.ParentCategoryId;       
+                        parent = parentCategory.ParentCategoryId;
                     }
                 }
                 categoryTrees.Add(new()
@@ -109,10 +108,14 @@ namespace My_Company.Repositories
                     parent = parentCategory.ParentCategoryId;
                 }
             }
-            else return "-";
+            else
+            {
+                return "-";
+            }
+
             return tree;
         }
-        
+
         public async Task<string> GetCategoryTreeWithCategoryName(Category category)
         {
             string tree = "";
@@ -126,7 +129,11 @@ namespace My_Company.Repositories
                     parent = parentCategory.ParentCategoryId;
                 }
             }
-            else return category.CategoryName;
+            else
+            {
+                return category.CategoryName;
+            }
+
             return tree + $"{category.CategoryName}";
         }
 
@@ -140,20 +147,22 @@ namespace My_Company.Repositories
             var query = FindAll();
 
             if (!string.IsNullOrEmpty(filters.SearchString))
+            {
                 query = query.Where(c =>
                 c.CategoryName.Contains(filters.SearchString) ||
                 filters.SearchString.Contains(c.CategoryName) ||
                 c.Description.Contains(filters.SearchString) ||
                 filters.SearchString.Contains(c.Description));
+            }
 
             switch (filters.SortOrder)
             {
                 case CategoriesSortOrderEnum.NameASC:
-                    query = query.OrderBy(c => c.CategoryName);
-                    break;
+                query = query.OrderBy(c => c.CategoryName);
+                break;
                 case CategoriesSortOrderEnum.NameDESC:
-                    query = query.OrderByDescending(c => c.CategoryName);
-                    break;
+                query = query.OrderByDescending(c => c.CategoryName);
+                break;
             }
 
             return query;

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
     public class CreateUserViewModel
     {
-        [Display(Name="Imię")]
+        [Display(Name = "Imię")]
         [Required]
         [MaxLength(30)]
         public string Name { get; set; }

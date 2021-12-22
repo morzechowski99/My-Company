@@ -54,8 +54,6 @@
                     $('.modal').modal('hide')
                     showAlert()
                 }
-
-
             })
             .done(function (data) {
 
@@ -204,7 +202,6 @@ const swapRows = function (rowId, direction) {
             }
 
             fixArrows()
-
             const rows = $(document).find('tr[aria-rowId]').toArray()
             rows.reverse().forEach(row => {
                 if ($(row).attr("aria-rowId") == rowId) {
@@ -216,7 +213,6 @@ const swapRows = function (rowId, direction) {
             })
         },
     })
-
 }
 
 const deleteRow = function (rowId) {

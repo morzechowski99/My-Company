@@ -2,45 +2,45 @@
 
 @if (Model.Count > 0)
 {
-<div class="row align-items-center ">
-    <div class="col-6 col-lg-4 " id="addNewAddress">
-        <div class="p-3 m-2 border border-success addressContainer ">
-            <input type="hidden" id="addressId" value="-1" />
-            <div class="m-2 d-flex align-items-center justify-content-center text-center">
-                Dodaj nowy
-            </div>
-        </div>
-    </div>
-    @foreach (var address in Model)
-    {
-        <div class="col-6 col-lg-4 ">
-            <div class="p-3 m-2 border border-secondary addressContainer">
-                <input type="hidden" class="addressId" value="@address.Id" />
-                <input type="hidden" class="addressFirstName" value="@address.FirstName" />
-                <input type="hidden" class="addressLastName" value="@address.LastName" />
-                <input type="hidden" class="addressStreet" value="@address.Street" />
-                <input type="hidden" class="addressCity" value="@address.City" />
-                <input type="hidden" class="addressPhoneNumber" value="@address.PhoneNumber" />
-                <input type="hidden" class="addressZipCode" value="@address.ZipCode" />
-                <div class="m-2">
-                    <p class="p-0 m-0">@Html.DisplayFor(m => address.FirstName) @Html.DisplayFor(m => address.LastName)</p>
-                    <p class="p-0 m-0">@Html.DisplayFor(m => address.Street) @Html.DisplayFor(m => address.City)</p>
-                    <p class="p-0 m-0">Numer telefonu: @Html.DisplayFor(m => address.PhoneNumber)</p>
+    <div class="row align-items-center ">
+        <div class="col-6 col-lg-4 " id="addNewAddress">
+            <div class="p-3 m-2 border border-success addressContainer ">
+                <input type="hidden" id="addressId" value="-1" />
+                <div class="m-2 d-flex align-items-center justify-content-center text-center">
+                    Dodaj nowy
                 </div>
             </div>
-
         </div>
-    }
+        @foreach (var address in Model)
+        {
+            <div class="col-6 col-lg-4 ">
+                <div class="p-3 m-2 border border-secondary addressContainer">
+                    <input type="hidden" class="addressId" value="@address.Id" />
+                    <input type="hidden" class="addressFirstName" value="@address.FirstName" />
+                    <input type="hidden" class="addressLastName" value="@address.LastName" />
+                    <input type="hidden" class="addressStreet" value="@address.Street" />
+                    <input type="hidden" class="addressCity" value="@address.City" />
+                    <input type="hidden" class="addressPhoneNumber" value="@address.PhoneNumber" />
+                    <input type="hidden" class="addressZipCode" value="@address.ZipCode" />
+                    <div class="m-2">
+                        <p class="p-0 m-0">@Html.DisplayFor(m => address.FirstName) @Html.DisplayFor(m => address.LastName)</p>
+                        <p class="p-0 m-0">@Html.DisplayFor(m => address.Street) @Html.DisplayFor(m => address.City)</p>
+                        <p class="p-0 m-0">Numer telefonu: @Html.DisplayFor(m => address.PhoneNumber)</p>
+                    </div>
+                </div>
 
-</div>
+            </div>
+        }
+
+    </div>
 }
 <style>
     .addressContainer {
-        cursor : pointer
-    } 
-
-    .addressContainer:hover {
-        background-color: var(--secondary);
-        border-color: var(--success);
+        cursor: pointer
     }
+
+        .addressContainer:hover {
+            background-color: var(--secondary);
+            border-color: var(--success);
+        }
 </style>

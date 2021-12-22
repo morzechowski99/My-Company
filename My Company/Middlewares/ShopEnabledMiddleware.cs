@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using My_Company.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company.Middlewares
@@ -25,11 +22,14 @@ namespace My_Company.Middlewares
                     ctx.Response.StatusCode = 404;
                 }
                 else
+                {
                     await _next(ctx);
+                }
             }
             else
+            {
                 await _next(ctx);
-
+            }
         }
     }
 }

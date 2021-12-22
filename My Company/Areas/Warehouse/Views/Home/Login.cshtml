@@ -10,19 +10,19 @@
                 <hr />
                 <div class="text-danger">@ViewBag.LoginMessage</div>
                 <div class="form-group">
-                    <label asp-for="Username" ></label>
+                    <label asp-for="Username"></label>
                     <input asp-for="Username" class="form-control" />
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password" ></label>
+                    <label asp-for="Password"></label>
                     <input asp-for="Password" class="form-control" />
                     <div><span asp-validation-for="Password" class="text-danger"></span></div>
                     <a id="forgot-password" href="/Identity/Account/ForgotPassword">Zapomnialeś hasła?</a>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">
-                        <label asp-for="RememberMe" >
+                        <label asp-for="RememberMe">
                             <input asp-for="RememberMe" />
                             @Html.DisplayNameFor(m => m.RememberMe)
                         </label>

@@ -9,7 +9,7 @@
 <h4>Produkt</h4>
 <hr />
 
-<form asp-action="Create" id="createForm"  enctype="multipart/form-data">
+<form asp-action="Create" id="createForm" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="tab">
         <h4>Wybierz kategorię</h4>
@@ -40,7 +40,7 @@
                     <label asp-for="EANCode" class="control-label"></label>
                     <input asp-for="EANCode" class="form-control" />
                     <span asp-validation-for="EANCode" class="text-danger"></span>
-                </div> 
+                </div>
                 <div class="form-group">
                     <label asp-for="NettoPrice" class="control-label"></label>
                     <input asp-for="NettoPrice" class="form-control" />
@@ -77,21 +77,21 @@
 
             </div>
         </div>
-    </div>    
-<div class="tab">
-    <h4>Zdjęcia</h4>
-    
+    </div>
+    <div class="tab">
+        <h4>Zdjęcia</h4>
+
         <div class="row">
             <div class="col-12 buttonContainer my-2">
                 <button type="button" id="addNextPhotoBtn" class="btn btn-outline-success">Dodaj kolejne zdjęcie</button>
-                
+
             </div>
-           
+
         </div>
-</div>
+    </div>
 
     <div class="d-flex justify-content-between">
-        
+
         <div>
             <a class="btn btn-outline-secondary" asp-action="Index">Anuluj</a>
         </div>

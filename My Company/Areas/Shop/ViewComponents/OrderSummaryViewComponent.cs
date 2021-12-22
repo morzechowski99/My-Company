@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static My_Company.Helpers.Constants;
 using static My_Company.Helpers.CartHelpers;
+using static My_Company.Helpers.Constants;
 
 namespace My_Company.Areas.Shop.ViewComponents
 {

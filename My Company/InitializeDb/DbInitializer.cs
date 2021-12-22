@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using My_Company.Data;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company.InitializeDb
@@ -14,7 +11,7 @@ namespace My_Company.InitializeDb
     {
         public static async Task Initialize(IRepositoryWrapper repository, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
-           // if (!repository.EnsureCreated()) return;
+            // if (!repository.EnsureCreated()) return;
 
             var adminRole = new AppRole();
             adminRole.Name = Constants.Roles.MainAdministrator;

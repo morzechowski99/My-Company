@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Shop.ViewModels.Order
 {
     public class OrderDefailsViewModel
     {
-        [Display(Name ="Numer zamówienia")]
+        [Display(Name = "Numer zamówienia")]
         public Guid Id { get; set; }
         [Display(Name = "Data zamówienia")]
         [DataType(DataType.Date)]
@@ -21,7 +19,7 @@ namespace My_Company.Areas.Shop.ViewModels.Order
         public string DeliveryTypeString { get; set; }
         [Display(Name = "Metoda płatności")]
         public string PaymentMethodString { get; set; }
-        public PaymentMethodEnum PaymentMethod{ get; set; }
+        public PaymentMethodEnum PaymentMethod { get; set; }
         [Display(Name = "Cena płatności")]
         [DataType(DataType.Currency)]
         public decimal PaymentPrice { get; set; }

@@ -80,7 +80,6 @@ $(function () {
             $('.filtersContainer').addClass('justify-content-end')
             $('.filtersContainer').removeClass('justify-content-between')
         }
-
     })
 
     $('#sortSelect').change(function () {
@@ -172,7 +171,6 @@ const loadData = function () {
             $('.spinner').addClass("spinnerHidden")
             $("#table").html(data)
             registerBtns()
-
         })
 }
 

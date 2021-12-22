@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
@@ -11,11 +8,11 @@ namespace My_Company.Areas.Warehouse.ViewModels
         public int Id { get; set; }
         [Display(Name = "Nazwa kategorii")]
         public string CategoryName { get; set; }
-        [Display(Name = "Opis")]       
+        [Display(Name = "Opis")]
         public string Descripttion { get; set; }
         [Display(Name = "Drzewo kategorii")]
         public string CategoryTree { get; set; }
-        [Display(Name ="Atrybuty")]
+        [Display(Name = "Atrybuty")]
         public List<AttributeViewModel> Attributes { get; set; }
     }
 }

@@ -15,8 +15,8 @@ namespace My_Company.Services.DocumentGeneratorService.Models
         public string Address2 { get; set; }
         [Display(Name = "NIP")]
         [Required]
-        [MinLength(10,ErrorMessage ="NIP musi mieć 10 znaków")]
-        [MaxLength(10,ErrorMessage ="NIP musi mieć 10 znaków")]
+        [MinLength(10, ErrorMessage = "NIP musi mieć 10 znaków")]
+        [MaxLength(10, ErrorMessage = "NIP musi mieć 10 znaków")]
         [RegularExpression(@"^\d+$")]
         public string NIP { get; set; }
         [Required]

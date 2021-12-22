@@ -230,7 +230,10 @@ namespace My_Company.Areas.Shop.Controllers
 
                 return View(orderModel);
             }
-            else return RedirectToAction("AuthorizeOrderDetails", new { id = id });
+            else
+            {
+                return RedirectToAction("AuthorizeOrderDetails", new { id = id });
+            }
         }
 
         [AllowAnonymous]
@@ -258,10 +261,10 @@ namespace My_Company.Areas.Shop.Controllers
             }
             else
             {
-                return View("OrderDetails",orderModel);
+                return View("OrderDetails", orderModel);
             }
 
-           
+
         }
 
         [AllowAnonymous]

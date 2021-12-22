@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
     public class NewWarehouseViewModel
     {
         [Required]
-        [Display(Name ="Nazwa")]
+        [Display(Name = "Nazwa")]
         public string Name { get; set; }
         [Required]
         [Display(Name = "Ulica")]

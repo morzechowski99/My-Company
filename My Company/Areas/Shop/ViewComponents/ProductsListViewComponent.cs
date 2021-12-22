@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace My_Company.Areas.Shop.ViewComponents
 {
-    public class ProductsListViewComponent : ViewComponent 
+    public class ProductsListViewComponent : ViewComponent
     {
         private readonly IRepositoryWrapper repositoryWrapper;
 

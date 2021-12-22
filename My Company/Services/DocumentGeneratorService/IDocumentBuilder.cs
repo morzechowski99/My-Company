@@ -14,9 +14,9 @@ namespace My_Company.Services.DocumentGeneratorService
         IDocumentBuilder BuildDocumentNumber(string documentNumber);
         IDocumentBuilder BuildTableHeader(params string[] header);
         IDocumentBuilder BuildTableBody(List<string[]> rows);
-        IDocumentBuilder BuildAdditionalInfo (List<string> lines, bool empty = false);
+        IDocumentBuilder BuildAdditionalInfo(List<string> lines, bool empty = false);
         IDocumentBuilder BuildTableBodySummary(List<string[]> rows);
-        IDocumentBuilder BuildSummary (List<string> lines, bool empty = false);
+        IDocumentBuilder BuildSummary(List<string> lines, bool empty = false);
         string GetDocument();
         IDocumentBuilder BuildTablesDesciptions(string description1, string description2);
         IDocumentBuilder BuildSecondTableHeader(params string[] header);

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using My_Company.Services.DocumentGeneratorService.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Services.DocumentGeneratorService
 {
@@ -114,27 +111,27 @@ namespace My_Company.Services.DocumentGeneratorService
             foreach (var row in rows)
             {
                 var rowString = "<tr>";
-                foreach(var data in row)
+                foreach (var data in row)
                 {
-                    rowsString +=  $@"<td>{data}</td>";
+                    rowsString += $@"<td>{data}</td>";
                 }
                 rowsString += "</tr>";
                 rowsString += rowString;
             }
             body = body.Replace("{tableRows}", rowsString);
             return this;
-        } 
-        
+        }
+
         public IDocumentBuilder BuildTableBodySummary(List<string[]> rows)
         {
             var rowsString = "";
             foreach (var row in rows)
             {
                 var rowString = @"<tr class=""borderNone"">";
-                foreach(var data in row)
+                foreach (var data in row)
                 {
-                    if(data != "")
-                    rowsString +=  $@"<td>{data}</td>";
+                    if (data != "")
+                        rowsString += $@"<td>{data}</td>";
                     else
                         rowsString += $@"<td class=""borderNone""></td>";
                 }

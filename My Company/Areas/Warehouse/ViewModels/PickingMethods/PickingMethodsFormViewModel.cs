@@ -6,6 +6,6 @@ namespace My_Company.Areas.Warehouse.ViewModels.PickingMethods
     public class PickingMethodsFormViewModel
     {
         public List<PickingMethodViewModel> Methods { get; set; }
-        public PersonalPickupAddress Addres{ get; set; }
+        public PersonalPickupAddress Addres { get; set; }
     }
 }

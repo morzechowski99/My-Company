@@ -35,7 +35,7 @@ namespace My_Company.Areas.Shop.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return BadRequest();
             }

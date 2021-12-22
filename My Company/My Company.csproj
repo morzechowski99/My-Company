@@ -47,7 +47,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Content\staticContent\" />
-    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
   <ItemGroup>

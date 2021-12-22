@@ -5,7 +5,6 @@ using My_Company.Services.DocumentGeneratorService.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using static My_Company.Helpers.Constants;
 
@@ -57,7 +56,7 @@ namespace My_Company.Services
         public async Task<int> GetShippingPrice(DeliveryType deliveryType, IConfigRepository configRepository)
         {
             var pickingMethods = await GetAvailavlePickingMethods(configRepository);
-            return pickingMethods.First(m => m.Type == deliveryType).Price;   
+            return pickingMethods.First(m => m.Type == deliveryType).Price;
         }
 
         public async Task<int> GetPaymentPrice(PaymentMethodEnum paymentMethod, IConfigRepository configRepository)
@@ -75,7 +74,7 @@ namespace My_Company.Services
 
         public async Task SetDataToPayment(DataToPayment dataToPayment, IConfigRepository configRepository)
         {
-            await SetValue(ConfigKeys.DataToPayment, JsonConvert.SerializeObject(dataToPayment),configRepository);
+            await SetValue(ConfigKeys.DataToPayment, JsonConvert.SerializeObject(dataToPayment), configRepository);
         }
 
         public async Task<bool> IsShopEnabled(IConfigRepository configRepository)
@@ -125,9 +124,9 @@ namespace My_Company.Services
         {
             return JsonConvert.DeserializeObject<List<MainPageItem>>
                (await GetValue(ConfigKeys.MainPageContent, configRepo));
-        } 
-        
-        public async Task SetMainPageContent(List<MainPageItem> mainPageContent,IConfigRepository configRepo)
+        }
+
+        public async Task SetMainPageContent(List<MainPageItem> mainPageContent, IConfigRepository configRepo)
         {
             await SetValue(ConfigKeys.MainPageContent, JsonConvert.SerializeObject(mainPageContent), configRepo);
         }

@@ -285,12 +285,12 @@ namespace My_Company.Services.DocumentGeneratorService
                 .BuildTableBody(GetDeliveryTableBody(delivery))
                 .BuildTableBodySummary(new List<string[]>())
                 .BuildAdditionalInfo(new List<string>(), true)
-                .BuildSummary(new List<string>(),true )
+                .BuildSummary(new List<string>(), true)
                 .GetDocument();
 
             return await GetDocument(html);
         }
-        
+
         public async Task<Stream> GetDeliveryCorrecingDocument(Delivery correcting, Delivery corrected)
         {
             var address = await config.GetDocumentAddress(repositoryWrapper.ConfigRepository);
@@ -301,14 +301,14 @@ namespace My_Company.Services.DocumentGeneratorService
                 .BuildBuyerData(address)
                 .BuildSellerData(mapper.Map<AddressData>(correcting.Supplier))
                 .BuildDocumentNumber($"Dostawa {correcting.PZNumber}")
-                .BuildTablesDesciptions("Przed korektą","Po korekcie")
+                .BuildTablesDesciptions("Przed korektą", "Po korekcie")
                 .BuildTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Sektor")
                 .BuildSecondTableHeader("Lp.", "Nazwa", "Jm.", "Ilość", "Sektor")
                 .BuildTableBody(GetDeliveryTableBody(corrected))
                 .BuildSecondTableBody(GetDeliveryTableBody(correcting))
                 .BuildTableBodySummary(new List<string[]>())
                 .BuildAdditionalInfo(new List<string>() { $@"<div class=""p0 m0""><b>Powiązany dokument:</b> {corrected.PZNumber}</div>" })
-                .BuildSummary(new List<string>(),true )
+                .BuildSummary(new List<string>(), true)
                 .GetDocument();
 
             return await GetDocument(html);

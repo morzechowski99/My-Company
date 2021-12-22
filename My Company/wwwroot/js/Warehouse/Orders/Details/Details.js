@@ -11,7 +11,6 @@
             .done(function (blob) {
                 openFile(blob)
             })
-
     })
 
     $("#getWz").click(function (e) {

@@ -31,7 +31,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             _mapper = mapper;
         }
 
-
         public IActionResult Index()
         {
             return View();
@@ -201,7 +200,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(categoryDto);
         }
 
-        // POST: Warehouse/Categories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditCategoryViewModel categoryDto)
@@ -336,7 +334,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                         category.Attributes.Add(newAttr);
                         newAttributes.Add(newAttr);
                     }
-                }              
+                }
 
                 _repositoryWrapper.CategoriesRepository.Update(category);
 

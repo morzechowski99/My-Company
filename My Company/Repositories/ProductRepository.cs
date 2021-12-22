@@ -135,8 +135,8 @@ namespace My_Company.Repositories
                 .ThenInclude(p => p.Attribute)
                 .Include(p => p.Photos)
                 .FirstOrDefaultAsync();
-        } 
-        
+        }
+
         public async Task<Product> GetProductDetailsById(int id)
         {
             return await FindByCondition(p => p.Id == id)

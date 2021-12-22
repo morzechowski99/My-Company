@@ -27,10 +27,10 @@ namespace My_Company.Areas.Warehouse.ViewComponents
             var mainPageContent = await config.GetMainPageContent(configRepo);
             var mainPageContentView = mapper.Map<List<MainPageItemViewModel>>(mainPageContent).OrderBy(i => i.Order).ToList();
 
-            foreach(var item in mainPageContentView)
+            foreach (var item in mainPageContentView)
             {
                 var categoryId = mainPageContent.First(i => i.Order == item.Order).CategoryId;
-                item.CategoryName = categoryId.HasValue ? 
+                item.CategoryName = categoryId.HasValue ?
                     await repositoryWrapper.CategoriesRepository.GetCategoryTreeWithCategoryName
                     (await repositoryWrapper.CategoriesRepository.GetById(categoryId.Value)) : "Wszystkie produkty";
             }

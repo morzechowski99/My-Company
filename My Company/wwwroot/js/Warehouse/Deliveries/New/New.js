@@ -84,7 +84,6 @@ $(function () {
     $("#sectorEanInput").on("input", function (e) {
         $("#rowSelect").val(null)
         $("#sectorSelect").empty()
-        //$("#rowSelect").change()
         const ean = e.target.value
         if (ean.length < 13) {
             order.lastSectorId = null

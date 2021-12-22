@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Models.Configuration
 {
     public class PersonalPickupAddress
     {
-    
+
         [Display(Name = "Ulica")]
         public string Street { get; set; }
         [Display(Name = "Kod pocztowy")]

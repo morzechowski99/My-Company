@@ -17,10 +17,10 @@ namespace My_Company.Areas.Shop.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            
+
             var availableMethods = await config.GetAvailavlePickingMethods(repositoryWrapper.ConfigRepository);
 
-            return View("AvailablePickingTypes",availableMethods);
+            return View("AvailablePickingTypes", availableMethods);
         }
     }
 

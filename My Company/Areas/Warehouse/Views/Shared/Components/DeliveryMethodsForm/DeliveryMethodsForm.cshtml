@@ -3,66 +3,66 @@
 @using My_Company.EnumTypes
 
 
-    <form id="paymentsMethodsForm" asp-action="ChangePickingMethods" method="post">
-        <div class="row my-2">
-            <div class="col-md-6">
-                @{
-                    bool personalPickupEnabled = Model.Methods.Any(m => m.Type == DeliveryType.PersonalPickup && m.Enabled);
-                }
-                <div class="form-check my-2">
-                    <input type="hidden" asp-for="@Model.Methods[0].Type" value="@DeliveryType.PersonalPickup" />
-                    <input type="checkbox" id="personalCheck" class="form-check-input" asp-for="Methods[0].Enabled">
-                    <label class="form-check-label">@Dictionary[DeliveryType.PersonalPickup]</label>
+<form id="paymentsMethodsForm" asp-action="ChangePickingMethods" method="post">
+    <div class="row my-2">
+        <div class="col-md-6">
+            @{
+                bool personalPickupEnabled = Model.Methods.Any(m => m.Type == DeliveryType.PersonalPickup && m.Enabled);
+            }
+            <div class="form-check my-2">
+                <input type="hidden" asp-for="@Model.Methods[0].Type" value="@DeliveryType.PersonalPickup" />
+                <input type="checkbox" id="personalCheck" class="form-check-input" asp-for="Methods[0].Enabled">
+                <label class="form-check-label">@Dictionary[DeliveryType.PersonalPickup]</label>
+            </div>
+            <div id="personal-pickup-data" style="display:@(personalPickupEnabled ? "block" : "none")">
+                <div class="form-group">
+                    <label asp-for="@Model.Methods[0].Price"></label>
+                    <input asp-for="@Model.Methods[0].Price" class="form-control" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
+                    <span class="text-danger" asp-validation-for="@Model.Methods[0].Price"></span>
                 </div>
-                <div id="personal-pickup-data" style="display:@(personalPickupEnabled ? "block" : "none")">
-                    <div class="form-group">
-                        <label asp-for="@Model.Methods[0].Price"></label>
-                        <input asp-for="@Model.Methods[0].Price" class="form-control" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
-                        <span class="text-danger" asp-validation-for="@Model.Methods[0].Price"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Addres.Street"></label>
-                        <input asp-for="Addres.Street" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
-                        <span class="text-danger" asp-validation-for="Addres.Street"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Addres.ZipCode"></label>
-                        <input asp-for="Addres.ZipCode" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
-                        <span class="text-danger" asp-validation-for="Addres.ZipCode"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Addres.City"></label>
-                        <input asp-for="Addres.City" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
-                        <span class="text-danger" asp-validation-for="Addres.City"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Addres.PhoneNumber"></label>
-                        <input asp-for="Addres.PhoneNumber" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
-                        <span class="text-danger" asp-validation-for="Addres.PhoneNumber"></span>
-                    </div>
+                <div class="form-group">
+                    <label asp-for="Addres.Street"></label>
+                    <input asp-for="Addres.Street" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
+                    <span class="text-danger" asp-validation-for="Addres.Street"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Addres.ZipCode"></label>
+                    <input asp-for="Addres.ZipCode" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
+                    <span class="text-danger" asp-validation-for="Addres.ZipCode"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Addres.City"></label>
+                    <input asp-for="Addres.City" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
+                    <span class="text-danger" asp-validation-for="Addres.City"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Addres.PhoneNumber"></label>
+                    <input asp-for="Addres.PhoneNumber" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="personalCheck" />
+                    <span class="text-danger" asp-validation-for="Addres.PhoneNumber"></span>
                 </div>
             </div>
-            <div class="col-md-6">
-                @{
-                    bool inPostEnabled = Model.Methods.Any(m => m.Type == DeliveryType.PaczkomatyInPost && m.Enabled);
-                }
-                <div class="form-check my-2">
-                    <input type="hidden" asp-for="@Model.Methods[1].Type" value="@DeliveryType.PaczkomatyInPost" />
-                    <input type="checkbox" id="inPostCheck" class="form-check-input" asp-for="Methods[1].Enabled">
-                    <label class="form-check-label">@Dictionary[DeliveryType.PaczkomatyInPost]</label>
+        </div>
+        <div class="col-md-6">
+            @{
+                bool inPostEnabled = Model.Methods.Any(m => m.Type == DeliveryType.PaczkomatyInPost && m.Enabled);
+            }
+            <div class="form-check my-2">
+                <input type="hidden" asp-for="@Model.Methods[1].Type" value="@DeliveryType.PaczkomatyInPost" />
+                <input type="checkbox" id="inPostCheck" class="form-check-input" asp-for="Methods[1].Enabled">
+                <label class="form-check-label">@Dictionary[DeliveryType.PaczkomatyInPost]</label>
+            </div>
+            <div id="inpost-data" style="display:@(inPostEnabled ? "block" : "none")">
+                <div class="form-group">
+                    <label asp-for="@Model.Methods[1].Price"></label>
+                    <input asp-for="@Model.Methods[1].Price" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="inPostCheck" />
+                    <span class="text-danger" asp-validation-for="@Model.Methods[1].Price"></span>
                 </div>
-                <div id="inpost-data" style="display:@(inPostEnabled ? "block" : "none")">
-                    <div class="form-group">
-                        <label asp-for="@Model.Methods[1].Price"></label>
-                        <input asp-for="@Model.Methods[1].Price" class="form-control" data-val="true" data-val-requiredifchecked="Pole wymagane" data-val-requiredifchecked-otherpropertyname="inPostCheck" />
-                        <span class="text-danger" asp-validation-for="@Model.Methods[1].Price"></span>
-                    </div>
-                </div>
+            </div>
 
-            </div>
         </div>
-        <div class="justify-content-end d-flex">
-            <button class="btn btn-success" type="submit">Zapisz</button>
-        </div>
-    </form>
+    </div>
+    <div class="justify-content-end d-flex">
+        <button class="btn btn-success" type="submit">Zapisz</button>
+    </div>
+</form>
 

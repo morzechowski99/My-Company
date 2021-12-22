@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.ViewModels;
-using My_Company.Data;
 using My_Company.Helpers;
 using My_Company.Interfaces;
 using My_Company.Models;
-using My_Company.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
@@ -67,7 +62,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 var supplierDb = _mapper.Map<Supplier>(supplier);
                 _repositoryWrapper.SuppliersRepository.Create(supplierDb);
                 await _repositoryWrapper.Save();
-                
+
                 return RedirectToAction(nameof(Index));
             }
             return View(supplier);
@@ -121,7 +116,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             var nips = await _repositoryWrapper.SuppliersRepository.GetSuppliersNIPsByPrefix(prefix);
             List<object> list = new List<object>();
-            foreach(string nip in nips)
+            foreach (string nip in nips)
             {
                 list.Add(new { nip = nip });
             }
@@ -137,7 +132,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             var emails = await _repositoryWrapper.SuppliersRepository.GetSuppliersEmailssByPrefix(prefix);
             List<object> list = new List<object>();
-            foreach(string email in emails)
+            foreach (string email in emails)
             {
                 list.Add(new { email = email });
             }
@@ -173,14 +168,12 @@ namespace My_Company.Areas.Warehouse.Controllers
                 _repositoryWrapper.SuppliersRepository.Delete(supplier);
                 await _repositoryWrapper.Save();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            
 
             return Ok();
         }
-
     }
 }

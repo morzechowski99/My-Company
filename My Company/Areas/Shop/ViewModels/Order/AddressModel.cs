@@ -5,7 +5,7 @@ namespace My_Company.Areas.Shop.ViewModels.Order
     public class AddressModel
     {
         [Required]
-        [Display(Name ="Imię")]
+        [Display(Name = "Imię")]
         public string FirstName { get; set; }
         [Required]
         [Display(Name = "Nazwisko")]
@@ -23,7 +23,7 @@ namespace My_Company.Areas.Shop.ViewModels.Order
         public string City { get; set; }
         [Required]
         [Display(Name = "Numer telefonu")]
-        [DataType(DataType.PhoneNumber,ErrorMessage ="Nieprawidłowy numer telefonu")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Nieprawidłowy numer telefonu")]
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
     }

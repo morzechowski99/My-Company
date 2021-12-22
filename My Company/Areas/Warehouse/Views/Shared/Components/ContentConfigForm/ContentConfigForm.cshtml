@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <input type="hidden" asp-for="@Model[i].Key" />
                     <label class="control-label">@ConfigDictionary[Model[i].Key]</label>
-                    <textarea rows="5" class="form-control w-75" asp-for="@Model[i].Value" ></textarea>
+                    <textarea rows="5" class="form-control w-75" asp-for="@Model[i].Value"></textarea>
                     <span asp-validation-for="@Model[i].Value" class="text-danger"></span>
                 </div>
             </div>

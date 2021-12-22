@@ -9,5 +9,5 @@ namespace My_Company.Areas.Shop.ViewModels.Order
         public string PackLockerName { get; set; }
         public ParcelLockerInfo ParcelLockerInfo { get; set; }
     }
-    
+
 }

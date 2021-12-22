@@ -21,7 +21,7 @@ namespace My_Company.Services
         private readonly IConfig config;
         private readonly IParcelLockersService parcelLockersService;
 
-        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IConfig config,IParcelLockersService parcelLockersService)
+        public OrdersService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IConfig config, IParcelLockersService parcelLockersService)
         {
             this.repositoryWrapper = repositoryWrapper;
             this.mapper = mapper;
@@ -130,7 +130,7 @@ namespace My_Company.Services
 
             var orderModel = mapper.Map<OrderDefailsViewModel>(order);
             orderModel.Products.ForEach(p => p.Price = p.OneItemPrice * p.Quantity);
-            if(order.DeliveryType == DeliveryType.PaczkomatyInPost)
+            if (order.DeliveryType == DeliveryType.PaczkomatyInPost)
             {
                 orderModel.Delivery.ParcelLockerInfo = await parcelLockersService.GetParcelLockerInfo((order.Delivery as InPostDelivery).PackLockerName);
             }

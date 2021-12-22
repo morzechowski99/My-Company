@@ -32,7 +32,7 @@ namespace My_Company.Services
 
             emailQueue.AddEmailToQueue(new EmailQueueItem
             {
-                Content = reason.GetEmailContent(order,url),
+                Content = reason.GetEmailContent(order, url),
                 Title = reason.GetEmailTitle(order),
                 To = email == null ? order.Email : email
             });

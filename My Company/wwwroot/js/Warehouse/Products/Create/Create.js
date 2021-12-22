@@ -22,7 +22,6 @@ $(function () {
         }
     }
 
-
     function nextPrev(n) {
         const x = $(".tab")
         const inputsToValidate = x.eq(currentTab).find('input, select, textarea')
@@ -129,7 +128,7 @@ const registerPhotoInputs = function () {
         e.stopImmediatePropagation();
         const [file] = this.files
         const id = $(this).data('id')
-       
+
         $(`.photoItem[data-id='${id}'] .card`).remove()
         if (file) {
             const src = URL.createObjectURL(file)
@@ -154,12 +153,12 @@ const registerPhotoInputs = function () {
                         $elem.find('.card-body').prepend("<h6>To będzie zdjęcie główne</h6>")
                     if (elemId > id) {
                         $elem.find('input').attr('name', `Photos[${elemId - 1}]`);
-                        $elem.data('id', elemId -1)
+                        $elem.data('id', elemId - 1)
                     }
                 })
             })
 
-           
+
         }
     })
 }
@@ -206,7 +205,6 @@ const loadAttributesHtml = function (id) {
     $('#attributesTab').load('/Warehouse/Products/GetAttributesViewComponent/' + lastCategoryId,
         null,
         function (responseText, textStatus, req) {
-
             if (textStatus == "error") {
                 $('#attributesTab').html('<h4 class="text-danger">Podczas pobierania danych z serwera wystąpił błąd. Prosimy przeładować stronę</h4>')
             }

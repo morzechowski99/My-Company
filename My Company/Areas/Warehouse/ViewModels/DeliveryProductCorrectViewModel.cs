@@ -6,7 +6,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
     {
         [Required]
         [Display(Name = "Ilość")]
-        [Range(0, int.MaxValue,ErrorMessage = "Niepoprawna ilość")]
+        [Range(0, int.MaxValue, ErrorMessage = "Niepoprawna ilość")]
         public int Count { get; set; }
         [Display(Name = "Nazwa")]
         public string Name { get; set; }

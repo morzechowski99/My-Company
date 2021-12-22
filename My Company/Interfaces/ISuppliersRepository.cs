@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using My_Company.Areas.Warehouse.ViewModels;
+﻿using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

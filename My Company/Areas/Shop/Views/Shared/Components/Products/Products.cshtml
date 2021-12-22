@@ -21,7 +21,7 @@
     </div>
     <div class="col-sm-4 col-12 d-flex justify-content-sm-end">
         <div class="form-inline flex-sm-wrap flex-nowrap">
-            <div class="p-2 control-label">Sortowanie</div> 
+            <div class="p-2 control-label">Sortowanie</div>
             <select class="form-control border-0" id="sortSelect">
                 <option value="0">Domyślne</option>
                 <option value="1">Od najtańszych</option>
@@ -67,8 +67,8 @@
             <li class="page-item @(2 == Model.CurrentPage ? "active" : "")"><a class="page-link" data-page="2" href="#">2</a></li>
             <li class="page-item @(3 == Model.CurrentPage ? "active" : "")"><a class="page-link" data-page="3" href="#">3</a></li>
             <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" data-page="@(Model.TotalPages - 1)"  href="#">@(Model.TotalPages - 1)</a></li>
-            <li class="page-item"><a class="page-link" data-page="@Model.TotalPages"  href="#">@Model.TotalPages</a></li>
+            <li class="page-item"><a class="page-link" data-page="@(Model.TotalPages - 1)" href="#">@(Model.TotalPages - 1)</a></li>
+            <li class="page-item"><a class="page-link" data-page="@Model.TotalPages" href="#">@Model.TotalPages</a></li>
         }
         else if (Model.CurrentPage + 3 > Model.TotalPages)
         {

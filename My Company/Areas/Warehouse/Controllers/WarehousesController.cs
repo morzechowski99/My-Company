@@ -1,17 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using My_Company.Areas.Warehouse.ViewModels;
+using My_Company.Interfaces;
+using My_Company.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using My_Company.Areas.Warehouse.ViewModels;
-using My_Company.Data;
-using My_Company.Interfaces;
-using My_Company.Models;
 
 namespace My_Company.Areas.Warehouse.Controllers
 {
@@ -27,7 +24,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             _mapper = mapper;
         }
 
-        // GET: Warehouse/Warehouses
         public async Task<IActionResult> Index()
         {
             if (await _repositoryWrapper.WarehouseRepository.FindAll().AnyAsync())
@@ -35,7 +31,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View();
         }
 
-        // GET: Warehouse/Warehouses/Details/5
         public async Task<IActionResult> Details()
         {
             var warehouse = await _repositoryWrapper.WarehouseRepository.FindAll().FirstOrDefaultAsync();
@@ -47,7 +42,6 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             return View(warehouse);
         }
-
 
         public async Task<IActionResult> Create()
         {
@@ -96,7 +90,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(warehouseDto);
         }
 
-        // GET: Warehouse/Warehouses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -112,9 +105,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             return View(warehouse);
         }
 
-        // POST: Warehouse/Warehouses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, My_Company.Models.Warehouse warehouse)
@@ -169,7 +159,7 @@ namespace My_Company.Areas.Warehouse.Controllers
             foreach (var row in plan)
             {
                 row.Sectors.Sort((r1, r2) => r1.Order - r2.Order > 0 ? 1 : -1);
-                foreach(var sector in row.Sectors)
+                foreach (var sector in row.Sectors)
                 {
                     sector.Deletable = await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(sector.Id);
                 }
@@ -208,7 +198,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
                 return Ok(row);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -265,7 +255,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (row == null)
                     return NotFound("there's no row with given id");
 
-                foreach(var sector in row.Sectors)
+                foreach (var sector in row.Sectors)
                 {
                     _repositoryWrapper.WarehouseSectorRepository.Delete(sector);
                 }
@@ -274,26 +264,27 @@ namespace My_Company.Areas.Warehouse.Controllers
 
                 await _repositoryWrapper.Save();
 
-                
-
                 return Ok(RowId);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (e is DbUpdateConcurrencyException || e is DbUpdateException)
                 {
                     return BadRequest("cannot delete this row");
                 }
-                else return StatusCode(StatusCodes.Status500InternalServerError);
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRow(NewWarehouseSectorViewModel newRow,int? WarehouseId)
+        public async Task<IActionResult> AddRow(NewWarehouseSectorViewModel newRow, int? WarehouseId)
         {
             try
             {
-                if(newRow == null || WarehouseId == null)
+                if (newRow == null || WarehouseId == null)
                 {
                     return BadRequest();
                 }
@@ -303,9 +294,9 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (warehouse == null)
                     return NotFound("warehouse not found");
 
-                foreach(var row in warehouse.Rows)
+                foreach (var row in warehouse.Rows)
                 {
-                    if(row.RowName == newRow.Name)
+                    if (row.RowName == newRow.Name)
                     {
                         return BadRequest("name already exists");
                     }
@@ -334,7 +325,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 return Ok(newRowDb);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -356,7 +347,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (!(await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(SectorId.Value)))
                     return BadRequest("sector isn't empty");
 
-                await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);        
+                await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);
                 await _repositoryWrapper.Save();
 
                 var sectors = await _repositoryWrapper.WarehouseSectorRepository.GetSectorsByRow(sector.RowId);
@@ -366,8 +357,8 @@ namespace My_Company.Areas.Warehouse.Controllers
                 {
                     s.Deletable = await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(s.Id);
                 }
-                
-                return Ok(new { sectors=sectorsDTOs, rowId=sector.RowId, rowName = sector.Row.RowName });
+
+                return Ok(new { sectors = sectorsDTOs, rowId = sector.RowId, rowName = sector.Row.RowName });
             }
             catch (Exception e)
             {
@@ -375,7 +366,10 @@ namespace My_Company.Areas.Warehouse.Controllers
                 {
                     return BadRequest("cannot delete this row");
                 }
-                else return StatusCode(StatusCodes.Status500InternalServerError);
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
             }
         }
     }

@@ -24,16 +24,16 @@
     </p>
     @if (Model == PaymentMethodEnum.TraditionalTransfer)
     {
-       <div class="text-center m-2">
-           @{ 
-               var dataToPayment = await config.GetDataToPayment(repo.ConfigRepository);
-           }
-           <h5>Dane do zapłaty:</h5>
-           <p class="p-0"><small class="text-muted">Nazwa firmy: </small>@dataToPayment.CompanyName</p>
-           <p class="p-0"><small class="text-muted">Bank: </small>@dataToPayment.BankName</p>
-           <p class="p-0"><small class="text-muted">Numer Konta: </small>@dataToPayment.AccountNumber</p>
-           <span class="text-muted font-italic">Prosimy o podanie numeru zamówienia w tytule przelewu</span>
-       </div>
+        <div class="text-center m-2">
+            @{
+                var dataToPayment = await config.GetDataToPayment(repo.ConfigRepository);
+            }
+            <h5>Dane do zapłaty:</h5>
+            <p class="p-0"><small class="text-muted">Nazwa firmy: </small>@dataToPayment.CompanyName</p>
+            <p class="p-0"><small class="text-muted">Bank: </small>@dataToPayment.BankName</p>
+            <p class="p-0"><small class="text-muted">Numer Konta: </small>@dataToPayment.AccountNumber</p>
+            <span class="text-muted font-italic">Prosimy o podanie numeru zamówienia w tytule przelewu</span>
+        </div>
     }
 
     <div class="d-flex justify-content-lg-start py-2">

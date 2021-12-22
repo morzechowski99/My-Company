@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace My_Company.Extensions
 {
@@ -24,7 +23,7 @@ namespace My_Company.Extensions
             Type choosenServiceType = strategytypes[type];
 
             //tworzymy obiekt za pomoca Reflection
-            IPaymentService strategy = ActivatorUtilities.CreateInstance(serviceProvider,choosenServiceType) as IPaymentService;
+            IPaymentService strategy = ActivatorUtilities.CreateInstance(serviceProvider, choosenServiceType) as IPaymentService;
 
             if (strategy is null)
             {

@@ -74,9 +74,6 @@ const deleteCategory = function (categoryId) {
     })
 }
 
-
-
-
 const registerBtns = function () {
 
     $('.changePageSize').click(function (e) {
@@ -118,5 +115,4 @@ const registerBtns = function () {
         const selectedCategory = $(this).data("id")
         $("#deleteCategoryModal input[name=categoryId]").val(selectedCategory)
     })
-
 }

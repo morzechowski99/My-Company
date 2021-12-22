@@ -4,7 +4,6 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,17 +37,17 @@ namespace My_Company.Repositories
             switch (filters.SortOrder)
             {
                 case SuppliersListSortOrderEnum.NameASC:
-                    suppliers = suppliers.OrderBy(s => s.Name);
-                    break;
+                suppliers = suppliers.OrderBy(s => s.Name);
+                break;
                 case SuppliersListSortOrderEnum.NameDESC:
-                    suppliers = suppliers.OrderByDescending(s => s.Name);
-                    break;
+                suppliers = suppliers.OrderByDescending(s => s.Name);
+                break;
                 case SuppliersListSortOrderEnum.NIPDESC:
-                    suppliers = suppliers.OrderByDescending(s => s.NIP);
-                    break;
+                suppliers = suppliers.OrderByDescending(s => s.NIP);
+                break;
                 case SuppliersListSortOrderEnum.NIPASC:
-                    suppliers = suppliers.OrderBy(s => s.NIP);
-                    break;
+                suppliers = suppliers.OrderBy(s => s.NIP);
+                break;
             }
 
             return suppliers;
@@ -60,7 +59,8 @@ namespace My_Company.Repositories
                 suppliers = suppliers.Where(s => s.Email.StartsWith(filters.Email));
             if (!string.IsNullOrEmpty(filters.Nip))
                 suppliers = suppliers.Where(s => s.NIP.StartsWith(filters.Nip));
-            if (!string.IsNullOrEmpty(filters.SearchString)) {
+            if (!string.IsNullOrEmpty(filters.SearchString))
+            {
                 var search = filters.SearchString.ToLower();
                 suppliers = suppliers.Where(s => s.Name.ToLower().Contains(search) ||
                      search.Contains(s.Name.ToLower()) ||
@@ -71,7 +71,7 @@ namespace My_Company.Repositories
                      s.WebSite.Contains(filters.SearchString) ||
                      filters.SearchString.Contains(s.WebSite));
             }
-             
+
             return suppliers;
         }
 
@@ -94,9 +94,9 @@ namespace My_Company.Repositories
         {
             query = query.ToLower();
             return await FindByCondition(s => s.City.ToLower().Contains(query) || query.Contains(s.City.ToLower()) ||
-                s.Name.ToLower().Contains(query) || query.Contains(s.Name.ToLower()) || 
+                s.Name.ToLower().Contains(query) || query.Contains(s.Name.ToLower()) ||
                 s.NIP.Contains(query) || query.Contains(s.NIP) ||
-                s.PostalCode.Contains(query) || query.Contains(s.PostalCode) || 
+                s.PostalCode.Contains(query) || query.Contains(s.PostalCode) ||
                 s.Street.ToLower().Contains(query) || query.Contains(s.Street.ToLower()))
                 .ToListAsync();
         }

@@ -7,7 +7,6 @@ using My_Company.Models;
 using My_Company.Models.AppSettings;
 using My_Company.Services.PaymentService.Dtos;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,11 +38,11 @@ namespace My_Company.Services.PaymentService
 
         public async Task<string> GetLinkToPayment(Order order)
         {
-            DotPayCreatePaymentRequest  request = await GetRequestDto(order);
+            DotPayCreatePaymentRequest request = await GetRequestDto(order);
             request.Chk = await CalculateChk(request);
             string url = dotPayOptions.BaseUrl;
             var properties = request.GetType().GetProperties().Where(p => p.GetValue(request) != null)
-                .Select(p => p.Name.ToLower() + "=" + HttpUtility.UrlEncode(p.GetValue(request).ToString()));                
+                .Select(p => p.Name.ToLower() + "=" + HttpUtility.UrlEncode(p.GetValue(request).ToString()));
             string queryString = String.Join("&", properties.ToArray());
 
             return url + "/?" + queryString;
@@ -58,7 +57,7 @@ namespace My_Company.Services.PaymentService
             SortedDictionary<string, string> sortedProps = new();
             foreach (var key in properties.Keys)
             {
-                sortedProps.Add(key, properties[key]);       
+                sortedProps.Add(key, properties[key]);
             }
             foreach (var key in sortedProps.Keys)
             {
@@ -66,7 +65,7 @@ namespace My_Company.Services.PaymentService
             }
             paramsList = paramsList.Remove(paramsList.Length - 1);
             sortedProps.Add("paramsList", paramsList);
-            string json = JsonConvert.SerializeObject(sortedProps,Formatting.None,new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeNonAscii });
+            string json = JsonConvert.SerializeObject(sortedProps, Formatting.None, new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeNonAscii });
             var pin = await config.GetValue(ConfigKeys.DotPayKeys.Pin, repositoryWrapper.ConfigRepository);
             using HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(pin));
             var hashedBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(json));
@@ -83,7 +82,7 @@ namespace My_Company.Services.PaymentService
             return new DotPayCreatePaymentRequest
             {
                 Id = int.Parse(await config.GetValue(ConfigKeys.DotPayKeys.Id, repositoryWrapper.ConfigRepository)),
-                Amount = Math.Round(GetOrderAmmount(order),2).ToString().Replace(',', '.'),
+                Amount = Math.Round(GetOrderAmmount(order), 2).ToString().Replace(',', '.'),
                 Description = $"Zapłata za zamówienie nr {order.Id}",
                 Url = this.baseUrl + "Order/PaymentConfirm",
                 UrlC = this.baseUrl + "Order/PaymentStatus",

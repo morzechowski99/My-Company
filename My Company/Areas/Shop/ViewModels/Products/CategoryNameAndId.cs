@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace My_Company.Areas.Shop.ViewModels.Products
+﻿namespace My_Company.Areas.Shop.ViewModels.Products
 {
     public class CategoryNameAndId
     {

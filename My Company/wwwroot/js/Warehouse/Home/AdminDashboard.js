@@ -22,7 +22,6 @@ let chart = null;
 $(function () {
     createChart()
 
-
     $('#rangeSelect').change(function () {
         const val = $(this).val()
         selectedRange = parseInt(val)

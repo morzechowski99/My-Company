@@ -68,11 +68,11 @@ namespace My_Company.Helpers
         public static decimal GetOrderAmmount(Order order)
         {
             decimal total = 0.0M;
-            foreach(var product in order.ProductOrders)
+            foreach (var product in order.ProductOrders)
             {
-                var price = Math.Round(product.ProductPrice / 100.0M,2);
-                var vat = Math.Round(price * (product.ProductVatRate / 100.0M),2);
-                total += Math.Round(product.Count * (price + vat),2);
+                var price = Math.Round(product.ProductPrice / 100.0M, 2);
+                var vat = Math.Round(price * (product.ProductVatRate / 100.0M), 2);
+                total += Math.Round(product.Count * (price + vat), 2);
             }
 
             var picking = Math.Round(order.DeliveryPrice / 100.0M, 2);

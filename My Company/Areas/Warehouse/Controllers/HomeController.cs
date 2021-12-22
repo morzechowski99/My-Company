@@ -6,9 +6,7 @@ using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Areas.Warehouse.ViewModels.Account;
 using My_Company.Interfaces;
 using My_Company.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using static My_Company.Areas.Warehouse.EnumTypes.ChartEnums;
 using static My_Company.Helpers.Constants;
@@ -33,7 +31,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         public IActionResult Index()
         {
             if (User.IsInRole(Roles.WarehouseEmployee))
-                return View("Index",User.Identity.Name);
+                return View("Index", User.Identity.Name);
             if (User.IsInRole(Roles.MainAdministrator))
                 return View("AdminDashboard");
             else
@@ -80,7 +78,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 var m when m == ChartMode.Orders => await repositoryWrapper.OrdersRepository.GetDataToChart(range),
                 var m when m == ChartMode.Completions => await repositoryWrapper.PickingRepository.GetDataToChart(range),
                 var m when m == ChartMode.Packing => await repositoryWrapper.OrderPackingRepository.GetDataToChart(range),
-                _ => null,      
+                _ => null,
             };
             return Ok(items);
         }

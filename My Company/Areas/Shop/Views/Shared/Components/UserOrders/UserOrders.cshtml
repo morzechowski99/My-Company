@@ -7,8 +7,8 @@
                 <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Id)</th>
                 <th class="text-uppercase ">@Html.DisplayNameFor(m => m.OrderDate)</th>
                 <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Total)</th>
-                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Status)</th>           
-                <th class="text-uppercase "></th>           
+                <th class="text-uppercase ">@Html.DisplayNameFor(m => m.Status)</th>
+                <th class="text-uppercase "></th>
             </tr>
         </thead>
         <tbody>
@@ -16,8 +16,8 @@
             {
                 <tr>
                     <th class="align-middle">
-                   
-                            @Html.DisplayFor(m => item.Id)
+
+                        @Html.DisplayFor(m => item.Id)
 
                     </th>
                     <td class="align-middle">
@@ -25,10 +25,10 @@
                     </td>
                     <td class="align-middle">
                         @Html.DisplayFor(m => item.Total)
-                    </td> 
+                    </td>
                     <td class="align-middle">
                         @Html.DisplayFor(m => item.Status)
-                    </td> 
+                    </td>
                     <td class="align-middle">
                         <a class="btn btn-outline-dark" style="border-radius:1px" asp-action="OrderDetails"
                            asp-controller="MyAccount" asp-route-id="@item.Id">Szczegóły</a>
@@ -36,7 +36,7 @@
 
                 </tr>
             }
-           
+
         </tbody>
     </table>
 </div>

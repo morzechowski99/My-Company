@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
@@ -11,11 +7,11 @@ namespace My_Company.Areas.Warehouse.ViewModels
         public int Id { get; set; }
         [Required]
         [MaxLength(20)]
-        [Display(Name="Nazwa")]
+        [Display(Name = "Nazwa")]
         public string Name { get; set; }
         [MaxLength(15)]
         [Display(Name = "NIP")]
-        [RegularExpression(@"^\d{10}$",ErrorMessage ="NIP musi miec 10 cyfr")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "NIP musi miec 10 cyfr")]
         public string NIP { get; set; }
         [Required]
         [MaxLength(100)]
@@ -25,7 +21,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [MaxLength(6)]
         [Display(Name = "Kod pocztowy")]
         [DataType(DataType.PostalCode)]
-        [RegularExpression(@"^\d{2}-\d{3}",ErrorMessage ="Zły format")]
+        [RegularExpression(@"^\d{2}-\d{3}", ErrorMessage = "Zły format")]
         public string PostalCode { get; set; }
         [Required]
         [MaxLength(30)]
@@ -47,7 +43,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Strona Internetowa")]
         public string WebSite { get; set; }
         [MaxLength(50)]
-        [DataType(DataType.EmailAddress,ErrorMessage ="Niepoprawny adres e-mail")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Niepoprawny adres e-mail")]
         [Display(Name = "Adres e-mail")]
         public string Email { get; set; }
     }

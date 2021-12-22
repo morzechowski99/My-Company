@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
-using static My_Company.Helpers.Constants;
 
 namespace My_Company.Services
 {

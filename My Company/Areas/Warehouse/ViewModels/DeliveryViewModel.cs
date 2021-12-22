@@ -11,7 +11,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Range(1, int.MaxValue)]
         public int SupplierId { get; set; }
         [Display(Name = "Produkty")]
-        [MinLength(1,ErrorMessage ="Dodaj co najmniej jeden produkt")]
+        [MinLength(1, ErrorMessage = "Dodaj co najmniej jeden produkt")]
         public List<DeliveryItemViewModel> Items { get; set; }
     }
 }

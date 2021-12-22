@@ -1,9 +1,5 @@
 ﻿using My_Company.EnumTypes;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewModels
 {
@@ -11,9 +7,9 @@ namespace My_Company.Areas.Warehouse.ViewModels
     {
         [Required]
         [MaxLength(30)]
-        [Display(Name="Nazwa")]
+        [Display(Name = "Nazwa")]
         public string Name { get; set; }
-        [Display(Name="Typ")]
+        [Display(Name = "Typ")]
         public AttributeType Type { get; set; }
     }
 }

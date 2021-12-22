@@ -89,7 +89,10 @@ namespace My_Company.Areas.Warehouse.Controllers
                 TempData["warning"] = "Nie można włączyć sklepu, ponieważ nie ma zdefiniowanych metod płatności lub wysyłki";
             }
             else
+            {
                 await config.SetIsShopEnabled(!shopEnabled, repositoryWrapper.ConfigRepository);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -219,8 +222,8 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             return ViewComponent("MainPageForm");
 
-        } 
-        
+        }
+
         [HttpPut]
         public async Task<IActionResult> MoveMainPageItem(int? order, MoveDirection? direction)
         {
@@ -281,7 +284,7 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             return ViewComponent("MainPageForm");
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> EditMainPageItem(EditMainPageItemViewModel editMainPage)
         {
@@ -305,11 +308,5 @@ namespace My_Company.Areas.Warehouse.Controllers
 
             return ViewComponent("MainPageForm");
         }
-        
-
-
     }
-
-
-
 }

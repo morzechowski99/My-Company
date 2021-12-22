@@ -3,7 +3,6 @@ using Hangfire.Dashboard;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -112,7 +111,7 @@ namespace My_Company
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IRecurringJobManager recurringJobManager, IEmailSenderJob emailSenderJob)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IEmailSenderJob emailSenderJob)
         {
             if (env.IsDevelopment())
             {
@@ -163,7 +162,7 @@ namespace My_Company
 
                 endpoints.MapRazorPages();
 
-                
+
             });
         }
     }

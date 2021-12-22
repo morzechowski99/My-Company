@@ -88,7 +88,7 @@
                 @await Component.InvokeAsync("AvailablePickingTypes")
                 <span asp-validation-for="DeliveryType" class="text-danger"></span>
                 <div class="my-2" style="display:none" id="choseParcelLocker">
-                    <input type="hidden" asp-for="PackLockerName" id="packLocekerNameInput" value=""/>
+                    <input type="hidden" asp-for="PackLockerName" id="packLocekerNameInput" value="" />
                     <button id="choosePickingMachine" type="button" class="btn btn-lg btn-outline-secondary border-0" style="border-radius:1px"><i class="bi bi-box"></i> Wybierz paczkomat</button>
                     <div class="m-2  pickingMachineAddress d-flex">
                         <div class="m-2">

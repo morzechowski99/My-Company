@@ -166,7 +166,7 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Name, opt => opt.MapFrom(y => y.Product.Name))
                 .ForMember(x => x.EANCode, opt => opt.MapFrom(y => y.Product.EANCode))
                 .ForMember(x => x.PhotoUrl, opt => opt.MapFrom(y => y.Product.Photos.Count == 0 ? Constants.ImagePlaceholder : y.Product.Photos.FirstOrDefault().Path));
-                
+
 
             CreateMap<Order, OrderPickingViewModel>()
                 .ForMember(x => x.Items, opt => opt.MapFrom(y => y.ProductOrders))
@@ -194,9 +194,9 @@ namespace My_Company.AutoMapper
             CreateMap<Order, OrderDetailsViewModel>()
                 .ForMember(x => x.Status, opt => opt.MapFrom(y => OrderStatusesDictionary.Dictionary[y.Status]))
                 .ForMember(x => x.OrderStatus, opt => opt.MapFrom(y => y.Status))
-                .ForMember(x => x.PaymentMethod, opt => opt.MapFrom(y => PaymentMethodDictionary.PaymentDictionary[y.PaymentMethod]))         
-                .ForMember(x => x.DeliveryMethod, opt => opt.MapFrom(y => DeliveryTypesDictionary.Dictionary[y.DeliveryType]))         
-                .ForMember(x => x.ParcelLockerInfo, opt => opt.MapFrom(y => y.Delivery is InPostDelivery ? (y.Delivery as InPostDelivery).PackLockerName : null))         
+                .ForMember(x => x.PaymentMethod, opt => opt.MapFrom(y => PaymentMethodDictionary.PaymentDictionary[y.PaymentMethod]))
+                .ForMember(x => x.DeliveryMethod, opt => opt.MapFrom(y => DeliveryTypesDictionary.Dictionary[y.DeliveryType]))
+                .ForMember(x => x.ParcelLockerInfo, opt => opt.MapFrom(y => y.Delivery is InPostDelivery ? (y.Delivery as InPostDelivery).PackLockerName : null))
                 .ForMember(x => x.PickingUser, opt => opt.MapFrom(y => $"{y.Picking.User.Name} {y.Picking.User.Surname} ({y.User.UserName})"))
                 .ForMember(x => x.Address, opt => opt.MapFrom(y => y.Address.ToString()));
 
@@ -207,7 +207,7 @@ namespace My_Company.AutoMapper
             CreateMap<Product, ListItemViewModel>()
                 .ForMember(x => x.Price, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.NettoPrice, y.VATRate.Rate)))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(y => y.ProductCategories.First().Category.CategoryName));
-            
+
 
             CreateMap<Product, ProductDetailsPageViewModel>()
                 .ForMember(x => x.State, opt => opt.MapFrom(y => Helpers.ViewHelpers.GetProductStockStatus(y)))
@@ -254,7 +254,7 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.PaymentMethodString, opt => opt.MapFrom(y => Dictionaries.PaymentMethodDictionary.PaymentDictionary[y.PaymentMethod]))
                 .ForMember(x => x.PaymentPrice, opt => opt.MapFrom(y => Math.Round(y.PaymentPrice / 100.0M, 2)))
                 .ForMember(x => x.DeliveryPrice, opt => opt.MapFrom(y => Math.Round(y.DeliveryPrice / 100.0M, 2)))
-                .ForMember(x => x.Products, opt => opt.MapFrom(y =>y.ProductOrders));
+                .ForMember(x => x.Products, opt => opt.MapFrom(y => y.ProductOrders));
 
             CreateMap<ProductOrder, OrderItem>()
                 .ForMember(x => x.OneItemPrice, opt => opt.MapFrom(y => Helpers.ProductsHelpers.GetGrossPrice(y.ProductPrice, y.ProductVatRate)))
@@ -270,8 +270,8 @@ namespace My_Company.AutoMapper
                 .ForMember(x => x.Name, opt => opt.MapFrom(y => $"{y.FirstName} {y.LastName}"))
                 .ForMember(x => x.NIP, opt => opt.MapFrom(y => ""))
                 .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
-                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.ZipCode} {y.City}")); 
-            
+                .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.ZipCode} {y.City}"));
+
             CreateMap<Supplier, AddressData>()
                 .ForMember(x => x.Address1, opt => opt.MapFrom(y => y.Street))
                 .ForMember(x => x.Address2, opt => opt.MapFrom(y => $"{y.PostalCode} {y.City}"));

@@ -217,7 +217,7 @@ namespace My_Company.Areas.Shop.Controllers
                 return NotFound();
 
             var orderTotal = OrderHelpers.GetOrderAmmount(order);
-            if (orderTotal != decimal.Parse(dotpayResponse.Operation_amount.Replace('.',',')))
+            if (orderTotal != decimal.Parse(dotpayResponse.Operation_amount.Replace('.', ',')))
                 return BadRequest("invalid amount");
 
             if (dotpayResponse.Operation_status == "completed")
@@ -225,7 +225,7 @@ namespace My_Company.Areas.Shop.Controllers
                 order.Status = OrderStatus.Paid;
                 order.Payment.Status = EnumTypes.PaymentStatus.Completed;
                 order.Paid = true;
-                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order,GetOrderDetailsUrl(order), order.User?.Email );
+                emailService.SendOrderEmail(OrderEmailReason.ChangeOrderStatus, order, GetOrderDetailsUrl(order), order.User?.Email);
             }
             else if (dotpayResponse.Operation_status == "rejected")
             {

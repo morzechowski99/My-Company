@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_Company.Areas.Warehouse.ViewComponents
@@ -24,8 +22,8 @@ namespace My_Company.Areas.Warehouse.ViewComponents
         {
             var attributes = await _repoWrapper.CategoriesRepository.GetAllAttributesByCategoryId(parentCategoryId);
             var attributesDtos = _mapper.Map<List<CreteAttributeViewModel>>(attributes);
-          
-            return View("InheritedAttributesTable",attributesDtos);
+
+            return View("InheritedAttributesTable", attributesDtos);
         }
     }
 }

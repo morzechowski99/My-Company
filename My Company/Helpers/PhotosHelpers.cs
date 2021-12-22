@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Helpers
 {
@@ -32,9 +28,14 @@ namespace My_Company.Helpers
                 throw new ArgumentOutOfRangeException("One of dimenions must be given");
             }
             else if (height == 0)
+            {
                 height = (int)(h * ((double)width / (double)w));
+            }
             else if (width == 0)
+            {
                 width = (int)(w * ((double)height / (double)h));
+            }
+
             var resized = new Bitmap(image, new Size(width, height));
             return resized;
         }

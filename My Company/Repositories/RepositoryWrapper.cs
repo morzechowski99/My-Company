@@ -247,7 +247,7 @@ namespace My_Company.Repositories
         {
             get
             {
-                if(pickingItemsRepository == null)
+                if (pickingItemsRepository == null)
                 {
                     pickingItemsRepository = new PickingItemsRepository(_context);
                 }
@@ -255,12 +255,12 @@ namespace My_Company.Repositories
                 return pickingItemsRepository;
             }
         }
-        
+
         public IConfigRepository ConfigRepository
         {
             get
             {
-                if(configRepository == null)
+                if (configRepository == null)
                 {
                     configRepository = new ConfigRepository(_context);
                 }

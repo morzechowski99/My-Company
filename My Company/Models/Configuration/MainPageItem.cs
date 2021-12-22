@@ -11,7 +11,7 @@ namespace My_Company.Models.Configuration
         [Required]
         public string ButtonText { get; set; }
         public string PhotoUrl { get; set; }
-        [Display(Name ="Tytuł")]
+        [Display(Name = "Tytuł")]
         [Required]
         public string Title { get; set; }
         [Display(Name = "Treść")]

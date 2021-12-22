@@ -200,9 +200,6 @@ const loadData = function () {
         })
 }
 
-
-
-
 const registerBtns = function () {
 
     $('.changePageSize').click(function (e) {

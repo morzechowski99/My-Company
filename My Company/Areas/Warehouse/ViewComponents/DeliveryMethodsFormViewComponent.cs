@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static My_Company.Helpers.Constants;
 
 namespace My_Company.Areas.Warehouse.ViewComponents
 {
@@ -25,7 +24,7 @@ namespace My_Company.Areas.Warehouse.ViewComponents
         {
             var configRepo = repositoryWrapper.ConfigRepository;
             var pickingMethods = await config.GetAvailavlePickingMethods(configRepo);
-            List<PickingMethodViewModel> pickingMethodDtos = new ();
+            List<PickingMethodViewModel> pickingMethodDtos = new();
             var values = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>();
             foreach (var pm in values)
             {

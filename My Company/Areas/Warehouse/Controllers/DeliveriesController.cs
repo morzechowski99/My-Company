@@ -326,14 +326,16 @@ namespace My_Company.Areas.Warehouse.Controllers
                     return BadRequest();
 
                 if (!delivery.IsCorrecting)
+                {
                     return File(await documentGenerator.GetDeliveryDocument(delivery), "application/pdf", $"Dostawa nr {delivery.PZNumber}.pdf");
+                }
                 else
                 {
                     var orginal = await repositoryWrapper.DeliveriesRepository.GetOrginalDeliveryToDocumentCorrectingById(id.Value);
                     return File(await documentGenerator.GetDeliveryCorrecingDocument(delivery, orginal), "application/pdf", $"Dostawa nr {delivery.PZNumber}.pdf");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

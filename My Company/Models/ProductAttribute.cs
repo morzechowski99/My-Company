@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace My_Company.Models
+﻿namespace My_Company.Models
 {
     public class ProductAttribute
     {

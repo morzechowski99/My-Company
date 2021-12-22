@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Areas.Shop.ViewModels.Cart
 {
@@ -13,9 +10,9 @@ namespace My_Company.Areas.Shop.ViewModels.Cart
             Items = new();
         }
         [DataType(DataType.Currency)]
-        [Display(Name ="Suma")]
+        [Display(Name = "Suma")]
         public decimal Total { get; set; }
-        [Display(Name ="Produkty")]
+        [Display(Name = "Produkty")]
         public List<CartItem> Items { get; set; }
     }
 }

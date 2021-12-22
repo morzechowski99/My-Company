@@ -8,13 +8,13 @@
 const rows = [];
 
 $(function () {
-    let currentTab = 0; 
+    let currentTab = 0;
     showTab(currentTab);
 
     function showTab(n) {
-        const x = $(".tab") 
+        const x = $(".tab")
         x[n].style.display = "block";
-        
+
         if (n == 0) {
             $("#prevBtn").css("display", "none")
         } else {
@@ -25,22 +25,20 @@ $(function () {
         } else {
             $("#nextBtn").html("Następny")
         }
-        
+
         fixStepIndicator(n)
     }
 
     function fixStepIndicator(n) {
-        
         const x = $(".step")
         x.removeClass("btn-primary")
         x.eq(n).addClass("btn-primary")
-       
     }
 
     function nextPrev(n) {
         const x = $(".tab")
         if (!$("#myForm").validate().form()) return;
-        x.eq(currentTab).css("display","none")
+        x.eq(currentTab).css("display", "none")
         currentTab = currentTab + n
         if (currentTab >= x.length) {
             $("#myForm").submit()
@@ -67,13 +65,12 @@ $(function () {
         rows.push(new SectorRow(name, count))
 
         rewriteTable();
-        
     }
 
     function rewriteTable() {
         $("#warehousePlan > tbody").empty()
 
-        rows.forEach((r,idx,arr) => {
+        rows.forEach((r, idx, arr) => {
             const row = $(`<tr> 
             <td>
                 ${r.name}
@@ -84,17 +81,16 @@ $(function () {
             <td>
                <button class="btn" id="row-${r.name}" type="button"> <i class="bi bi-trash"></i></button>
                 ${idx !== arr.length - 1 ? `<button class="btn" id="row-swapDown-${r.name}" type="button"> <i class="bi bi-arrow-down"></i></button>` : ''}
-                ${idx !== 0 ? `<button class="btn" id="row-swapUp-${r.name}" type="button"> <i class="bi bi-arrow-up"></i></button>`: ''}
-            </td>
-            
+                ${idx !== 0 ? `<button class="btn" id="row-swapUp-${r.name}" type="button"> <i class="bi bi-arrow-up"></i></button>` : ''}
+            </td>           
         </tr>`)
             $("#warehousePlan > tbody").append(row)
-            $(`#row-${r.name}`).click(function() {
+            $(`#row-${r.name}`).click(function () {
                 deleteRow(r.name)
             })
 
             $(`#row-swapDown-${r.name}`).click(function () {
-                swap(r.name,1)
+                swap(r.name, 1)
             })
 
             $(`#row-swapUp-${r.name}`).click(function () {

@@ -109,28 +109,6 @@ $(function () {
             $(this).val(1)
     })
 
-    ////    $('#submit').click(function () {
-    ////        $(".spinner").removeClass('spinnerHidden')
-    ////        const data = {
-    ////            supplierId: supplierSelect.getValue(),
-    ////            items: order.products.map(p => (
-    ////                {
-    ////                    productId: p.product.id,
-    ////                    sectorId: p.sector,
-    ////                    count: p.count
-    ////                }))
-    ////        }
-    ////        $.post('/Warehouse/Deliveries/New', data)
-    ////            .always(function () {
-    ////                $(".spinner").addClass('spinnerHidden')
-    ////            })
-    ////            .fail(function () {
-    ////                showErrorAlert("Wystąpił błąd")
-    ////            })
-    ////            .done(function (data) {
-    ////                location.href = `/Warehouse/Deliveries/Details/${data}`
-    ////            })
-    ////    })
 })
 
 const validateProductEan = function (ean) {

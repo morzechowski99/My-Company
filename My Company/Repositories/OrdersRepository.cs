@@ -138,7 +138,7 @@ namespace My_Company.Repositories
                 .Include(o => o.Delivery)
                 .FirstOrDefaultAsync();
         }
-        
+
         public async Task<Order> GetOrderToDocumentsById(Guid? id)
         {
             return await FindByCondition(o => o.Id == id)
@@ -227,31 +227,31 @@ namespace My_Company.Repositories
                     {
                         DateTime firstDay = now.AddDays(-4);
                         IEnumerable<IGrouping<DayOfWeek, Order>> items = (await FindByCondition(o => o.OrderDate >= firstDay).ToListAsync()).GroupBy(o => o.OrderDate.DayOfWeek);
-                        for(int i = 0; i < 5; i++)
+                        for (int i = 0; i < 5; i++)
                         {
                             var dayOfWeek = (int)(firstDay.DayOfWeek + i) % 7;
                             var item = items.FirstOrDefault(i => (int)i.Key == dayOfWeek);
                             chartItems.Add(new ChartItem { Index = dayOfWeek, Value = item == null ? 0 : item.Count() });
                         }
                         break;
-                    } 
+                    }
                 case ChartEnums.ChartRange.Month:
                     {
                         DateTime firstMonth = now.AddMonths(-4);
                         IEnumerable<IGrouping<int, Order>> items = (await FindByCondition(o => o.OrderDate >= firstMonth).ToListAsync()).GroupBy(o => o.OrderDate.Month);
-                        for(int i = 0; i < 5; i++)
+                        for (int i = 0; i < 5; i++)
                         {
-                            var month = (((int)(firstMonth.Month + i)-1) % 12) + 1;
+                            var month = (((int)(firstMonth.Month + i) - 1) % 12) + 1;
                             var item = items.FirstOrDefault(i => (int)i.Key == month);
                             chartItems.Add(new ChartItem { Index = month, Value = item == null ? 0 : item.Count() });
                         }
                         break;
-                    } 
+                    }
                 case ChartEnums.ChartRange.Year:
                     {
                         DateTime firstYear = now.AddYears(-4);
                         IEnumerable<IGrouping<int, Order>> items = (await FindByCondition(o => o.OrderDate >= firstYear).ToListAsync()).GroupBy(o => o.OrderDate.Year);
-                        for(int i = 0; i < 5; i++)
+                        for (int i = 0; i < 5; i++)
                         {
                             var year = (int)firstYear.Year + i;
                             var item = items.FirstOrDefault(i => (int)i.Key == year);
@@ -260,7 +260,7 @@ namespace My_Company.Repositories
                         break;
                     }
             }
-           
+
             return chartItems;
         }
     }

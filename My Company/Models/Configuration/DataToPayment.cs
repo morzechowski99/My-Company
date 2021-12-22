@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Models.Configuration
 {
     public class DataToPayment
     {
-        [Display(Name ="Nazwa firmy")]
+        [Display(Name = "Nazwa firmy")]
         public string CompanyName { get; set; }
         [Display(Name = "Numer konta")]
         public string AccountNumber { get; set; }

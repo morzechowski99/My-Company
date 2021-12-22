@@ -30,7 +30,7 @@ $(function () {
             success: function () {
                 loadNewAttributes()
             },
-            
+
         })
 
     })
@@ -48,9 +48,8 @@ $(function () {
             },
             success: function () {
                 showAlert(successAlert)
-                 toogleSpinner()
+                toogleSpinner()
             },
-            
         })
     })
 
@@ -70,7 +69,6 @@ $(function () {
                 showAlert(successAlert)
                 toogleSpinner()
             },
-            
         })
     })
 
@@ -89,11 +87,8 @@ $(function () {
                 showAlert(successAlert)
                 toogleSpinner()
             },
-            
         })
-
     })
-
 
     $("#descriptionForm").submit(function (e) {
         e.preventDefault()
@@ -110,9 +105,7 @@ $(function () {
                 showAlert(successAlert)
                 toogleSpinner()
             }
-            
         })
-
     })
 
     $("#addPhotoForm").submit(function (e) {
@@ -124,7 +117,7 @@ $(function () {
             type: "POST",
             data: data,
             enctype: 'multipart/form-data',
-            processData: false, 
+            processData: false,
             contentType: false,
             cache: false,
             error: function () {
@@ -136,9 +129,7 @@ $(function () {
                 registerButtons()
                 toogleSpinner()
             }
-            
         })
-
     })
 
     $('#photoInput').change(function (e) {
@@ -153,7 +144,6 @@ $(function () {
                 $("#photoInputValidation").text("")
                 $("#addPhotoForm").submit()
             }
-
         }
     })
 
@@ -194,7 +184,6 @@ $(function () {
     })
 
     registerButtons()
-
 })
 
 const loadSubCategories = function (id, containerId) {
@@ -231,11 +220,9 @@ const loadSubCategories = function (id, containerId) {
             }
             if (subCategoriesExists)
                 $("#categorySelects").append(container)
-
         })
         .always(function () {
             toogleSpinner()
-
         })
 }
 

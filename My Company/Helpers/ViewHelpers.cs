@@ -1,22 +1,18 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Models;
 using My_Company.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My_Company.Helpers
 {
     public static class ViewHelpers
     {
-        public static SelectList GetVatRatesSelectList(IEnumerable<VATRate> rates,int? selectedRate)
+        public static SelectList GetVatRatesSelectList(IEnumerable<VATRate> rates, int? selectedRate)
         {
             var ratesView = new List<VATRateViewModel>();
 
-            foreach(var rate in rates)
+            foreach (var rate in rates)
             {
                 ratesView.Add(new VATRateViewModel
                 {
@@ -25,13 +21,13 @@ namespace My_Company.Helpers
                 });
             }
 
-            return new SelectList(ratesView, "Id", "Rate",selectedRate.HasValue? selectedRate : null);
+            return new SelectList(ratesView, "Id", "Rate", selectedRate.HasValue ? selectedRate : null);
         }
-        public static SelectList GetSuppliersSelectList(IEnumerable<Supplier> suppliers,int? selectedSupplierId)
+        public static SelectList GetSuppliersSelectList(IEnumerable<Supplier> suppliers, int? selectedSupplierId)
         {
             var suppliersView = new List<SupplierSelectViewModel>();
 
-            foreach(var supplier in suppliers)
+            foreach (var supplier in suppliers)
             {
                 suppliersView.Add(new SupplierSelectViewModel
                 {
@@ -40,7 +36,7 @@ namespace My_Company.Helpers
                 });
             }
 
-            return new SelectList(suppliersView, "Id", "Description", selectedSupplierId.HasValue? selectedSupplierId : null);
+            return new SelectList(suppliersView, "Id", "Description", selectedSupplierId.HasValue ? selectedSupplierId : null);
         }
 
         public static StockState GetProductStockStatus(Product p)
@@ -51,6 +47,6 @@ namespace My_Company.Helpers
                 return StockState.RunningOut;
             else
                 return StockState.Critical;
-        } 
+        }
     }
 }

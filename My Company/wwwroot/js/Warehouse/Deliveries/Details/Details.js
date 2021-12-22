@@ -14,7 +14,6 @@
             })
 
     })
-
 })
 
 const openFile = function (blob) {

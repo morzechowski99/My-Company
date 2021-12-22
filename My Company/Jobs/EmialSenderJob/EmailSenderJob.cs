@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Logging;
 using My_Company.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace My_Company.Jobs.EmialSenderJob
 
         public async Task SendEmails()
         {
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var email = queue.GetItem();
                 if (email == null)
@@ -28,7 +27,7 @@ namespace My_Company.Jobs.EmialSenderJob
                 {
                     await emailSender.SendEmailAsync(email.To, email.Title, email.Content);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     queue.AddEmailToQueue(email);
                     throw;

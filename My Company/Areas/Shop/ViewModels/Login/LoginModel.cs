@@ -5,12 +5,12 @@ namespace My_Company.Areas.Shop.ViewModels.Login
     public class LoginModel
     {
         [Required]
-        [DataType(DataType.EmailAddress,ErrorMessage ="Nieprawidłowy email")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Nieprawidłowy email")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name ="Hasło")]
+        [Display(Name = "Hasło")]
         public string Password { get; set; }
 
         [Display(Name = "Nie wylogowywuj mnie")]
