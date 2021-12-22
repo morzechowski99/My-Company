@@ -1,4 +1,5 @@
-﻿using My_Company.Areas.Warehouse.ViewModels;
+﻿using My_Company.Areas.Warehouse.EnumTypes;
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.EnumTypes;
 using My_Company.Models;
 using System;
@@ -28,5 +29,6 @@ namespace My_Company.Interfaces
         Task<Order> GetOrderToDocumentsById(Guid? id);
         Task<string> GetInvoiceNumber();
         Task<string> GetWZNumber();
+        Task<List<ChartItem>> GetDataToChart(ChartEnums.ChartRange range);
     }
 }

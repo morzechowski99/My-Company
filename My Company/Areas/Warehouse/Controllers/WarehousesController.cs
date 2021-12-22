@@ -30,30 +30,29 @@ namespace My_Company.Areas.Warehouse.Controllers
         // GET: Warehouse/Warehouses
         public async Task<IActionResult> Index()
         {
-            return View(await _repositoryWrapper.WarehouseRepository.GetAll());
+            if (await _repositoryWrapper.WarehouseRepository.FindAll().AnyAsync())
+                return RedirectToAction(nameof(Details));
+            return View();
         }
 
         // GET: Warehouse/Warehouses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var warehouse = await _repositoryWrapper.WarehouseRepository.GetById(id.Value);
+            var warehouse = await _repositoryWrapper.WarehouseRepository.FindAll().FirstOrDefaultAsync();
 
             if (warehouse == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(warehouse);
         }
 
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (await _repositoryWrapper.WarehouseRepository.FindAll().AnyAsync())
+                return RedirectToAction(nameof(Details));
             return View();
         }
 
@@ -61,6 +60,8 @@ namespace My_Company.Areas.Warehouse.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewWarehouseViewModel warehouseDto)
         {
+            if (await _repositoryWrapper.WarehouseRepository.FindAll().AnyAsync())
+                return BadRequest();
             if (ModelState.IsValid)
             {
                 var warehouseDb = _mapper.Map<Models.Warehouse>(warehouseDto);
@@ -145,35 +146,6 @@ namespace My_Company.Areas.Warehouse.Controllers
             }
             return View(warehouse);
         }
-
-        //// GET: Warehouse/Warehouses/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var warehouse = await _context.Warehouses
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (warehouse == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(warehouse);
-        //}
-
-        // POST: Warehouse/Warehouses/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var warehouse = await _context.Warehouses.FindAsync(id);
-        //    _context.Warehouses.Remove(warehouse);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         [HttpGet]
         public async Task<IActionResult> EditPlan(int? id)
@@ -384,12 +356,10 @@ namespace My_Company.Areas.Warehouse.Controllers
                 if (!(await _repositoryWrapper.WarehouseSectorRepository.IsEmpty(SectorId.Value)))
                     return BadRequest("sector isn't empty");
 
-                await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);
-           
+                await _repositoryWrapper.WarehouseSectorRepository.DeleteSector(sector);        
                 await _repositoryWrapper.Save();
 
                 var sectors = await _repositoryWrapper.WarehouseSectorRepository.GetSectorsByRow(sector.RowId);
-
                 var sectorsDTOs = _mapper.Map<List<WarehouseSectorViewModel>>(sectors.OrderBy(s => s.Order));
 
                 foreach (var s in sectorsDTOs)

@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Areas.Warehouse.ViewModels.Account;
+using My_Company.Interfaces;
 using My_Company.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static My_Company.Areas.Warehouse.EnumTypes.ChartEnums;
 using static My_Company.Helpers.Constants;
 
 namespace My_Company.Areas.Warehouse.Controllers
@@ -18,11 +21,13 @@ namespace My_Company.Areas.Warehouse.Controllers
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper mapper;
+        private readonly IRepositoryWrapper repositoryWrapper;
 
-        public HomeController(SignInManager<AppUser> signInManager, IMapper mapper)
+        public HomeController(SignInManager<AppUser> signInManager, IMapper mapper, IRepositoryWrapper repositoryWrapper)
         {
             _signInManager = signInManager;
             this.mapper = mapper;
+            this.repositoryWrapper = repositoryWrapper;
         }
 
         public IActionResult Index()
@@ -65,6 +70,19 @@ namespace My_Company.Areas.Warehouse.Controllers
                 }
             }
             return View(loginModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChartData(ChartMode mode, ChartRange range)
+        {
+            List<ChartItem> items = mode switch
+            {
+                var m when m == ChartMode.Orders => await repositoryWrapper.OrdersRepository.GetDataToChart(range),
+                var m when m == ChartMode.Completions => await repositoryWrapper.PickingRepository.GetDataToChart(range),
+                var m when m == ChartMode.Packing => await repositoryWrapper.OrderPackingRepository.GetDataToChart(range),
+                _ => null,      
+            };
+            return Ok(items);
         }
     }
 }

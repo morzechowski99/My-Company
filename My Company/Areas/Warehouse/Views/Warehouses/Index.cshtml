@@ -4,59 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Twoje magazyny</h1>
+<h1>Nie dodałeś jeszcze magazynu. Stwórz go teraz</h1>
 
 <p>
-    <a asp-action="Create">Dodaj nowy</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
-<div class="table-responsive-md">
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Street)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PostalCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Voivodeship)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Street)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Voivodeship)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> 
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text"></i></a> 
-                        <a asp-action="EditPlan" asp-route-id="@item.Id"><i class="bi bi-map-fill"></i></a> 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
