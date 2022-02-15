@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$(function () {
     $('#cartForm').submit(function (e) {
         e.preventDefault()
         $('.spinner').removeClass("spinnerHidden")

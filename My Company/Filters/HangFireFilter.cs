@@ -1,4 +1,5 @@
-﻿using Hangfire.Dashboard;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Hangfire.Dashboard;
 using My_Company.Helpers;
 
 namespace My_Company.Filters

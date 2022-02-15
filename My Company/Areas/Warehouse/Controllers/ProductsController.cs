@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

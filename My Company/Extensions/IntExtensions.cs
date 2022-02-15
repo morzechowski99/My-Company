@@ -1,4 +1,5 @@
-﻿namespace My_Company.Extensions
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+namespace My_Company.Extensions
 {
     public static class IntExtensions
     {

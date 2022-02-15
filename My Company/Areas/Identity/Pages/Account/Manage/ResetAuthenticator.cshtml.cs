@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace My_Company.Areas.Identity.Pages.Account.Manage

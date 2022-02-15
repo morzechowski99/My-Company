@@ -1,4 +1,5 @@
-﻿$.validator.setDefaults({ ignore: null });
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$.validator.setDefaults({ ignore: null });
 
 let lastCategoryId = null
 

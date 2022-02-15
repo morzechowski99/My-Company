@@ -1,4 +1,5 @@
-﻿namespace My_Company.Helpers
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+namespace My_Company.Helpers
 {
     public static class ProductsHelpers
     {

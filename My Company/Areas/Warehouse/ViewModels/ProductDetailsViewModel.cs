@@ -1,4 +1,5 @@
-﻿using My_Company.ViewModels;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

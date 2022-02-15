@@ -1,4 +1,5 @@
-﻿const values = []
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+const values = []
 let editingIdx
 
 $(function () {

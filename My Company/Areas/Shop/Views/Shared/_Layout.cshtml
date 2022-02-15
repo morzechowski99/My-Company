@@ -1,4 +1,5 @@
-﻿@inject My_Company.Interfaces.IRepositoryWrapper repositoryWrapper;
+﻿@*Program powstał na Wydziale Informatyki Politechniki Białostockiej*@
+@inject My_Company.Interfaces.IRepositoryWrapper repositoryWrapper;
 @inject My_Company.Interfaces.IConfig config;
 @using static My_Company.Helpers.Constants;
 @using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@
             <div class="container-fluid">
                 <div class=" row">
                     <div class="col-12 d-flex justify-content-between">
-                        <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index"><img height="30" src="@Url.Content(await config.GetValue(ConfigKeys.LogoPath,repositoryWrapper.ConfigRepository))" alt="logo"/></a>
+                        <a class="navbar-brand" asp-area="Shop" asp-controller="Home" asp-action="Index"><img height="30" src="@Url.Content(await config.GetValue(ConfigKeys.LogoPath,repositoryWrapper.ConfigRepository))" alt="logo" /></a>
                         <div class="d-flex">
                             @await Component.InvokeAsync("Cart")
                             <div class="pt-1" id="cartIcon">
@@ -31,12 +32,12 @@
                             </div>
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <div class="pt-1" >
+                                <div class="pt-1">
                                     <a class="text-dark  btn-lg" asp-controller="MyAccount" asp-action="Logout" asp-route-returnUrl="@Context.Request.Path"><i class="bi bi-box-arrow-right"></i></a>
                                 </div>
                             }
                         </div>
-                        </div>
+                    </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +66,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - My_Company - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            Program powstał na Wydziale Informatyki Politechniki Białostockiej
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

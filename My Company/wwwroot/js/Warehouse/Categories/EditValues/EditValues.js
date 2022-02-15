@@ -1,4 +1,5 @@
-﻿let editingIdx
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let editingIdx
 let values = []
 $(function () {
 

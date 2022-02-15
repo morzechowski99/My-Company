@@ -1,4 +1,5 @@
-﻿class SectorRow {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+class SectorRow {
     constructor(name, count) {
         this.name = name
         this.count = count

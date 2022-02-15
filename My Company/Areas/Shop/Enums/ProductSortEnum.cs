@@ -1,4 +1,5 @@
-﻿namespace My_Company.Areas.Shop.Enums
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+namespace My_Company.Areas.Shop.Enums
 {
     public enum ProductSortEnum
     {

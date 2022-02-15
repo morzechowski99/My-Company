@@ -1,4 +1,5 @@
-﻿let filtersVisible = false
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let filtersVisible = false
 let defaultFilters = filters = {
     pageSize: 12,
     sortOrder: 0,

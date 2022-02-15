@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Helpers;
 using My_Company.Interfaces;

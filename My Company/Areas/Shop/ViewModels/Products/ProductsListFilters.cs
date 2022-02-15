@@ -1,4 +1,5 @@
-﻿using My_Company.Areas.Shop.Enums;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Areas.Shop.Enums;
 using My_Company.ViewModels;
 using System.Collections.Generic;
 

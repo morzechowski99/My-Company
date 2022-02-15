@@ -1,4 +1,5 @@
-﻿//selectize plugins
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+//selectize plugins
 Selectize.define('tag_limit', function (options) {
     const self = this
     options.tagLimit = options.tagLimit

@@ -1,4 +1,5 @@
-﻿const filters = {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+const filters = {
     supplierId: null,
     dateFrom: null,
     dateTo: null,

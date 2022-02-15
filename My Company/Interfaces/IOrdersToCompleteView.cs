@@ -1,4 +1,5 @@
-﻿using My_Company.Models.DBViews;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Models.DBViews;
 
 namespace My_Company.Interfaces
 {

@@ -1,4 +1,5 @@
-﻿using My_Company.Models.Configuration;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Models.Configuration;
 using System.Collections.Generic;
 
 namespace My_Company.Areas.Warehouse.ViewModels.PaymentMethods

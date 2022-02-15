@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using AutoMapper;
 using LiczbyNaSlowaNETCore;
 using My_Company.Interfaces;
 using My_Company.Models;

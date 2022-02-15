@@ -1,4 +1,5 @@
-﻿using My_Company.Areas.Warehouse.EnumTypes;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.EnumTypes;
 using My_Company.ViewModels;
 using System;

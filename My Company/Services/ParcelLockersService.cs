@@ -1,4 +1,5 @@
-﻿using My_Company.Interfaces;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Interfaces;
 using My_Company.Models.InPostModels;
 using RestSharp;
 using System.Threading.Tasks;

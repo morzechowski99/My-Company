@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Hosting;
 using My_Company.Services.DocumentGeneratorService.Models;
 using System.Collections.Generic;
 using System.IO;

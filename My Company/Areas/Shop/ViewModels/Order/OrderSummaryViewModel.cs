@@ -1,4 +1,5 @@
-﻿using My_Company.Models.InPostModels;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Models.InPostModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Areas.Shop.ViewModels.Order

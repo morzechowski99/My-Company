@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using System.ComponentModel.DataAnnotations;
 
 namespace My_Company.Areas.Shop.ViewModels.Login
 {

@@ -1,3 +1,5 @@
+--Program powsta³ na Wydziale Informatyki Politechniki Bia³ostockiej
+
 create or alter view OrdersToComplete
 as select o.Id, o.OrderDate
 from Orders o 

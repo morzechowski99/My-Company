@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Newtonsoft.Json;
 
 namespace My_Company.Services.PaymentService.Dtos
 {

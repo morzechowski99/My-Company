@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.Extensions.DependencyInjection;
 using My_Company.EnumTypes;
 using My_Company.Services.PaymentService;
 using System;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Mvc.Rendering;
 using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Models;
 using My_Company.ViewModels;

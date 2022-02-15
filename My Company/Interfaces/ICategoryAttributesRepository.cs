@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Attribute = My_Company.Models.Attribute;
 

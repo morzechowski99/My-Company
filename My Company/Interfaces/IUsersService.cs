@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Identity;
 using My_Company.Areas.Shop.ViewModels.Login;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Models;

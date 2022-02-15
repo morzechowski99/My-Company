@@ -1,4 +1,5 @@
-﻿using My_Company.Areas.Shop.ViewModels.Cart;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Areas.Shop.ViewModels.Cart;
 using My_Company.Areas.Shop.ViewModels.Order;
 using My_Company.Models;
 using System;

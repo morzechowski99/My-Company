@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Warehouse.EnumTypes;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Data;

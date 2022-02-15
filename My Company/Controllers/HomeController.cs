@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using My_Company.Models;
 using System.Diagnostics;

@@ -1,3 +1,5 @@
+--Program powsta³ na Wydziale Informatyki Politechniki Bia³ostockiej
+
 INSERT INTO Suppliers(Name, NIP, Street, PostalCode, City, PhoneNumber1, PhoneNumber2) VALUES 
 ('Bryan', '3349276813', 'Oxford Street', '62-218', 'Stockertown', '+48 510438578', '462934797'),
 ('Christian', '8610329049', 'King Street', '07-812', 'Braden River', '+48 559566513', '486902344'),

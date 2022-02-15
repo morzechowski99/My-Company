@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using System.Collections.Generic;
 using static My_Company.Helpers.Constants;
 
 namespace My_Company.Dictionaries

@@ -1,4 +1,5 @@
-﻿/*additional validating methods*/
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+/*additional validating methods*/
 
 $.validator.addMethod('filesize', function (value, element, arg) {
     if (element.files[0].size <= arg) {

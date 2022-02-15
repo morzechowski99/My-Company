@@ -1,4 +1,5 @@
-﻿namespace My_Company.ViewModels
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+namespace My_Company.ViewModels
 {
     public class SupplierSelectViewModel
     {

@@ -1,4 +1,5 @@
-﻿let orderId = null
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let orderId = null
 let sort = null
 let filtersVisible = false
 let statuses = []

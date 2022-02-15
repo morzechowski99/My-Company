@@ -1,4 +1,5 @@
-﻿const COOKIE_KEY = 'cart'
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+const COOKIE_KEY = 'cart'
 
 var formatter = new Intl.NumberFormat('pl', {
     style: 'currency',

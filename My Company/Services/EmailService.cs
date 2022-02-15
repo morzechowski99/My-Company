@@ -1,4 +1,5 @@
-﻿using My_Company.EnumTypes;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.EnumTypes;
 using My_Company.Interfaces;
 using My_Company.Models;
 using System;

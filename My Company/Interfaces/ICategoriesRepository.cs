@@ -1,4 +1,5 @@
-﻿using My_Company.Areas.Warehouse.ViewModels;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Models;
 using My_Company.ViewModels;
 using System.Collections.Generic;

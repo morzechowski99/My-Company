@@ -1,4 +1,5 @@
-﻿@model Guid
+﻿@*Program powstał na Wydziale Informatyki Politechniki Białostockiej*@
+@model Guid
 
 <div class="row d-flex align-content-start">
     @await Component.InvokeAsync("OrderProductsInPicking", new { orderId = Model })

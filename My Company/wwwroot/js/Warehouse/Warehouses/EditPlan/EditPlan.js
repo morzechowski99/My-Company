@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$(function () {
 
     const warehouseId = getRouteValueAt(3)
 

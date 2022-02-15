@@ -1,4 +1,5 @@
-﻿let attributesCount = 0
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let attributesCount = 0
 
 $.validator.setDefaults({ ignore: null });
 

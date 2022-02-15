@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$(function () {
     $('#cart').popover({
         html: true,
         content: function () {

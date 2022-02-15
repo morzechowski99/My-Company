@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;

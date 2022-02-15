@@ -1,3 +1,4 @@
+//Program powsta³ na Wydziale Informatyki Politechniki Bia³ostockiej
 using Hangfire;
 using Hangfire.Dashboard;
 using Hangfire.SqlServer;

@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$(function () {
     $("#getInvoice").click(function (e) {
         e.preventDefault()
         var id = $(this).data("id")

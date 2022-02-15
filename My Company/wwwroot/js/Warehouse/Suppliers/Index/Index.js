@@ -1,4 +1,5 @@
-﻿let searchValue = ""
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let searchValue = ""
 let sort = null
 let nip = ""
 let email = ""

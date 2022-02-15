@@ -1,4 +1,5 @@
-﻿using My_Company.Models;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Models;
 using static My_Company.Dictionaries.OrderStatusesDictionary;
 
 namespace My_Company.EnumTypes

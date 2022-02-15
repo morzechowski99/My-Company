@@ -1,4 +1,5 @@
-﻿let productId = undefined
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+let productId = undefined
 let sectorId = undefined
 let sectors = []
 

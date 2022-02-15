@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Identity.UI.Services;
 using My_Company.Interfaces;
 using System;
 using System.Threading.Tasks;

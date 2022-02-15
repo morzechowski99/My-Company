@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Extensions;
 using My_Company.Interfaces;

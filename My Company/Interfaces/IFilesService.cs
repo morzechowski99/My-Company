@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;

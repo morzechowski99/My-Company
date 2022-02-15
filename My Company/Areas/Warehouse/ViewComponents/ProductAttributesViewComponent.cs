@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using My_Company.Areas.Warehouse.ViewModels;
 using My_Company.Interfaces;

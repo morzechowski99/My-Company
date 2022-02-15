@@ -1,4 +1,5 @@
-﻿var formatter = new Intl.NumberFormat('pl', {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+var formatter = new Intl.NumberFormat('pl', {
     style: 'currency',
     currency: 'PLN',
 });

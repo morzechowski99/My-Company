@@ -1,4 +1,5 @@
-﻿namespace My_Company.Models
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+namespace My_Company.Models
 {
     public class AttributeDictionaryValues
     {

@@ -1,4 +1,5 @@
-﻿$.validator.addMethod("requiredifchecked", function (value, element, params) {
+﻿/*Program powstał na Wydziale Informatyki Politechniki Białostockiej*/
+$.validator.addMethod("requiredifchecked", function (value, element, params) {
     if ($(params).prop('checked') == false) {
         return true;
     }

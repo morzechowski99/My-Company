@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using My_Company.Areas.Shop.ViewModels.Cart;
 using My_Company.Areas.Shop.ViewModels.Order;

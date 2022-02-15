@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using Microsoft.EntityFrameworkCore.Storage;
 using My_Company.Data;
 using My_Company.DBViews;
 using My_Company.Interfaces;

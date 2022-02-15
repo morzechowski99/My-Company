@@ -1,4 +1,5 @@
-﻿using My_Company.Services.DocumentGeneratorService.Models;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using My_Company.Services.DocumentGeneratorService.Models;
 using System.Collections.Generic;
 
 namespace My_Company.Services.DocumentGeneratorService

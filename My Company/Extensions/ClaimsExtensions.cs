@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿//Program powstał na Wydziale Informatyki Politechniki Białostockiej
+using System.Security.Claims;
 
 namespace My_Company.Extensions
 {
