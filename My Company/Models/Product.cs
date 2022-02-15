@@ -19,7 +19,7 @@ namespace My_Company.Models
         public int Id { get; set; }
         [MaxLength(25)]
         public string Name { get; set; }
-        public int MagazineCount { get; set; }
+        public int StockQuantity { get; set; }
         public int Demand { get; set; }
         [MaxLength(13)]
         public string EANCode { get; set; }

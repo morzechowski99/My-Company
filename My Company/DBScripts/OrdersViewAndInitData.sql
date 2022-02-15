@@ -6,7 +6,7 @@ and not exists (select 1
 				from ProductOrders po join
 				Products p on po.ProductId = p.Id
 				join Orders on po.OrderId = o.Id
-				where p.MagazineCount < po.Count)
+				where p.StockQuantity < po.Count)
 and not exists (select 1
 				from Picking p
 				where p.OrderId = o.Id);

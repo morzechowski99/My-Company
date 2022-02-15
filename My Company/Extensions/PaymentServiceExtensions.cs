@@ -12,7 +12,7 @@ namespace My_Company.Extensions
     {
         public static IPaymentService GetService(this PaymentMethodEnum type, IServiceProvider serviceProvider)
         {
-            //pobieranie wsyzstkich co implementuja interfejs strategii i rpzekonwertowanie do slownika klucz wartosc gdzie klucz to wartosc emuma
+            //pobieranie wsyzstkich serwisów implementujacych interfejs strategii i konwersja do slownika, gdzie klucz to wartosc emuma
             Dictionary<PaymentMethodEnum, Type> strategytypes = Assembly
                 .GetExecutingAssembly()
                 .GetExportedTypes()
@@ -22,7 +22,7 @@ namespace My_Company.Extensions
             //wybieramy konkretny typ
             Type choosenServiceType = strategytypes[type];
 
-            //tworzymy obiekt za pomoca Reflection
+            //tworzenie 
             IPaymentService strategy = ActivatorUtilities.CreateInstance(serviceProvider, choosenServiceType) as IPaymentService;
 
             if (strategy is null)

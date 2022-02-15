@@ -52,21 +52,26 @@
 })
 
 const registerBtns = function () {
-    $(".deleteAttributeBtn").click(function () {
+    $(".deleteAttributeBtn").click(function (e) {
+        e.stopImmediatePropagation()
         const id = $(this).data("id")
 
         $(`div[data-id=${id}]`).remove()
         fixAttributes(id)
+        registerBtns()
     })
 }
 
 const fixAttributes = function (deletedId) {
-    for (let i = deletedId + 1; i <= attributesCount; i++) {
-
+    for (let i = deletedId + 1; i < attributesCount; i++) {
         const container = $(`div[data-id=${i}]`)
-        container.find('input').attr("name", `[${i - 1}].Name`)
+        container.find('input:not([type=hidden])').attr("name", `[${i - 1}].Name`)
+        container.find('input[type=hidden]').attr("name", `[${i - 1}].Id`)
         container.find('select').attr("name", `[${i - 1}].Type`)
-        container.data("id", i - 1)
+        container.attr("data-id", i - 1)
+        container.find('span.text-danger').attr("data-valmsg-for", `[${i - 1}].Name`)
+        container.find('.deleteAttributeBtn').attr("data-id", i - 1)
+        
     }
     attributesCount--
 }

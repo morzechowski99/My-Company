@@ -206,6 +206,7 @@ namespace My_Company.Repositories
                 return tree;
             Category category = null;
             var id = categoryId;
+
             do
             {
                 category = await GetOne(c => c.Id == id);

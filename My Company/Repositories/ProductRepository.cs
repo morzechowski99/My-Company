@@ -90,9 +90,9 @@ namespace My_Company.Repositories
                 {
                     query = filters.States.FirstOrDefault() switch
                     {
-                        var s when s == StockState.Good => query.Where(p => p.MagazineCount > p.Demand * 1.15),
-                        var s when s == StockState.RunningOut => query.Where(p => p.MagazineCount <= p.Demand * 1.15 && p.MagazineCount > p.Demand),
-                        var s when s == StockState.Critical => query.Where(p => p.MagazineCount <= p.Demand),
+                        var s when s == StockState.Good => query.Where(p => p.StockQuantity > p.Demand * 1.15),
+                        var s when s == StockState.RunningOut => query.Where(p => p.StockQuantity <= p.Demand * 1.15 && p.StockQuantity > p.Demand),
+                        var s when s == StockState.Critical => query.Where(p => p.StockQuantity <= p.Demand),
                         _ => query
                     };
                 }
@@ -100,15 +100,15 @@ namespace My_Company.Repositories
                 {
                     if (filters.States.Contains(StockState.Critical) && filters.States.Contains(StockState.Good))
                     {
-                        query = query.Where(p => p.MagazineCount > p.Demand * 1.15 || p.MagazineCount < p.Demand);
+                        query = query.Where(p => p.StockQuantity > p.Demand * 1.15 || p.StockQuantity < p.Demand);
                     }
                     else if (filters.States.Contains(StockState.Good) && filters.States.Contains(StockState.RunningOut))
                     {
-                        query = query.Where(p => p.MagazineCount > p.Demand);
+                        query = query.Where(p => p.StockQuantity > p.Demand);
                     }
                     else
                     {
-                        query = query.Where(p => p.MagazineCount <= p.Demand * 1.15);
+                        query = query.Where(p => p.StockQuantity <= p.Demand * 1.15);
                     }
                 }
             }

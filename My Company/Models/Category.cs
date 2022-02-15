@@ -10,8 +10,6 @@ namespace My_Company.Models
             ChildCategories = new HashSet<Category>();
             Attributes = new HashSet<Attribute>();
         }
-
-
         public int Id { get; set; }
         public string CategoryName { get; set; }
         public string Description { get; set; }

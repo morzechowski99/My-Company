@@ -208,7 +208,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                     {
                         var product = await repositoryWrapper.ProductRepository
                             .GetProductWithoutVirtualPropertiesById(item.ProductId);
-                        product.MagazineCount += item.Count;
+                        product.StockQuantity += item.Count;
                         repositoryWrapper.ProductRepository.Update(product);
                         var productSector = await repositoryWrapper.ProductSectorRepository.GetByProductAndSector(item.ProductId, item.SectorId);
                         if (productSector == null)

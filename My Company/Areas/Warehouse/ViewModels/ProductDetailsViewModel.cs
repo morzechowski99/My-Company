@@ -27,7 +27,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Zdjęcia")]
         public List<string> Photos { get; set; }
         [Display(Name = "Na magazynie")]
-        public int MagazineCount { get; set; }
+        public int StockStatus { get; set; }
         [Display(Name = "Zapotrzebowanie")]
         public int Demand { get; set; }
         public string Status { get; set; }

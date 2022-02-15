@@ -15,7 +15,7 @@ namespace My_Company.Middlewares
 
         public async Task Invoke(HttpContext ctx, IConfig config, IRepositoryWrapper repositoryWrapper)
         {
-            if (!ctx.Request.Path.StartsWithSegments("/Warehouse"))
+            if (!ctx.Request.Path.StartsWithSegments("/Warehouse") && !ctx.Request.Path.StartsWithSegments("/warehouse")&& !ctx.Request.Path.StartsWithSegments("/Identity"))
             {
                 if (!await config.IsShopEnabled(repositoryWrapper.ConfigRepository))
                 {

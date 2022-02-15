@@ -20,6 +20,8 @@ namespace My_Company.Areas.Shop.Controllers
 
         public IActionResult Search(int? id)
         {
+            if (id == -1)
+                return View();
             return View(id);
         }
 

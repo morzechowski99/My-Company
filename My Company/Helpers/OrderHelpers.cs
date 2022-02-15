@@ -12,10 +12,10 @@ namespace My_Company.Helpers
             message = null;
             foreach (var po in productOrders)
             {
-                if (po.Product.MagazineCount < po.Count)
+                if (po.Product.StockQuantity < po.Count)
                 {
                     message = $"Na magazynie jest za mało produktu {po.Product.Name} ({po.Product.EANCode})\n" +
-                        $"stan magazynowy: {po.Product.MagazineCount}, potrzeba {po.Count} sztuk";
+                        $"stan magazynowy: {po.Product.StockQuantity}, potrzeba {po.Count} sztuk";
                     return false;
                 }
             }

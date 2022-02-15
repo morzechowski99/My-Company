@@ -15,7 +15,7 @@ namespace My_Company
         {
             var host = CreateHostBuilder(args).Build();
 
-            // CreateDbIfNotExists(host);
+            CreateDbIfNotExists(host);
 
             host.Run();
         }
@@ -37,7 +37,8 @@ namespace My_Company
                     var repopWrapper = services.GetRequiredService<IRepositoryWrapper>();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-                    await DbInitializer.Initialize(repopWrapper, userManager, roleManager);
+                    var configRepo = services.GetRequiredService<IConfig>();
+                    await DbInitializer.Initialize(repopWrapper, userManager, roleManager,configRepo);
                 }
                 catch
                 {

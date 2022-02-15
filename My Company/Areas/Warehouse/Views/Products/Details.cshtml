@@ -102,10 +102,10 @@
                         </div>
                         <div class="col-12">
                             <div>
-                                <span><small class="text-muted">@Html.DisplayNameFor(m => m.MagazineCount)</small></span>
+                                <span><small class="text-muted">@Html.DisplayNameFor(m => m.StockStatus)</small></span>
                             </div>
                             <div>
-                                <span class="@(Model.MagazineCount <= Model.Demand ? "text-danger" : "")">@Html.DisplayFor(m => m.MagazineCount)</span>
+                                <span class="@(Model.StockStatus <= Model.Demand ? "text-danger" : "")">@Html.DisplayFor(m => m.StockStatus)</span>
                             </div>
                         </div>
                     </div>

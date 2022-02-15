@@ -41,9 +41,9 @@ namespace My_Company.Helpers
 
         public static StockState GetProductStockStatus(Product p)
         {
-            if (p.MagazineCount > p.Demand * 1.15)
+            if (p.StockQuantity > p.Demand * 1.15)
                 return StockState.Good;
-            else if (p.MagazineCount > p.Demand)
+            else if (p.StockQuantity > p.Demand)
                 return StockState.RunningOut;
             else
                 return StockState.Critical;

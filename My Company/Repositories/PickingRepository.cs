@@ -67,8 +67,7 @@ namespace My_Company.Repositories
         {
             var picking = await FindByCondition(p => p.OrderId == pickingId)
                 .Include(p => p.PickingItems)
-                .ThenInclude(pi => pi.ProductOrder.Product.ProductSectors)
-                .ThenInclude(ps => ps.Sector.Row)
+                .ThenInclude(pi => pi.Sector.Row)
                 .FirstOrDefaultAsync();
             if (picking == null)
             {

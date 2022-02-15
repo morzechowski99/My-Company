@@ -9,7 +9,7 @@ namespace My_Company.Areas.Warehouse.ViewModels
         [Display(Name = "Nazwa kategorii")]
         public string CategoryName { get; set; }
         [Display(Name = "Opis")]
-        public string Descripttion { get; set; }
+        public string Description { get; set; }
         [Display(Name = "Drzewo kategorii")]
         public string CategoryTree { get; set; }
         [Display(Name = "Atrybuty")]

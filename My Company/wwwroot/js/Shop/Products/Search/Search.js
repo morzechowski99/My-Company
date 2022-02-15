@@ -3,7 +3,7 @@ let defaultFilters = filters = {
     pageSize: 12,
     sortOrder: 0,
     page: 1,
-    categoryId: getRouteValueAt(2),
+    categoryId: getRouteValueAt(2) == -1 ? undefined : getRouteValueAt(2),
     priceFrom: undefined,
     priceTo: undefined,
     attributes: []

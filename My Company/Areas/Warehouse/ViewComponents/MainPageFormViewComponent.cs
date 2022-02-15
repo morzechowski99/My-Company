@@ -30,7 +30,7 @@ namespace My_Company.Areas.Warehouse.ViewComponents
             foreach (var item in mainPageContentView)
             {
                 var categoryId = mainPageContent.First(i => i.Order == item.Order).CategoryId;
-                item.CategoryName = categoryId.HasValue ?
+                item.CategoryName = categoryId.HasValue && categoryId.Value != -1 ?
                     await repositoryWrapper.CategoriesRepository.GetCategoryTreeWithCategoryName
                     (await repositoryWrapper.CategoriesRepository.GetById(categoryId.Value)) : "Wszystkie produkty";
             }

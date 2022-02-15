@@ -76,13 +76,14 @@ namespace My_Company.Areas.Warehouse.Controllers
                 return RedirectToAction(nameof(Index));
             }
             string message;
-            if (!OrderHelpers.CheckIfAllProductsAreAvailable(order.ProductOrders, out message))
-            {
-                TempData["Error"] = message;
-                return RedirectToAction(nameof(Index));
-            }
+
             if (order.Picking == null)
             {
+                if (!OrderHelpers.CheckIfAllProductsAreAvailable(order.ProductOrders, out message))
+                {
+                    TempData["Error"] = message;
+                    return RedirectToAction(nameof(Index));
+                }
                 Picking picking = new Picking { Start = DateTime.Now, UserId = userId, OrderId = order.Id };
                 order.Picking = picking;
                 repositoryWrapper.PickingRepository.Create(picking);
@@ -90,7 +91,7 @@ namespace My_Company.Areas.Warehouse.Controllers
                 {
                     var product = await repositoryWrapper.ProductRepository
                         .GetProductWithoutVirtualPropertiesById(productOrder.ProductId);
-                    product.MagazineCount -= productOrder.Count;
+                    product.StockQuantity -= productOrder.Count;
                     repositoryWrapper.ProductRepository.Update(product);
                 }
                 await repositoryWrapper.Save();

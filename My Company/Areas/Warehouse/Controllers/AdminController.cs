@@ -113,8 +113,7 @@ namespace My_Company.Areas.Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePaymentsMethods(PaymentMethodsFormViewModel paymentMethodsDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
+            
 
             if (paymentMethodsDto.Methods.Any(m => m.Enabled == true && m.Method == PaymentMethodEnum.TraditionalTransfer))
                 await config.SetDataToPayment(paymentMethodsDto.DataToPayment, repositoryWrapper.ConfigRepository);
