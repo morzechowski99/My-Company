@@ -38,7 +38,9 @@
     {
         <div class="col-6 col-md-6 col-lg-4 my-2">
             <div class="card">
-                <img class="card-img-top" src="@Url.Content(item.PhotoUrl)" alt="@item.Name">
+                <a asp-action="Details" asp-route-id="@item.Id" class="itemLink">
+                    <img class="card-img-top" src="@Url.Content(item.PhotoUrl)" alt="@item.Name">
+                </a>
                 <div class="card-body mb-0">
                     <p class=" m-0"><small class="text-secondary">@Html.DisplayFor(model => item.CategoryName)</small></p>
                     <h5 class="text-uppercase my-1"><a class="text-dark" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(model => item.Name)</a></h5>
@@ -100,5 +102,9 @@
         min-height: 35vh;
         max-height: 35vh;
         object-fit: scale-down;
+    }
+
+    .itemLink:hover{
+        opacity:0.5;
     }
 </style>
